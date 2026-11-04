@@ -5,9 +5,12 @@ import { CertsStrip } from "@/components/skills/CertsStrip";
 import { Marquee } from "@/components/ui/Marquee";
 
 export const metadata: Metadata = {
-  title: "Skills · Javohir Sadullayev (.NET & AI Stack)",
+  title: "Skills & Tech Stack · Javohir Sadullayev (.NET & C#)",
   description:
-    "Tools I've actually shipped with. No percentages, no self-assigned stars. Production-proven backend, database, real-time and AI stack.",
+    "Production tech stack of Javohir Sadullayev (javohir engineer): C#, .NET 8, ASP.NET Core, PostgreSQL, Redis, SignalR, Docker, and Azure Cognitive Services.",
+  alternates: {
+    canonical: "/skills",
+  },
 };
 
 export default function SkillsPage() {

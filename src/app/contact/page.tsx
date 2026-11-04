@@ -6,7 +6,10 @@ import { ContactSidebar } from "@/components/contact/ContactSidebar";
 export const metadata: Metadata = {
   title: "Contact · Javohir Sadullayev (.NET & AI Engineer)",
   description:
-    "Tell me what's breaking. A slow endpoint, a cache that never hits, an AI feature that costs more than it earns — or just a project you want a second brain on. Email is the fastest way to reach me.",
+    "Get in touch with Javohir Sadullayev (javohir engineer). Available for .NET backend engineering roles, system architecture consulting, and high-concurrency API contracts.",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 export default function ContactPage() {

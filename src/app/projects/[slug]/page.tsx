@@ -20,7 +20,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${project.title} · Case Study | Javohir Sadullayev`,
-    description: project.description,
+    description: `${project.title} case study by Javohir Sadullayev (javohir.engineer). ${project.description}`,
+    alternates: {
+      canonical: `/projects/${slug}`,
+    },
   };
 }
 

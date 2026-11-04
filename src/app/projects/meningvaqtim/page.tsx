@@ -9,7 +9,10 @@ import { ProjectNavigation } from "@/components/case-study/ProjectNavigation";
 export const metadata: Metadata = {
   title: "MeningVaqtim Case Study · Javohir Sadullayev",
   description:
-    "Planned work versus what actually happened. Timezone-aware analytics, automated timer completion, and distraction logging with .NET 8, PostgreSQL, and Hangfire.",
+    "MeningVaqtim productivity analytics engine engineered by Javohir Sadullayev. Timezone-aware analytics, automated timer completion, and distraction logging with .NET 8, PostgreSQL, and Hangfire.",
+  alternates: {
+    canonical: "/projects/meningvaqtim",
+  },
   keywords: [
     "MeningVaqtim",
     ".NET 8",

@@ -9,7 +9,10 @@ import { ProjectNavigation } from "@/components/case-study/ProjectNavigation";
 export const metadata: Metadata = {
   title: "KitobdagiMen Case Study · Javohir Sadullayev",
   description:
-    "A reading community that publishes itself. Reviews, reading goals, quotes, Google OAuth, SignalR real-time chat, and Telegram Mini App bridge on .NET 8 and PostgreSQL.",
+    "KitobdagiMen reading community platform by Javohir Sadullayev. Reviews, reading goals, quotes, Google OAuth, SignalR real-time chat, and Telegram Mini App bridge on .NET 8 and PostgreSQL.",
+  alternates: {
+    canonical: "/projects/kitobdagimen",
+  },
 };
 
 export default function KitobdagiMenCaseStudyPage() {

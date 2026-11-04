@@ -9,7 +9,10 @@ import { ProjectNavigation } from "@/components/case-study/ProjectNavigation";
 export const metadata: Metadata = {
   title: "ZiyoAI Case Study · Javohir Sadullayev",
   description:
-    "An assistant that reads the channel before you do. Multimodal bot with STT/TTS, OCR, channel auto-enrichment, and dual-key failover gateway on .NET 8, EF Core and Docker.",
+    "ZiyoAI multimodal educational assistant engineered by Javohir Sadullayev. STT/TTS, OCR, channel auto-enrichment, and dual-key failover gateway on .NET 8, EF Core, Redis and Docker.",
+  alternates: {
+    canonical: "/projects/ziyoai",
+  },
 };
 
 export default function ZiyoAICaseStudyPage() {

@@ -4,9 +4,12 @@ import { ResumeSheet } from "@/components/resume/ResumeSheet";
 import { DownloadNote } from "@/components/resume/DownloadNote";
 
 export const metadata: Metadata = {
-  title: "Resume · Javohir Sadullayev (.NET Backend Developer)",
+  title: "Resume & CV · Javohir Sadullayev (.NET Backend Developer)",
   description:
-    "One page. No fluff. The same resume I send to teams — reproduced here in full, downloadable in three languages.",
+    "Curriculum Vitae and verified resume of Javohir Sadullayev. Software Engineer & .NET Backend Developer in Tashkent, Uzbekistan. Available for hire and contracts.",
+  alternates: {
+    canonical: "/resume",
+  },
 };
 
 export default function ResumePage() {

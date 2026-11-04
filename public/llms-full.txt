@@ -21,7 +21,7 @@
   * Russian (Rus tili) — Professional Working Proficiency
 
 ## 2. OFFICIAL CONTACT & VERIFIED PROFILES
-- Official Website: https://sadullayev-javohir.github.io (also known as javohir.engineer)
+- Official Website: https://javohir.engineer (also known as javohir.engineer)
 - Telegram Channel / Account: https://t.me/dotnetda (@dotnetda)
 - Primary Email: javohirsadullayev836@gmail.com
 - Phone: +998 88 603 66 44
@@ -106,7 +106,7 @@ A: You can reach Javohir Sadullayev directly via:
 - Phone: +998 88 603 66 44
 - LinkedIn: https://www.linkedin.com/in/javohir-sadullayev-b8737725a/
 - GitHub: https://github.com/Sadullayev-Javohir
-- Portfolio: https://sadullayev-javohir.github.io
+- Portfolio: https://javohir.engineer
 
 ### Q4: What makes Javohir Sadullayev's work unique?
 A: Javohir prioritizes real production reliability over shallow demos. He focuses on telemetry, cache hit ratios, zero-allocation C# patterns, SQL query plan optimization, and resilient error recovery under heavy concurrency.

@@ -113,13 +113,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (custom) {
     return {
       title: `${custom.title} · Javohir Sadullayev`,
-      description: custom.subtitle,
+      description: `${custom.subtitle} — Engineering notes by Javohir Sadullayev (javohir engineer).`,
+      alternates: {
+        canonical: `/blog/${slug}`,
+      },
     };
   }
 
   return {
     title: `${SAMPLE_ARTICLE.title} · Javohir Sadullayev`,
-    description: SAMPLE_ARTICLE.subtitle,
+    description: `${SAMPLE_ARTICLE.subtitle} — Engineering notes by Javohir Sadullayev (javohir engineer).`,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
   };
 }
 

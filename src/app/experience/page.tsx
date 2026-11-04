@@ -6,7 +6,10 @@ import { ExperienceBeyondRoles } from "@/components/experience/ExperienceBeyondR
 export const metadata: Metadata = {
   title: "Experience · Javohir Sadullayev (.NET & AI Engineer)",
   description:
-    "Where the work happened. Since June 2026 I've worked across four product teams and one open-source project — always on the backend, usually on the part of the system that has to stay up.",
+    "Engineering experience and track record of Javohir Sadullayev (javohir engineer). Backend systems, real-time architectures, low-latency APIs and production incident resolution.",
+  alternates: {
+    canonical: "/experience",
+  },
 };
 
 export default function ExperiencePage() {

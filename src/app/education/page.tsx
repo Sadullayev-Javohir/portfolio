@@ -6,9 +6,12 @@ import { BuiltWhileStudyingSection } from "@/components/education/BuiltWhileStud
 import { CredentialsSection } from "@/components/education/CredentialsSection";
 
 export const metadata: Metadata = {
-  title: "Education · Javohir Sadullayev (.NET & AI Engineer)",
+  title: "Education & Credentials · Javohir Sadullayev (PDP University)",
   description:
-    "B.Sc. in Computer Science at PDP University in Tashkent (2024–2028). Fundamentals first: algorithms, data structures, relational databases, network programming and verified certifications.",
+    "Education of Javohir Sadullayev: B.Sc. in Computer Science at PDP University in Tashkent (2024–2028, GPA 4.13/4.5). Algorithms, relational databases, distributed systems and certifications.",
+  alternates: {
+    canonical: "/education",
+  },
 };
 
 export default function EducationPage() {

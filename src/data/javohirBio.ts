@@ -8,7 +8,7 @@ export const JAVOHIR_KNOWLEDGE = {
   telegramUsername: "@dotnetda",
   linkedin: "https://www.linkedin.com/in/javohir-sadullayev-b8737725a/",
   github: "https://github.com/Sadullayev-Javohir",
-  portfolio: "https://sadullayev-javohir.github.io/",
+  portfolio: "https://javohir.engineer",
 
   education: {
     university: "PDP University",

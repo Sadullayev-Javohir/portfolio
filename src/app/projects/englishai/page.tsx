@@ -11,7 +11,10 @@ import { ProjectNavigation } from "@/components/case-study/ProjectNavigation";
 export const metadata: Metadata = {
   title: "EnglishAI Case Study · Javohir Sadullayev",
   description:
-    "Adaptive English platform with speech assessment, placement testing and real-time pronunciation scoring. ASP.NET Core, PostgreSQL, Redis and Azure Speech.",
+    "Adaptive English platform with speech assessment, placement testing and real-time pronunciation scoring. ASP.NET Core, PostgreSQL, Redis and Azure Speech by Javohir Sadullayev.",
+  alternates: {
+    canonical: "/projects/englishai",
+  },
 };
 
 export default function EnglishAICaseStudyPage() {

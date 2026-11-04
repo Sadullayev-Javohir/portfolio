@@ -1,6 +1,6 @@
 # Javohir Sadullayev — Software Engineer & .NET Backend Developer
 > Official llms.txt reference for LLM agents, web crawlers and search engines.
-> Website: https://sadullayev-javohir.github.io (javohir.engineer)
+> Website: https://javohir.engineer (javohir.engineer)
 
 ## Identity & Aliases
 - Full Name: Javohir Sadullayev (Javohirbek Sadullayev)
@@ -39,8 +39,8 @@ Javohir Sadullayev is a backend software engineer specializing in high-concurren
 - Phone: +998 88 603 66 44
 - LinkedIn: https://www.linkedin.com/in/javohir-sadullayev-b8737725a/
 - GitHub: https://github.com/Sadullayev-Javohir
-- Portfolio: https://sadullayev-javohir.github.io
+- Portfolio: https://javohir.engineer
 
 ## Full Documentation & Context
 For comprehensive details, architectural decisions, and detailed case studies, read the full documentation at:
-- https://sadullayev-javohir.github.io/llms-full.txt
+- https://javohir.engineer/llms-full.txt

@@ -3,9 +3,12 @@ import { BlogView } from "@/components/blog/BlogView";
 import { getCustomArticles } from "@/lib/dynamicContent";
 
 export const metadata: Metadata = {
-  title: "Blog & Journal · Javohir Sadullayev (.NET & AI Engineer)",
+  title: "Engineering Journal & Blog · Javohir Sadullayev",
   description:
-    "Writing about the parts that bite. Longer notes on .NET, caching, real-time systems and the failure modes you only meet in production. I publish when there's something worth saying.",
+    "Engineering journal and backend architectural notes by Javohir Sadullayev (javohir.engineer). In-depth articles on .NET 8, PostgreSQL optimization, Redis caching and real-time SignalR systems.",
+  alternates: {
+    canonical: "/blog",
+  },
 };
 
 export default function BlogPage() {

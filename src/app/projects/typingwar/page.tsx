@@ -9,7 +9,10 @@ import { TypingWarNav } from "@/components/projects/typingwar/TypingWarNav";
 export const metadata: Metadata = {
   title: "TypingWar · Real-Time Duel Engine · Javohir Sadullayev",
   description:
-    "Duels where the server keeps score. Real-time typing duel engine built with .NET 8, SignalR Core, Redis Pub/Sub, and cadence anti-cheat verification.",
+    "TypingWar real-time multiplayer duel engine engineered by Javohir Sadullayev. Built with .NET 8, SignalR Core, Redis Pub/Sub, and cadence anti-cheat verification under sub-50ms latency.",
+  alternates: {
+    canonical: "/projects/typingwar",
+  },
 };
 
 export default function TypingWarPage() {
