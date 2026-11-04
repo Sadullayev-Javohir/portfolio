@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    container_name: portfolio-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - /opt/portfolio/src/data:/app/src/data
+      - /opt/portfolio/public/uploads:/app/public/uploads

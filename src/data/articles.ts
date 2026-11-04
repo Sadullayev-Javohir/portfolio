@@ -69,6 +69,7 @@ export interface ArticleData {
   quote: string;
   bullets: string[];
   tags: string[];
+  customMarkdown?: string;
   reactions: {
     likes: number;
     claps: number;

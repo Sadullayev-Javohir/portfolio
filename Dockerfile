@@ -40,8 +40,8 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Persistent data directory permissions for contactMessages, customArticles, etc.
-RUN mkdir -p ./src/data && chown -R nextjs:nodejs ./src/data
+# Persistent data directory permissions for contactMessages, customArticles, uploads, etc.
+RUN mkdir -p ./src/data ./public/uploads && chown -R nextjs:nodejs ./src/data ./public/uploads
 
 USER nextjs
 

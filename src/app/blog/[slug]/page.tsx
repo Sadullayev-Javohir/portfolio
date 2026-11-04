@@ -16,11 +16,49 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+function extractTocFromMarkdown(content: string) {
+  const lines = content.split("\n");
+  const toc: { id: string; num: string; text: string }[] = [];
+  let count = 1;
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith("## ") && !trimmed.startsWith("###")) {
+      const heading = trimmed.replace(/^##\s+/, "");
+      // Clean leading numbering like "01. Title" if present
+      const cleanText = heading.replace(/^\d+[\.\)]\s*/, "");
+      const slugId =
+        "section-" +
+        cleanText
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)+/g, "");
+
+      toc.push({
+        id: slugId || `section-${count}`,
+        num: String(count).padStart(2, "0"),
+        text: cleanText || heading,
+      });
+      count++;
+    }
+  }
+
+  if (toc.length === 0) {
+    toc.push(
+      { id: "section-01", num: "01", text: "Maqola Mazmuni" },
+      { id: "section-02", num: "02", text: "Xulosalar" }
+    );
+  }
+
+  return toc;
+}
+
 function customToArticleData(custom: CustomArticle): ArticleData {
-  const paragraphs = custom.markdownContent
-    .split("\n\n")
-    .map((p) => p.trim())
-    .filter(Boolean);
+  const toc = extractTocFromMarkdown(custom.markdownContent || "");
+
+  const categories = custom.categories && custom.categories.length > 0
+    ? custom.categories
+    : [custom.category || ".NET"];
 
   return {
     slug: custom.slug,
@@ -30,20 +68,20 @@ function customToArticleData(custom: CustomArticle): ArticleData {
       parent: "BLOG",
       current: custom.title.toUpperCase(),
     },
-    categories: [custom.category, ...(custom.tags || [])],
+    categories: [...categories, ...(custom.tags || [])],
     publishedDate: custom.publishedDate,
     readTime: custom.readTime,
-    views: "124",
+    views: "180+ VIEWS",
     likesCount: 14,
     commentsCount: 2,
     author: {
       name: "Javohir Sadullayev",
-      role: ".NET & AI Engineer",
-      bio: "Building high-concurrency systems, event-driven architectures, and AI speech models.",
+      role: "Backend & Systems Engineer",
+      bio: "Building high-performance .NET 8 services, distributed architectures, and AI speech systems.",
       avatar: "/javohir.jpg",
     },
     cover: {
-      label: custom.category.toUpperCase(),
+      label: custom.chip || custom.category.toUpperCase(),
       code: "JOURNAL",
       caption: custom.subtitle || custom.title,
       stats: [
@@ -51,49 +89,47 @@ function customToArticleData(custom: CustomArticle): ArticleData {
         { value: custom.category, label: "CATEGORY" },
       ],
     },
-    toc: [
-      { id: "section-01", num: "01", text: "Overview" },
-      { id: "section-02", num: "02", text: "Details" },
-    ],
-    intro: custom.subtitle || paragraphs[0] || custom.title,
+    toc,
+    intro: custom.subtitle || custom.title,
     sections: [
       {
         id: "section-01",
         num: "01",
-        title: "Overview & Decisions",
-        content: [paragraphs[0] || custom.subtitle || "No content."],
+        title: "Overview",
+        content: [custom.subtitle || ""],
       },
       {
         id: "section-02",
         num: "02",
         title: "Technical Notes",
-        content: paragraphs.slice(1).length > 0 ? paragraphs.slice(1) : [custom.markdownContent],
+        content: [custom.markdownContent || ""],
       },
     ],
     codeBlock: {
       lang: "csharp",
-      caption: "Article Code & Reference",
+      caption: "Article Reference Code",
       badge: "PRODUCTION",
       lines: [
         "// " + custom.title,
-        "// Author: Javohir Sadullayev",
-        "var status = await DeployAsync();",
+        "// Javohir Sadullayev · Engineering Journal",
+        "var result = await ProcessAsync();",
       ],
     },
     callout: {
-      title: "Key Takeaway",
-      text: custom.subtitle || "Production systems require telemetry, clean error handling, and thoughtful caching.",
+      title: "Asosiy Xulosa",
+      text: custom.subtitle || "Tizim arxitekturasi va samaradorlik yechimlari.",
     },
     results: [
-      { value: "100%", label: "reliability" },
-      { value: "<50ms", label: "latency" },
+      { value: "100%", label: "uptime" },
+      { value: "<25ms", label: "latency" },
     ],
     quote: `"${custom.subtitle || custom.title}"`,
     bullets: [
-      "Production-ready architecture with comprehensive logging.",
-      "Scalable backend design built with .NET and high performance data layers.",
+      "Production-ready backend architecture and event streaming.",
+      "Reliable and performant systems built with .NET and high-performance data pipelines.",
     ],
-    tags: [custom.category, ".NET", "Backend", "Architecture"],
+    tags: custom.tags || [custom.category, ".NET", "Backend"],
+    customMarkdown: custom.markdownContent,
     reactions: {
       likes: 42,
       claps: 58,
@@ -113,7 +149,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (custom) {
     return {
       title: `${custom.title} · Javohir Sadullayev`,
-      description: `${custom.subtitle} — Engineering notes by Javohir Sadullayev (javohir engineer).`,
+      description: `${custom.subtitle || custom.title} — Engineering notes by Javohir Sadullayev.`,
       alternates: {
         canonical: `/blog/${slug}`,
       },
@@ -122,7 +158,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${SAMPLE_ARTICLE.title} · Javohir Sadullayev`,
-    description: `${SAMPLE_ARTICLE.subtitle} — Engineering notes by Javohir Sadullayev (javohir engineer).`,
+    description: `${SAMPLE_ARTICLE.subtitle} — Engineering notes by Javohir Sadullayev.`,
     alternates: {
       canonical: `/blog/${slug}`,
     },
@@ -133,6 +169,10 @@ export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
 
   const custom = getCustomArticles().find((a) => a.slug === slug);
+  if (!custom && slug !== SAMPLE_ARTICLE.slug) {
+    notFound();
+  }
+
   const article = custom ? customToArticleData(custom) : SAMPLE_ARTICLE;
 
   return (

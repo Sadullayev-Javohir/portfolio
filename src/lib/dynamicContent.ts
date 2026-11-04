@@ -34,6 +34,10 @@ export interface CustomArticle {
   title: string;
   subtitle: string;
   category: string;
+  categories?: string[];
+  chip?: string;
+  bulletColor?: string;
+  coverImage?: string;
   publishedDate: string;
   readTime: string;
   tags: string[];
@@ -164,7 +168,11 @@ export function saveCustomArticle(article: Partial<CustomArticle> & { title: str
     slug,
     title: article.title,
     subtitle: article.subtitle || "",
-    category: article.category || ".NET",
+    category: article.category || (article.categories && article.categories[0]) || ".NET",
+    categories: article.categories && article.categories.length > 0 ? article.categories : [article.category || ".NET"],
+    chip: article.chip || "JOURNAL · ARTICLE",
+    bulletColor: article.bulletColor || "bg-yellow",
+    coverImage: article.coverImage || "",
     publishedDate: article.publishedDate || new Date().toLocaleDateString("en-US", { month: "short", year: "numeric" }).toUpperCase(),
     readTime,
     tags: article.tags && article.tags.length > 0 ? article.tags : [".NET", "Backend"],
