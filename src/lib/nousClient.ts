@@ -209,11 +209,64 @@ export function matchDirectIntent(query: string): string | null {
     return "Javohir Sadullayev — .NET Backend dasturchisi va PDP University Computer Science yo'nalishi 3-kurs talabasi (GPA 4.13). U yuqori yuklamali REST API'lar, past kechikishli SignalR real-time tizimlari (<30ms), PostgreSQL va Redis optimallashtiruvi hamda Clean Architecture asosidagi tizimlar qurishga ixtisoslashgan.";
   }
 
-  // 4. "Kontaktlar / Bog'lanish"
+  // 4a. Specific: Phone number only
+  const isPhone =
+    /(?:telefon|raqam|nomer|phone|номер|телефон)(?:\s|$)/iu.test(q) &&
+    !/kontakt|aloqa|bog\x27lanish|contact|связаться|все|hammasi|barchasi/iu.test(q);
+
+  if (isPhone) {
+    if (/[а-яё]/iu.test(q)) return "Телефон Джавохира: +998 88 603 66 44";
+    if (/phone/i.test(q)) return "Javohir's phone number: +998 88 603 66 44";
+    return "Javohirning telefon raqami: +998 88 603 66 44";
+  }
+
+  // 4b. Specific: Telegram only
+  const isTelegram =
+    /(?:telegram|tg|телеграм)(?:\s|$)/iu.test(q) &&
+    !/kontakt|aloqa|bog\x27lanish|contact|связаться|все|hammasi|barchasi/iu.test(q);
+
+  if (isTelegram) {
+    if (/[а-яё]/iu.test(q)) return "Телеграм Джавохира: @dotnetda (https://t.me/dotnetda)";
+    if (/telegram|tg/i.test(q)) return "Javohir's Telegram: @dotnetda (https://t.me/dotnetda)";
+    return "Javohirning Telegram akkaunti: @dotnetda (https://t.me/dotnetda)";
+  }
+
+  // 4c. Specific: Email only
+  const isEmail =
+    /(?:email|e-mail|pochta|электронная\s*почта|mail|gmail)(?:\s|$)/iu.test(q) &&
+    !/kontakt|aloqa|bog\x27lanish|contact|связаться|все|hammasi|barchasi/iu.test(q);
+
+  if (isEmail) {
+    if (/[а-яё]/iu.test(q)) return "Email Джавохира: javohirsadullayev836@gmail.com";
+    if (/email|mail/i.test(q)) return "Javohir's email: javohirsadullayev836@gmail.com";
+    return "Javohirning emaili: javohirsadullayev836@gmail.com";
+  }
+
+  // 4d. Specific: GitHub only
+  const isGitHub =
+    /(?:github|git\s*hub|гитхаб)(?:\s|$)/iu.test(q) &&
+    !/kontakt|aloqa|bog\x27lanish|contact|связаться|все|hammasi|barchasi/iu.test(q);
+
+  if (isGitHub) {
+    if (/[а-яё]/iu.test(q)) return "GitHub Джавохира: github.com/Sadullayev-Javohir";
+    if (/github|git/i.test(q)) return "Javohir's GitHub: github.com/Sadullayev-Javohir";
+    return "Javohirning GitHub sahifasi: github.com/Sadullayev-Javohir";
+  }
+
+  // 4e. Specific: LinkedIn only
+  const isLinkedIn =
+    /(?:linkedin|линкедин|linked\s*in)(?:\s|$)/iu.test(q) &&
+    !/kontakt|aloqa|bog\x27lanish|contact|связаться|все|hammasi|barchasi/iu.test(q);
+
+  if (isLinkedIn) {
+    if (/[а-яё]/iu.test(q)) return "LinkedIn Джавохира: linkedin.com/in/javohir-sadullayev-b8737725a";
+    if (/linkedin/i.test(q)) return "Javohir's LinkedIn: linkedin.com/in/javohir-sadullayev-b8737725a";
+    return "Javohirning LinkedIn sahifasi: linkedin.com/in/javohir-sadullayev-b8737725a";
+  }
+
+  // 4f. Generic: All contacts (kontaktlar, bog'lanish, contact, etc.)
   const isContact =
-    /^(kontakt|aloqa|bog\x27lanish|kontaktlar|telefon|telegram|email)(\s|$)/iu.test(q) ||
-    /^(contact|how\s+to\s+contact)(\s|$)/iu.test(q) ||
-    /^(контакт|связаться|как\s+связаться|телеграм)(\s|$)/iu.test(q);
+    /(?:kontakt|aloqa|bog\x27lanish|kontaktlar|contact|how\s+to\s+contact|контакт|связаться|как\s+связаться)(?:\s|$)/iu.test(q);
 
   if (isContact) {
     if (/[а-яё]/iu.test(q)) {

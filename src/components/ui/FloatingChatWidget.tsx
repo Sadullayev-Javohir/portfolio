@@ -36,6 +36,7 @@ export function FloatingChatWidget() {
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const chatFeedRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const isUserScrolledUpRef = useRef(false);
 
   const {
@@ -83,7 +84,10 @@ export function FloatingChatWidget() {
     isUserScrolledUpRef.current = false;
     setShowScrollBottomBtn(false);
     sendMessage();
-    setTimeout(() => scrollToBottom(true), 50);
+    setTimeout(() => {
+      scrollToBottom(true);
+      inputRef.current?.focus();
+    }, 50);
   };
 
   // Dragging logic - attached specifically to the drag-handle area
@@ -340,6 +344,7 @@ export function FloatingChatWidget() {
             className="p-3 bg-white border-t-2 border-ink flex items-center gap-2"
           >
             <input
+              ref={inputRef}
               type="text"
               id="chat-input"
               name="chat-input"
@@ -347,6 +352,10 @@ export function FloatingChatWidget() {
               onChange={(e) => setInput(e.target.value)}
               placeholder={isLoading ? "..." : dict.chatWidget.placeholder}
               disabled={isLoading}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
               className="flex-1 px-3 py-2 rounded-xl border-2 border-ink bg-cream/30 text-ink text-xs sm:text-sm font-sans placeholder:text-muted focus:outline-none focus:bg-white focus:shadow-solid-sm transition-all disabled:opacity-60"
             />
 

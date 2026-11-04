@@ -322,6 +322,10 @@ QAT'IY QOIDALAR (BU QOIDALARGA 100% AMAL QILING):
 3. TIL:
    - Foydalanuvchi qaysi tilda yozsa (O'zbek, Rus, Ingliz), aynan o'sha tilda javob bering.
 
+4. KONTAKT QOIDASI:
+   - Foydalanuvchi faqat bitta kontakt kanali haqida so'rasa (masalan, faqat telefon, faqat GitHub, faqat email, faqat Telegram, faqat LinkedIn), FAQAT o'sha kanalning ma'lumotini bering. Boshqa kontaktlarni qo'shmang.
+   - Faqat "kontaktlar", "bog'lanish", "aloqa" kabi umumiy so'rov bo'lsagina barcha kontaktlarni bering.
+
 SAVOL BO'YICHA RAG KONTEKSTI:
 ${contextText}
 
