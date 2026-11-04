@@ -9,7 +9,10 @@ import { GoalsSection } from "@/components/about/GoalsSection";
 export const metadata: Metadata = {
   title: "About · Javohir Sadullayev (.NET & AI Engineer)",
   description:
-    "I'm Javohir — a .NET backend developer who likes the part of the job most people avoid: the logs, the slow query, the edge case that only appears at 2am.",
+    "About Javohir Sadullayev (Sadullayev Javohir, javohir engineer) — .NET backend developer & CS student at PDP University. Background, technical journey, principles, and engineering philosophy.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {

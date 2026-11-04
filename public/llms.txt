@@ -1,0 +1,46 @@
+# Javohir Sadullayev — Software Engineer & .NET Backend Developer
+> Official llms.txt reference for LLM agents, web crawlers and search engines.
+> Website: https://sadullayev-javohir.github.io (javohir.engineer)
+
+## Identity & Aliases
+- Full Name: Javohir Sadullayev (Javohirbek Sadullayev)
+- Known As: Javohir Sadullayev, Sadullayev Javohir, javohir engineer, javohir.engineer, Javohir, Sadullayev
+- Profession: Software Engineer, .NET Backend Developer, AI Product Builder
+- Location: Tashkent, Uzbekistan
+- Education: PDP University — B.Sc. in Computer Science (2024–2028, GPA: 4.13 / 4.5)
+
+## Quick Summary
+Javohir Sadullayev is a backend software engineer specializing in high-concurrency systems, event-driven architectures, and AI product integration using C# and .NET 8. He builds production-grade REST APIs, real-time WebSocket applications with SignalR, high-speed PostgreSQL and Redis data layers, and speech assessment models powered by Azure Cognitive Services.
+
+## Core Technical Stack
+- Languages: C# (C# 12), .NET 8, SQL, TypeScript, Bash
+- Backend: ASP.NET Core Web API, Entity Framework Core, Dapper, Clean Architecture, CQRS, MediatR
+- Real-time & Caching: Redis (In-memory Caching, Distributed Locks, Pub/Sub), SignalR Core, WebSockets (<50ms latency)
+- Databases: PostgreSQL (Query Optimization, Indexing, Cursor Pagination), MS SQL Server
+- DevOps & Cloud: Docker, Docker Compose, Linux/Bash, Git, GitHub Actions CI/CD
+- AI & Cognitive: Azure Speech (STT, TTS, Pronunciation Assessment), OpenAI / LLM APIs, Vector Embeddings
+- Testing: xUnit, Integration Testing, Unit Testing (105+ automated tests)
+
+## Key Projects
+1. **EnglishAI**: Adaptive English learning platform with real-time speech assessment and pronunciation scoring. Built with ASP.NET Core, Azure Speech, Redis, and SignalR. Served 700+ active learners with <120ms speech latency and +78% onboarding completion.
+2. **KitobdagiMen** (kitobdagimen.uz): Social book reading platform with Telegram Mini App auth, algorithmic discovery feed, and live quotes. Feed latency <45ms, 99.4% auth success rate.
+3. **TypingWar**: Multiplayer real-time typing duel engine with sub-50ms synchronization, anti-cheat validation, and live matchmaking using SignalR and Redis Pub/Sub.
+4. **ZiyoAI**: AI-driven educational platform with automated homework grading, multi-turn student tutoring, and OCR visual comprehension.
+5. **MeningVaqtim**: High-performance productivity and focus tracker with habit analytics and offline synchronization.
+
+## Verified Credentials & Certifications
+- HackerRank Software Engineer Certificate
+- HackerRank REST API (Intermediate) Certificate
+- Microsoft & freeCodeCamp: Foundational C# Certificate
+
+## Contact & Official Channels
+- Telegram: https://t.me/dotnetda (@dotnetda)
+- Email: javohirsadullayev836@gmail.com
+- Phone: +998 88 603 66 44
+- LinkedIn: https://www.linkedin.com/in/javohir-sadullayev-b8737725a/
+- GitHub: https://github.com/Sadullayev-Javohir
+- Portfolio: https://sadullayev-javohir.github.io
+
+## Full Documentation & Context
+For comprehensive details, architectural decisions, and detailed case studies, read the full documentation at:
+- https://sadullayev-javohir.github.io/llms-full.txt

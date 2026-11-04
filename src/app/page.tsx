@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { Marquee } from "@/components/ui/Marquee";
 import { Intro } from "@/components/home/Intro";
@@ -8,6 +9,17 @@ import { ExperiencePreview } from "@/components/home/ExperiencePreview";
 import { EducationSection } from "@/components/home/EducationSection";
 import { JournalTeaser } from "@/components/home/JournalTeaser";
 import { NowCta } from "@/components/home/NowCta";
+import { SITE_CONFIG } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Javohir Sadullayev · Software Engineer & .NET Developer | javohir.engineer",
+  description:
+    "Official portfolio of Javohir Sadullayev (Sadullayev Javohir, javohir engineer). Software Engineer & .NET Backend Developer specializing in high-concurrency systems, C# / .NET 8, PostgreSQL, Redis, SignalR, and AI applications in Tashkent, Uzbekistan.",
+  keywords: SITE_CONFIG.keywords,
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default function HomePage() {
   return (

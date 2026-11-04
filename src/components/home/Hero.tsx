@@ -30,7 +30,18 @@ export function Hero() {
 
           {/* Headline with Playful Geometric Element */}
           <div className="flex flex-col">
+            {/* Semantic Identity Eyebrow for SEO & Branding */}
+            <div className="flex items-center gap-2 mb-2">
+              <span className="font-mono text-xs sm:text-sm font-extrabold tracking-[2px] uppercase text-coral">
+                Javohir Sadullayev
+              </span>
+              <span className="font-mono text-xs text-muted">·</span>
+              <span className="font-mono text-xs sm:text-sm font-semibold tracking-[1.5px] uppercase text-ink/70">
+                Software Engineer
+              </span>
+            </div>
             <h1 className="font-display text-3xl sm:text-5xl lg:text-[60px] font-extrabold text-ink tracking-tight leading-[1.05]">
+              <span className="sr-only">Javohir Sadullayev · Software Engineer &amp; .NET Developer — </span>
               {dict.hero.title}
             </h1>
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-1">
