@@ -1,0 +1,28 @@
+import type { Metadata } from "next";
+import { ContactHeader } from "@/components/contact/ContactHeader";
+import { ContactForm } from "@/components/contact/ContactForm";
+import { ContactSidebar } from "@/components/contact/ContactSidebar";
+
+export const metadata: Metadata = {
+  title: "Contact · Javohir Sadullayev (.NET & AI Engineer)",
+  description:
+    "Tell me what's breaking. A slow endpoint, a cache that never hits, an AI feature that costs more than it earns — or just a project you want a second brain on. Email is the fastest way to reach me.",
+};
+
+export default function ContactPage() {
+  return (
+    <div className="flex flex-col w-full">
+      {/* Contact Header */}
+      <ContactHeader />
+
+      {/* Main Two-Column Content: Form & Direct Channels */}
+      <section className="w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 pb-16 lg:pb-[64px] flex flex-col lg:flex-row gap-6 lg:gap-[24px] items-start">
+        {/* Form Column */}
+        <ContactForm />
+
+        {/* Sidebar: Direct Channels & Good Fit */}
+        <ContactSidebar />
+      </section>
+    </div>
+  );
+}

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Solid Neo-Brutalist Shadow -->
+    <filter id="gear-shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="6" dy="6" stdDeviation="0" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+    <linearGradient id="gear-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD24D" />
+      <stop offset="100%" stop-color="#FFA800" />
+    </linearGradient>
+    <linearGradient id="slash-coral" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7D6B" />
+      <stop offset="100%" stop-color="#FF4B36" />
+    </linearGradient>
+  </defs>
+
+  <!-- Neo-brutalist Badge Container -->
+  <!-- Solid bottom-right shadow box -->
+  <rect x="28" y="28" width="460" height="460" rx="115" fill="#000000" opacity="0.35" />
+  
+  <!-- Main Badge -->
+  <rect x="24" y="24" width="460" height="460" rx="115" fill="#14110F" stroke="#FFC940" stroke-width="14" />
+
+  <!-- Technical Circuit Grid Overlay -->
+  <g opacity="0.08" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="4,6">
+    <line x1="70" y1="170" x2="442" y2="170" />
+    <line x1="70" y1="256" x2="442" y2="256" />
+    <line x1="70" y1="342" x2="442" y2="342" />
+    <line x1="170" y1="70" x2="170" y2="442" />
+    <line x1="256" y1="70" x2="256" y2="442" />
+    <line x1="342" y1="70" x2="342" y2="442" />
+  </g>
+
+  <!-- Top-Right Status Node & Circuit Trace -->
+  <path d="M 364 88 L 404 88 L 420 104 L 420 134" fill="none" stroke="#7BE0AD" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" />
+  <circle cx="364" cy="88" r="8" fill="#7BE0AD" />
+  <circle cx="420" cy="134" r="6" fill="#7BE0AD" opacity="0.7" />
+
+  <!-- Bottom-Left Prompt Node -->
+  <path d="M 88 396 L 106 414 L 88 432" fill="none" stroke="#FFC940" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.6" />
+  <line x1="118" y1="432" x2="140" y2="432" stroke="#FFC940" stroke-width="6" stroke-linecap="round" opacity="0.6" />
+
+  <!-- Engineer Gear with Drop Shadow -->
+  <path d="M 391.25 228.58 L 430.73 234.93 A 176 176 0 0 1 430.73 277.07 L 391.25 283.42 A 138 138 0 0 1 371.02 332.25 L 371.02 332.25 L 394.45 364.66 A 176 176 0 0 1 364.66 394.45 L 332.25 371.02 A 138 138 0 0 1 283.42 391.25 L 283.42 391.25 L 277.07 430.73 A 176 176 0 0 1 234.93 430.73 L 228.58 391.25 A 138 138 0 0 1 179.75 371.02 L 179.75 371.02 L 147.34 394.45 A 176 176 0 0 1 117.55 364.66 L 140.98 332.25 A 138 138 0 0 1 120.75 283.42 L 120.75 283.42 L 81.27 277.07 A 176 176 0 0 1 81.27 234.93 L 120.75 228.58 A 138 138 0 0 1 140.98 179.75 L 140.98 179.75 L 117.55 147.34 A 176 176 0 0 1 147.34 117.55 L 179.75 140.98 A 138 138 0 0 1 228.58 120.75 L 228.58 120.75 L 234.93 81.27 A 176 176 0 0 1 277.07 81.27 L 283.42 120.75 A 138 138 0 0 1 332.25 140.98 L 332.25 140.98 L 364.66 117.55 A 176 176 0 0 1 394.45 147.34 L 371.02 179.75 A 138 138 0 0 1 391.25 228.58 Z" fill="url(#gear-gold)" stroke="#14110F" stroke-width="4" stroke-linejoin="round" filter="url(#gear-shadow)" />
+
+  <!-- Gear Center Hole (Dark Core) -->
+  <circle cx="256" cy="256" r="92" fill="#14110F" stroke="#FFA800" stroke-width="8" />
+
+  <!-- Inner Concentric Tech Ring -->
+  <circle cx="256" cy="256" r="82" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-dasharray="3,4" opacity="0.15" />
+
+  <!-- Software Engineer Code Brackets: < / > -->
+  <!-- Left Bracket < -->
+  <path d="M 216 208 L 174 256 L 216 304" fill="none" stroke="#FDF8F1" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Center Slash / -->
+  <path d="M 274 198 L 238 314" fill="none" stroke="url(#slash-coral)" stroke-width="20" stroke-linecap="round" />
+
+  <!-- Right Bracket > -->
+  <path d="M 296 208 L 338 256 L 296 304" fill="none" stroke="#FDF8F1" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Core Status Sparkle -->
+  <circle cx="256" cy="256" r="3" fill="#FFC940" />
+</svg>

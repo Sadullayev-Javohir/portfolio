@@ -1,0 +1,11 @@
+{
+  "primaryModel": "upstage/solar-mini4:free",
+  "fallbackModels": [
+    "stepfun/step-3.7-flash:free",
+    "reflection/beam-1.0-501b-a23b:free"
+  ],
+  "temperature": 0.3,
+  "maxTokens": 1024,
+  "timeoutSeconds": 10,
+  "lastUpdated": "2026-11-04T12:10:00.000Z"
+}
