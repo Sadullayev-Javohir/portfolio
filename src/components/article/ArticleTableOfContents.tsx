@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { ArticleData } from "@/data/articles";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ArticleTableOfContentsProps {
   items: ArticleData["toc"];
 }
 
 export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
+  const { dict } = useLanguage();
   const [activeId, setActiveId] = useState<string>(items[0]?.id || "");
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
     <aside className="w-full lg:w-[250px] shrink-0 self-start lg:sticky lg:top-28">
       <div className="w-full bg-white rounded-[16px] border-[1.5px] border-ink p-[16px_18px] flex flex-col shadow-sm">
         <span className="font-mono text-[8px] text-muted tracking-[1.3px] uppercase font-medium">
-          ON THIS PAGE
+          {dict.blogPage.onThisPage}
         </span>
 
         <div className="w-full h-[1px] bg-rule my-3" />

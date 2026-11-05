@@ -5,12 +5,15 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { CustomArticle } from "@/lib/dynamicContent";
 import { BlogFeaturedEmpty } from "./BlogFeaturedEmpty";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface BlogFeaturedArticleProps {
   article?: CustomArticle | null;
 }
 
 export function BlogFeaturedArticle({ article }: BlogFeaturedArticleProps) {
+  const { dict } = useLanguage();
+
   if (!article) {
     return <BlogFeaturedEmpty />;
   }
@@ -24,10 +27,10 @@ export function BlogFeaturedArticle({ article }: BlogFeaturedArticleProps) {
         {/* Label Row */}
         <div className="flex items-center gap-2.5">
           <span className="font-mono text-[10.5px] uppercase tracking-[1.6px] text-muted font-medium">
-            FEATURED ESSAY
+            {dict.blogPage.featuredEssay}
           </span>
           <span className="bg-yellow border-[1.5px] border-ink text-ink font-mono text-[8px] tracking-[0.4px] px-2.5 py-0.5 rounded-full uppercase font-bold shadow-solid-sm">
-            LATEST POST
+            {dict.blogPage.latestPost}
           </span>
         </div>
 
@@ -62,7 +65,7 @@ export function BlogFeaturedArticle({ article }: BlogFeaturedArticleProps) {
                   {article.chip || category}
                 </span>
                 <div className="relative z-10">
-                  <span className="font-mono text-[11px] text-muted">CHOP ETILGAN</span>
+                  <span className="font-mono text-[11px] text-muted">{dict.blogPage.publishedBadge}</span>
                   <div className="font-display font-bold text-2xl text-ink leading-tight mt-1 line-clamp-2">
                     {article.title}
                   </div>
@@ -113,7 +116,7 @@ export function BlogFeaturedArticle({ article }: BlogFeaturedArticleProps) {
                 href={`/blog/${article.slug}`}
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-ink bg-yellow hover:bg-yellow-hover font-mono text-xs font-bold text-ink shadow-solid-sm hover:shadow-solid hover:-translate-y-0.5 transition-all"
               >
-                <span>Maqolani o&apos;qish</span>
+                <span>{dict.blogPage.readArticle}</span>
                 <ArrowUpRight className="w-4 h-4" />
               </Link>
             </div>

@@ -35,10 +35,10 @@ export function Footer() {
           {/* Footer Copy */}
           <div className="max-w-xl flex flex-col gap-5">
             <span className="font-mono text-[11px] text-coral tracking-[1.6px] uppercase font-medium">
-              ✳ SAY HELLO
+              {dict.footer.sayHello}
             </span>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-[42px] font-bold text-cream tracking-tight leading-[1.05]">
-              Got a backend problem worth solving?
+              {dict.footer.title}
             </h2>
             <p className="text-[#B9B0A4] text-sm sm:text-[15px] leading-relaxed max-w-lg">
               {dict.footer.tagline}
@@ -84,7 +84,7 @@ export function Footer() {
             {/* Elsewhere Column */}
             <div className="flex flex-col gap-3">
               <span className="font-mono text-[9.5px] tracking-[1.6px] text-[#8F8678] uppercase font-medium">
-                ELSEWHERE
+                {dict.footer.connectLabel}
               </span>
               <ul className="flex flex-col gap-2.5 text-sm text-cream font-normal">
                 <li>

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { PLANNED_ARTICLES, PlannedArticle } from "@/data/blogData";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface PlannedArticlesSectionProps {
   filterText?: string;
@@ -19,6 +20,7 @@ export function PlannedArticlesSection({
   filterText = "",
   categoryFilter = "",
 }: PlannedArticlesSectionProps) {
+  const { dict } = useLanguage();
   // If search filter is active, filter articles; otherwise display all planned cards as in pen design
   const filteredArticles = PLANNED_ARTICLES.filter((item) => {
     if (!filterText) return true;
@@ -36,14 +38,14 @@ export function PlannedArticlesSection({
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
           <div className="flex flex-col gap-2">
             <span className="font-mono text-[10.5px] uppercase tracking-[1.6px] text-muted font-medium">
-              ON THE DESK
+              {dict.blogPage.onTheDesk}
             </span>
             <h2 className="font-display font-bold text-[26px] sm:text-[30px] text-ink">
-              Planned, not published.
+              {dict.blogPage.plannedTitle}
             </h2>
           </div>
           <span className="font-mono text-[8.5px] text-muted self-start sm:self-end">
-            Titles may change — ideas come from real incidents
+            {dict.blogPage.plannedSubtitle}
           </span>
         </div>
 

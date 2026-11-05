@@ -5,7 +5,7 @@ import { BadgeCheck, Languages } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export function ExperienceBeyondRoles() {
-  const { dict } = useLanguage();
+  const { dict, language } = useLanguage();
 
   const certifications = [
     { title: "HackerRank REST API (Intermediate)", subtitle: "HackerRank Verified" },
@@ -13,11 +13,24 @@ export function ExperienceBeyondRoles() {
     { title: "Foundational C# with Microsoft", subtitle: "Microsoft & freeCodeCamp" },
   ];
 
-  const languages = [
-    { name: "Uzbek", level: "Native / Ona tili" },
-    { name: "English", level: "B1 Intermediate (CEFR)" },
-    { name: "Russian", level: "Professional / Working" },
-  ];
+  const languages =
+    language === "uz"
+      ? [
+          { name: "O'zbek tili", level: "Ona tili" },
+          { name: "Ingliz tili", level: "B1 Intermediate (CEFR)" },
+          { name: "Rus tili", level: "Ishchi / Erkin muloqot" },
+        ]
+      : language === "ru"
+      ? [
+          { name: "Узбекский", level: "Родной язык" },
+          { name: "Английский", level: "B1 Intermediate (CEFR)" },
+          { name: "Русский", level: "Рабочий / Профессиональный" },
+        ]
+      : [
+          { name: "Uzbek", level: "Native / Fluent" },
+          { name: "English", level: "B1 Intermediate (CEFR)" },
+          { name: "Russian", level: "Professional / Working" },
+        ];
 
   return (
     <section className="w-full bg-white border-y-2 border-ink py-12 px-6 sm:px-10 lg:px-14">

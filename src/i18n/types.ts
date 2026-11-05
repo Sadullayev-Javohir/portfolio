@@ -79,6 +79,28 @@ export interface NowCtaTranslations {
   ctaResume: string;
 }
 
+export interface ExpertiseTranslations {
+  eyebrow: string;
+  title: string;
+  description: string;
+  action: string;
+  backendTitle: string;
+  backendDesc: string;
+  dataTitle: string;
+  dataDesc: string;
+  realtimeTitle: string;
+  realtimeDesc: string;
+  deliveryTitle: string;
+  deliveryDesc: string;
+}
+
+export interface AboutTimelineItem {
+  year: string;
+  title: string;
+  description: string;
+  company: string;
+}
+
 export interface AboutTranslations {
   header: {
     eyebrow: string;
@@ -122,6 +144,7 @@ export interface AboutTranslations {
   journey: {
     eyebrow: string;
     title: string;
+    timeline: AboutTimelineItem[];
   };
   interests: {
     eyebrow: string;
@@ -158,6 +181,9 @@ export interface ProjectsPageTranslations {
   ctaTitle: string;
   ctaDesc: string;
   ctaButton: string;
+  allProjectsLabel: string;
+  showingCount: string;
+  caseStudyBtn: string;
 }
 
 export interface ExperiencePageTranslations {
@@ -191,6 +217,12 @@ export interface SkillsPageTranslations {
   allGroups: string;
   certsEyebrow: string;
   certsTitle: string;
+  allStack: string;
+  searchPlaceholder: string;
+  colTech: string;
+  colCategory: string;
+  colUsed: string;
+  noMatchingTech: string;
 }
 
 export interface EducationPageTranslations {
@@ -215,6 +247,45 @@ export interface BlogPageTranslations {
   latestTitle: string;
   writeArticle: string;
   readArticle: string;
+  featuredEssay: string;
+  latestPost: string;
+  publishedBadge: string;
+  articlesPublished: string;
+  nothingToScroll: string;
+  seeProjectsBtn: string;
+  allPublishedArticles: string;
+  noArticlesYet: string;
+  noMatchingArticles: string;
+  readArticleBtn: string;
+  onTheDesk: string;
+  plannedSubtitle: string;
+  like: string;
+  liked: string;
+  likePrompt: string;
+  likeThanks: string;
+  viewsLabel: string;
+  share: string;
+  copied: string;
+  onThisPage: string;
+  prevArticle: string;
+  nextArticle: string;
+  relatedArticles: string;
+  relatedEmpty: string;
+  plannedTopicsBtn: string;
+  commentsTitle: string;
+  writeTab: string;
+  previewTab: string;
+  attachImage: string;
+  removeImage: string;
+  namePlaceholder: string;
+  commentPlaceholder: string;
+  postCommentBtn: string;
+  replyBtn: string;
+  editBtn: string;
+  deleteBtn: string;
+  cancelBtn: string;
+  saveBtn: string;
+  noCommentsYet: string;
 }
 
 export interface ResumePageTranslations {
@@ -228,6 +299,10 @@ export interface ResumePageTranslations {
   educationLabel: string;
   skillsLabel: string;
   projectsLabel: string;
+  preferPdfTitle: string;
+  preferPdfDesc: string;
+  downloadPdfBtn: string;
+  rolesCount: string;
 }
 
 export interface ContactPageTranslations {
@@ -250,6 +325,33 @@ export interface ContactPageTranslations {
   availabilityBadge: string;
   locationTitle: string;
   locationValue: string;
+  formHeadTitle: string;
+  formHeadSubtitle: string;
+  onlineBadge: string;
+  subjectHint: string;
+  directInboxNotice: string;
+  successTitle: string;
+  successDesc: string;
+  sendAnotherBtn: string;
+  telegramBtn: string;
+  nameError: string;
+  emailError: string;
+  messageError: string;
+  trustResponseLabel: string;
+  trustResponseValue: string;
+  trustResponseDesc: string;
+  trustDirectLabel: string;
+  trustDirectValue: string;
+  trustDirectDesc: string;
+  trustPrivacyLabel: string;
+  trustPrivacyValue: string;
+  trustPrivacyDesc: string;
+  topics: {
+    backend: string;
+    ai: string;
+    redis: string;
+    job: string;
+  };
 }
 
 export interface ChatWidgetTranslations {
@@ -275,7 +377,18 @@ export interface CaseStudyTranslations {
   backToProjects: string;
 }
 
+export interface NotFoundTranslations {
+  eyebrow: string;
+  routeNotFound: string;
+  title: string;
+  description: string;
+  backHome: string;
+  browseProjects: string;
+}
+
 export interface FooterTranslations {
+  sayHello: string;
+  title: string;
   tagline: string;
   pagesLabel: string;
   projectsLabel: string;
@@ -310,6 +423,7 @@ export interface TranslationDictionary {
   educationSection: EducationSectionTranslations;
   journalTeaser: JournalTeaserTranslations;
   nowCta: NowCtaTranslations;
+  expertise: ExpertiseTranslations;
   about: AboutTranslations;
   projectsPage: ProjectsPageTranslations;
   experiencePage: ExperiencePageTranslations;
@@ -320,6 +434,7 @@ export interface TranslationDictionary {
   contactPage: ContactPageTranslations;
   chatWidget: ChatWidgetTranslations;
   caseStudy: CaseStudyTranslations;
+  notFound: NotFoundTranslations;
   footer: FooterTranslations;
   projects: Record<string, ProjectTranslationItem>;
   roles: Record<string, RoleTranslationItem>;

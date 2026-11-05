@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Heart, Eye, Share2, Check } from "lucide-react";
 import { ArticleData } from "@/data/articles";
 import { getOrCreateAuthorToken } from "@/lib/useClientIdentity";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ArticleEngagementBarProps {
   slug?: string;
@@ -12,6 +13,8 @@ interface ArticleEngagementBarProps {
 }
 
 export function ArticleEngagementBar({ slug, reactions, onStatsChange }: ArticleEngagementBarProps) {
+  const { dict } = useLanguage();
+  const b = dict.blogPage;
   const [likes, setLikes] = useState<number>(reactions?.likes || 0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
   const [views, setViews] = useState<number>(0);
@@ -113,7 +116,7 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
               ? "bg-coral text-cream border-ink"
               : "bg-cream text-ink hover:bg-coral/20"
           }`}
-          title={hasLiked ? "Sizga yoqdi (Qaytarib olish uchun bosing)" : "Maqolaga like bosish"}
+          title={hasLiked ? b.liked : b.likePrompt}
         >
           <Heart
             className={`w-4 h-4 transition-transform group-hover:scale-110 ${
@@ -121,7 +124,7 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
             }`}
           />
           <span className="font-mono text-xs font-bold tracking-wide">
-            {hasLiked ? "Yoqdi" : "Like"}
+            {hasLiked ? b.liked : b.like}
           </span>
           <span
             className={`px-2 py-0.5 rounded-full font-mono text-xs font-bold ${
@@ -132,7 +135,7 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
           </span>
         </button>
         <span className="text-xs font-mono text-muted hidden sm:inline">
-          {hasLiked ? "Fikringiz uchun rahmat!" : "Maqola ma'qul kelgan bo'lsa like bosing"}
+          {hasLiked ? b.likeThanks : b.likePrompt}
         </span>
       </div>
 
@@ -142,7 +145,7 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
         <div className="flex items-center gap-2 text-ink px-3.5 py-2 rounded-full bg-cream border border-ink/30 shadow-sm">
           <Eye className="w-4 h-4 text-ink" />
           <span className="font-mono text-xs font-bold uppercase tracking-wider">
-            {views} {views === 1 ? "VIEW" : "VIEWS"}
+            {views} {b.viewsLabel}
           </span>
         </div>
 
@@ -150,17 +153,17 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
         <button
           onClick={handleShare}
           className="flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-ink bg-cream text-ink hover:bg-yellow hover:shadow-solid-sm transition-all cursor-pointer font-mono text-xs font-bold"
-          title="Havoladan nusxa olish"
+          title={b.share}
         >
           {copiedLink ? (
             <>
               <Check className="w-3.5 h-3.5 text-mint stroke-[3]" />
-              <span className="text-ink">Nusxalandi!</span>
+              <span className="text-ink">{b.copied}</span>
             </>
           ) : (
             <>
               <Share2 className="w-3.5 h-3.5 text-ink" />
-              <span>Ulashish</span>
+              <span>{b.share}</span>
             </>
           )}
         </button>

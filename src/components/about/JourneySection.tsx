@@ -121,40 +121,48 @@ export function JourneySection() {
 
         {/* Timeline Stack (1:1 with PORTFOLIO.pen) */}
         <div className="flex flex-col border-b-[1.5px] border-ink">
-          {TIMELINE_ITEMS.map((item, idx) => (
-            <div
-              key={idx}
-              className="border-t-[1.5px] border-ink py-6 sm:py-7 flex flex-col md:flex-row md:items-center justify-between gap-6"
-            >
-              {/* Year Col */}
-              <div className="w-[120px] shrink-0 flex items-center gap-2.5">
-                <span
-                  className={`w-3 h-3 rounded-full ${item.markerColor} border-[1.5px] border-ink shrink-0`}
-                />
-                <span className="font-mono text-[10px] sm:text-[11px] font-medium tracking-[0.9px] text-muted uppercase">
-                  {item.year}
-                </span>
-              </div>
+          {TIMELINE_ITEMS.map((item, idx) => {
+            const localized = dict.about.journey.timeline?.[idx];
+            const displayYear = localized?.year || item.year;
+            const displayTitle = localized?.title || item.title;
+            const displayDesc = localized?.description || item.description;
+            const displayCompany = localized?.company || item.company;
 
-              {/* Journey Copy */}
-              <div className="flex-1 max-w-[660px] flex flex-col gap-2">
-                <h3 className="font-display text-xl sm:text-2xl font-semibold tracking-[-0.8px] text-ink">
-                  {item.title}
-                </h3>
-                <p className="font-body text-sm sm:text-[15px] text-muted leading-[1.6]">
-                  {item.description}
-                </p>
-                <span className="font-mono text-[9px] text-ink font-semibold tracking-[0.8px] uppercase pt-0.5">
-                  {item.company}
-                </span>
-              </div>
+            return (
+              <div
+                key={idx}
+                className="border-t-[1.5px] border-ink py-6 sm:py-7 flex flex-col md:flex-row md:items-center justify-between gap-6"
+              >
+                {/* Year Col */}
+                <div className="w-[120px] shrink-0 flex items-center gap-2.5">
+                  <span
+                    className={`w-3 h-3 rounded-full ${item.markerColor} border-[1.5px] border-ink shrink-0`}
+                  />
+                  <span className="font-mono text-[10px] sm:text-[11px] font-medium tracking-[0.9px] text-muted uppercase">
+                    {displayYear}
+                  </span>
+                </div>
 
-              {/* Visual Geometric Composition */}
-              <div className="shrink-0 flex justify-end md:w-[200px] overflow-visible">
-                {item.renderVisual()}
+                {/* Journey Copy */}
+                <div className="flex-1 max-w-[660px] flex flex-col gap-2">
+                  <h3 className="font-display text-xl sm:text-2xl font-semibold tracking-[-0.8px] text-ink">
+                    {displayTitle}
+                  </h3>
+                  <p className="font-body text-sm sm:text-[15px] text-muted leading-[1.6]">
+                    {displayDesc}
+                  </p>
+                  <span className="font-mono text-[9px] text-ink font-semibold tracking-[0.8px] uppercase pt-0.5">
+                    {displayCompany}
+                  </span>
+                </div>
+
+                {/* Visual Geometric Composition */}
+                <div className="shrink-0 flex justify-end md:w-[200px] overflow-visible">
+                  {item.renderVisual()}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

@@ -203,7 +203,7 @@ export function ProjectsFeed({ initialCustomProjects = [] }: ProjectsFeedProps) 
                       : "bg-white text-ink border border-ink/40 hover:bg-cream/80"
                   }`}
                 >
-                  {cat === "All" ? `All projects · ${totalCount}` : cat}
+                  {cat === "All" ? `${dict.projectsPage.allProjectsLabel} · ${totalCount}` : cat}
                 </button>
               );
             })}
@@ -211,7 +211,9 @@ export function ProjectsFeed({ initialCustomProjects = [] }: ProjectsFeedProps) 
 
           {/* Results Count */}
           <span className="font-mono text-xs font-semibold text-muted tracking-wider uppercase shrink-0">
-            SHOWING {filteredProjects.length} OF {totalCount}
+            {dict.projectsPage.showingCount
+              .replace("{count}", String(filteredProjects.length))
+              .replace("{total}", String(totalCount))}
           </span>
         </div>
       </section>

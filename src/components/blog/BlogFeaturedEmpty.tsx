@@ -5,8 +5,10 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { FEATURED_EMPTY_DATA } from "@/data/blogData";
 import { SOCIAL_LINKS } from "@/data/portfolioData";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function BlogFeaturedEmpty() {
+  const { dict } = useLanguage();
   return (
     <section className="w-full bg-cream pt-9 pb-7 px-6 sm:px-10 lg:px-14">
       <div className="max-w-[1440px] mx-auto flex flex-col gap-5">
@@ -71,7 +73,7 @@ export function BlogFeaturedEmpty() {
               className="absolute font-mono text-[10px] uppercase tracking-[1.6px] text-ink font-medium pointer-events-none"
               style={{ left: "38px", top: "200px" }}
             >
-              ARTICLES PUBLISHED
+              {dict.blogPage.articlesPublished}
             </span>
 
             {/* Note "Nothing to scroll. Yet." */}
@@ -79,7 +81,7 @@ export function BlogFeaturedEmpty() {
               className="absolute font-mono text-[9px] tracking-[0.4px] text-ink pointer-events-none"
               style={{ left: "38px", top: "340px" }}
             >
-              Nothing to scroll. Yet.
+              {dict.blogPage.nothingToScroll}
             </span>
           </div>
 
@@ -122,7 +124,7 @@ export function BlogFeaturedEmpty() {
                 >
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                 </svg>
-                <span>Follow on GitHub</span>
+                <span>{dict.projectsPage.ctaButton}</span>
               </a>
 
               {/* See projects */}
@@ -130,7 +132,7 @@ export function BlogFeaturedEmpty() {
                 href="/projects"
                 className="inline-flex items-center gap-2 bg-transparent text-ink border-2 border-ink rounded-full px-5 py-3 font-semibold text-[13.5px] hover:bg-cream transition-colors cursor-pointer"
               >
-                <span>See projects</span>
+                <span>{dict.blogPage.seeProjectsBtn}</span>
                 <ArrowUpRight className="w-[15px] h-[15px] text-ink" />
               </Link>
             </div>

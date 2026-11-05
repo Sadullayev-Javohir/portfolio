@@ -3,6 +3,7 @@
 import React from "react";
 import { Search } from "lucide-react";
 import { BLOG_CATEGORIES } from "@/data/blogData";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface BlogToolsProps {
   searchQuery: string;
@@ -17,6 +18,7 @@ export function BlogTools({
   selectedCategory,
   setSelectedCategory,
 }: BlogToolsProps) {
+  const { dict } = useLanguage();
   return (
     <div className="w-full bg-white border-b-2 border-ink py-[18px] px-6 sm:px-10 lg:px-14">
       <div className="max-w-[1440px] mx-auto flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4">
@@ -29,7 +31,7 @@ export function BlogTools({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search articles, topics, tags…"
+              placeholder={dict.blogPage.searchPlaceholder}
               className="bg-transparent border-none outline-none font-sans text-[12.5px] text-ink placeholder:text-muted w-full"
             />
             <span className="bg-white border border-ink text-ink font-mono text-[8px] font-medium px-[7px] py-[3px] rounded-md shrink-0 select-none shadow-[1px_1px_0px_#14110F]">

@@ -3,15 +3,18 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function NotFoundView() {
+  const { dict } = useLanguage();
+
   const quickLinks = [
-    { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
-    { label: "Projects", href: "/projects" },
-    { label: "Experience", href: "/experience" },
-    { label: "Blog", href: "/blog" },
-    { label: "Resume", href: "/resume" },
+    { label: dict.nav.home, href: "/" },
+    { label: dict.nav.about, href: "/about" },
+    { label: dict.nav.projects, href: "/projects" },
+    { label: dict.nav.experience, href: "/experience" },
+    { label: dict.nav.blog, href: "/blog" },
+    { label: dict.nav.resume, href: "/resume" },
   ];
 
   return (
@@ -88,13 +91,13 @@ export function NotFoundView() {
         {/* Crumb */}
         <div className="flex items-center gap-[9px]">
           <span className="font-mono text-[9.5px] uppercase tracking-[1.6px] text-muted font-normal">
-            HTTP 404
+            {dict.notFound.eyebrow}
           </span>
           <span className="font-mono text-[9.5px] text-muted font-normal">
             ·
           </span>
           <span className="font-mono text-[9.5px] uppercase tracking-[1.6px] text-ink font-normal">
-            ROUTE_NOT_FOUND
+            {dict.notFound.routeNotFound}
           </span>
         </div>
 
@@ -139,12 +142,12 @@ export function NotFoundView() {
 
         {/* Title */}
         <h1 className="font-display text-[26px] sm:text-[34px] md:text-[40px] font-bold text-ink leading-[1.1] tracking-[-1px] sm:tracking-[-1.5px]">
-          This route doesn&apos;t exist.
+          {dict.notFound.title}
         </h1>
 
         {/* Sub */}
         <p className="font-sans text-[14px] sm:text-[15px] leading-[1.6] text-muted text-center max-w-[560px] px-2">
-          The page moved, was renamed, or never shipped. The backend is fine — this one is on the URL.
+          {dict.notFound.description}
         </p>
 
         {/* Actions */}
@@ -154,7 +157,7 @@ export function NotFoundView() {
             href="/"
             className="inline-flex items-center gap-[9px] px-[22px] py-[13px] rounded-full bg-yellow border-2 border-ink text-ink font-sans text-[14px] font-semibold shadow-[4px_4px_0px_#14110F] hover:shadow-none hover:translate-x-1 hover:translate-y-1 active:translate-x-1 active:translate-y-1 transition-all"
           >
-            <span>Back to home</span>
+            <span>{dict.notFound.backHome}</span>
             <ArrowLeft className="w-4 h-4 text-ink stroke-[2.2]" />
           </Link>
 
@@ -163,7 +166,7 @@ export function NotFoundView() {
             href="/projects"
             className="inline-flex items-center gap-[9px] px-[22px] py-[13px] rounded-full bg-transparent border-2 border-ink text-ink font-sans text-[14px] font-semibold hover:bg-ink hover:text-cream active:bg-ink active:text-cream transition-all"
           >
-            <span>Browse projects</span>
+            <span>{dict.notFound.browseProjects}</span>
             <ArrowUpRight className="w-4 h-4 stroke-[2.2]" />
           </Link>
         </div>

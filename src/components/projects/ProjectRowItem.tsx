@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 
 export interface ProjectItemData {
   id: string;
@@ -26,6 +27,7 @@ export interface ProjectItemData {
 }
 
 export function ProjectRowItem({ project }: { project: ProjectItemData }) {
+  const { dict } = useLanguage();
   return (
     <ScrollReveal>
       <article
@@ -109,7 +111,7 @@ export function ProjectRowItem({ project }: { project: ProjectItemData }) {
                 href={project.caseStudyHref}
                 className="group/btn inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-yellow border-2 border-ink shadow-solid-sm hover:shadow-solid text-xs font-bold text-ink transition-all hover:-translate-y-0.5 active:translate-y-0"
               >
-                <span>Case study</span>
+                <span>{dict.projectsPage.caseStudyBtn}</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-ink group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
               </Link>
 

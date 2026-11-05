@@ -25,6 +25,7 @@ import {
   getSavedAuthorName,
   saveAuthorName,
 } from "@/lib/useClientIdentity";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ArticleCommentsSectionProps {
   slug?: string;
@@ -33,6 +34,8 @@ interface ArticleCommentsSectionProps {
 }
 
 export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsSectionProps) {
+  const { dict, language } = useLanguage();
+  const b = dict.blogPage;
   const [comments, setComments] = useState<SanitizedBlogComment[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -422,17 +425,17 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
         <div className="flex items-center gap-2.5">
           <MessageSquare className="w-5 h-5 text-ink" />
           <h3 className="font-display text-[22px] sm:text-[24px] font-bold text-ink tracking-tight">
-            Fikrlar va Muhokama
+            {b.commentsTitle}
           </h3>
           <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-ink border-[1.5px] border-ink font-mono text-[9px] font-bold text-cream uppercase tracking-wider">
-            {totalCount} {totalCount === 1 ? "IZOH" : "IZOHLAR"}
+            {totalCount} {b.commentsTitle.toUpperCase()}
           </span>
         </div>
 
         {/* Sort Group */}
         <div className="flex items-center gap-2">
           <span className="font-mono text-[8px] text-muted tracking-wider uppercase font-semibold">
-            TARTIBLASH:
+            {language === "uz" ? "TARTIBLASH:" : language === "ru" ? "СОРТИРОВКА:" : "SORT:"}
           </span>
           <button
             onClick={() => setSortOrder("newest")}
@@ -442,7 +445,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                 : "bg-white text-muted hover:text-ink hover:bg-cream"
             }`}
           >
-            Yangi
+            {language === "uz" ? "Yangi" : language === "ru" ? "Сначала новые" : "Newest"}
           </button>
           <button
             onClick={() => setSortOrder("oldest")}
@@ -452,7 +455,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                 : "bg-white text-muted hover:text-ink hover:bg-cream"
             }`}
           >
-            Eski
+            {language === "uz" ? "Eski" : language === "ru" ? "Сначала старые" : "Oldest"}
           </button>
         </div>
       </div>
@@ -475,7 +478,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               type="text"
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
-              placeholder="Ism-familiyangiz (Masalan: Anvar Qodirov)"
+              placeholder={b.namePlaceholder}
               className="px-3 py-1.5 rounded-xl border border-ink/30 bg-cream/40 text-xs font-sans text-ink focus:outline-none focus:border-ink focus:bg-white flex-1 max-w-sm"
               required
             />
@@ -493,7 +496,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               }`}
             >
               <PenTool className="w-3 h-3" />
-              <span>Yozish</span>
+              <span>{b.writeTab}</span>
             </button>
             <button
               type="button"
@@ -505,7 +508,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               }`}
             >
               <Eye className="w-3 h-3" />
-              <span>Visual Ko&apos;rinishi</span>
+              <span>{b.previewTab}</span>
             </button>
           </div>
         </div>
@@ -517,17 +520,21 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
             rows={3}
             value={newCommentText}
             onChange={(e) => setNewCommentText(e.target.value)}
-            placeholder="Maqola bo'yicha fikringizni yozing (matnni belgilab Bold, Italic yoki Rasm tugmasini bosing)..."
+            placeholder={b.commentPlaceholder}
             className="w-full bg-cream/40 border-[1.5px] border-ink/30 rounded-xl p-3 text-[13px] text-ink font-sans placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors resize-y min-h-[90px]"
             required
           />
         ) : (
           <div className="w-full bg-cream/30 border-[1.5px] border-ink/30 rounded-xl p-4 min-h-[90px] text-[13px] text-ink font-sans">
             {newCommentText.trim() || commentImageUrl ? (
-              renderCommentBody(newCommentText || "(Matnsiz rasm)", commentImageUrl)
+              renderCommentBody(newCommentText || "(Preview)", commentImageUrl)
             ) : (
               <span className="text-muted italic">
-                Bu yerda formatlangan izohingiz qanday ko&apos;rinishi real vaqtda aks etadi.
+                {language === "uz"
+                  ? "Bu yerda formatlangan izohingiz qanday ko'rinishi real vaqtda aks etadi."
+                  : language === "ru"
+                  ? "Здесь в реальном времени будет показан предпросмотр вашего комментария."
+                  : "Your formatted comment preview will appear here in real time."}
               </span>
             )}
           </div>
@@ -541,7 +548,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               <img src={commentImageUrl} alt="preview" className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="font-mono text-xs font-bold text-ink">Biriktirilgan rasm</span>
+              <span className="font-mono text-xs font-bold text-ink">{b.attachImage}</span>
               <span className="font-mono text-[10px] text-muted truncate max-w-[200px]">
                 {commentImageUrl}
               </span>
@@ -550,7 +557,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               type="button"
               onClick={() => setCommentImageUrl("")}
               className="p-1 rounded-lg text-coral hover:bg-peach cursor-pointer ml-2"
-              title="Rasmni olib tashlash"
+              title={b.removeImage}
             >
               <X className="w-4 h-4" />
             </button>
@@ -562,41 +569,41 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
           <div className="flex items-center gap-1 text-ink flex-wrap">
             <button
               type="button"
-              onClick={() => insertFormatting("**", "**", "qalin matn")}
+              onClick={() => insertFormatting("**", "**", "text")}
               className="p-1.5 rounded-lg hover:bg-yellow hover:text-ink transition-colors cursor-pointer"
-              title="Qalin matn (**bold**)"
+              title="Bold (**bold**)"
             >
               <Bold className="w-3.5 h-3.5" />
             </button>
             <button
               type="button"
-              onClick={() => insertFormatting("*", "*", "kursiv matn")}
+              onClick={() => insertFormatting("*", "*", "text")}
               className="p-1.5 rounded-lg hover:bg-yellow hover:text-ink transition-colors cursor-pointer"
-              title="Kursiv (*italic*)"
+              title="Italic (*italic*)"
             >
               <Italic className="w-3.5 h-3.5" />
             </button>
             <button
               type="button"
-              onClick={() => insertFormatting("`", "`", "kod")}
+              onClick={() => insertFormatting("`", "`", "code")}
               className="p-1.5 rounded-lg hover:bg-yellow hover:text-ink transition-colors cursor-pointer"
-              title="Kod (`code`)"
+              title="Code (`code`)"
             >
               <Code className="w-3.5 h-3.5" />
             </button>
             <button
               type="button"
-              onClick={() => insertFormatting("[", "](https://havola.uz)", "havola matni")}
+              onClick={() => insertFormatting("[", "](https://example.com)", "link text")}
               className="p-1.5 rounded-lg hover:bg-yellow hover:text-ink transition-colors cursor-pointer"
-              title="Havola [text](url)"
+              title="Link [text](url)"
             >
               <LinkIcon className="w-3.5 h-3.5" />
             </button>
             <button
               type="button"
-              onClick={() => insertFormatting("@", " ", "foydalanuvchi")}
+              onClick={() => insertFormatting("@", " ", "user")}
               className="p-1.5 rounded-lg hover:bg-yellow hover:text-ink transition-colors cursor-pointer"
-              title="Belgilash (@nom)"
+              title="Mention (@name)"
             >
               <AtSign className="w-3.5 h-3.5" />
             </button>
@@ -608,10 +615,10 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploadingImage}
               className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-ink/30 bg-cream/70 hover:bg-yellow text-xs font-mono font-bold text-ink transition-colors cursor-pointer disabled:opacity-50"
-              title="Rasm yuklash / biriktirish"
+              title={b.attachImage}
             >
               <ImageIcon className="w-3.5 h-3.5" />
-              <span>{isUploadingImage ? "Yuklanmoqda..." : "Rasm qo'shish"}</span>
+              <span>{isUploadingImage ? "..." : b.attachImage}</span>
             </button>
           </div>
 
@@ -623,11 +630,11 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
             {isSubmitting ? (
               <>
                 <Loader2 className="w-3 h-3 animate-spin" />
-                <span>Yuborilmoqda...</span>
+                <span>...</span>
               </>
             ) : (
               <>
-                <span>Izoh qoldirish</span>
+                <span>{b.postCommentBtn}</span>
                 <CornerDownLeft className="w-3 h-3" />
               </>
             )}
@@ -639,7 +646,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
       {isLoading && (
         <div className="py-8 flex items-center justify-center gap-2 text-muted font-mono text-xs">
           <Loader2 className="w-4 h-4 animate-spin text-ink" />
-          <span>Izohlar yuklanmoqda...</span>
+          <span>...</span>
         </div>
       )}
 
@@ -648,7 +655,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
         <div className="p-8 rounded-2xl bg-white border border-ink/20 text-center flex flex-col items-center justify-center gap-2">
           <MessageSquare className="w-8 h-8 text-muted/40" />
           <p className="font-sans text-sm text-muted">
-            Hozircha izohlar yo&apos;q. Birinchi bo&apos;lib o&apos;z fikringizni bildiring!
+            {b.noCommentsYet}
           </p>
         </div>
       )}
@@ -683,7 +690,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                   </span>
                   {comment.updatedAt && (
                     <span className="font-mono text-[8px] text-muted italic">
-                      (tahrirlangan)
+                      {language === "uz" ? "(tahrirlangan)" : language === "ru" ? "(изменено)" : "(edited)"}
                     </span>
                   )}
                 </div>
@@ -700,10 +707,10 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                     setReplyImageUrl("");
                   }}
                   className="p-1.5 rounded-lg border border-ink/20 hover:border-ink hover:bg-yellow text-ink transition-colors flex items-center gap-1 text-[11px] font-mono font-semibold cursor-pointer"
-                  title="Javob berish"
+                  title={b.replyBtn}
                 >
                   <Reply className="w-3 h-3" />
-                  <span>Javob</span>
+                  <span>{b.replyBtn}</span>
                 </button>
 
                 {/* Edit button (if owner) */}
@@ -716,7 +723,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                       setEditImageUrl(comment.imageUrl || "");
                     }}
                     className="p-1.5 rounded-lg border border-ink/20 hover:border-ink hover:bg-cream text-ink transition-colors cursor-pointer"
-                    title="Tahrirlash"
+                    title={b.editBtn}
                   >
                     <Edit2 className="w-3 h-3" />
                   </button>
@@ -728,7 +735,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                     type="button"
                     onClick={() => handleDeleteComment(comment.id)}
                     className="p-1.5 rounded-lg border border-coral/30 hover:border-coral hover:bg-peach text-coral transition-colors cursor-pointer"
-                    title="O'chirish"
+                    title={b.deleteBtn}
                   >
                     <Trash2 className="w-3 h-3" />
                   </button>
@@ -755,7 +762,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                       onClick={() => setEditImageUrl("")}
                       className="text-xs text-coral hover:underline"
                     >
-                      Rasmni olib tashlash
+                      {b.removeImage}
                     </button>
                   </div>
                 )}
@@ -766,7 +773,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                     onClick={() => setEditingCommentId(null)}
                     className="px-3 py-1 rounded-full border border-ink/30 text-xs font-mono text-muted hover:text-ink cursor-pointer"
                   >
-                    Bekor qilish
+                    {b.cancelBtn}
                   </button>
                   <button
                     type="button"
@@ -774,7 +781,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                     disabled={isSubmittingEdit || !editText.trim()}
                     className="px-3.5 py-1 rounded-full bg-yellow border border-ink text-xs font-mono font-bold text-ink hover:bg-yellow-hover shadow-sm cursor-pointer disabled:opacity-50"
                   >
-                    {isSubmittingEdit ? "Saqlanmoqda..." : "Saqlash ✓"}
+                    {isSubmittingEdit ? "..." : `${b.saveBtn} ✓`}
                   </button>
                 </div>
               </div>
@@ -790,7 +797,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                 <div className="flex items-center justify-between text-xs font-mono">
                   <span className="font-bold text-ink flex items-center gap-1">
                     <CornerDownLeft className="w-3 h-3 text-muted" />
-                    {comment.authorName}ga javob yozish:
+                    {language === "uz" ? `${comment.authorName}ga javob yozish:` : language === "ru" ? `Ответ для ${comment.authorName}:` : `Replying to ${comment.authorName}:`}
                   </span>
                   <div className="flex items-center gap-2">
                     <button
@@ -798,7 +805,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                       onClick={() => setReplyTab(replyTab === "write" ? "preview" : "write")}
                       className="text-[11px] font-mono text-ink underline"
                     >
-                      {replyTab === "write" ? "Visual ko'rish" : "Yozish"}
+                      {replyTab === "write" ? b.previewTab : b.writeTab}
                     </button>
                     <button
                       type="button"
@@ -816,15 +823,15 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                     rows={2}
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="Javobingizni yozing..."
+                    placeholder={b.commentPlaceholder}
                     className="w-full bg-white border border-ink/30 rounded-lg p-2.5 text-xs font-sans text-ink focus:outline-none focus:border-ink"
                   />
                 ) : (
                   <div className="w-full bg-white border border-ink/30 rounded-lg p-2.5 text-xs font-sans text-ink min-h-[60px]">
                     {replyText.trim() || replyImageUrl ? (
-                      renderCommentBody(replyText || "(Matnsiz)", replyImageUrl)
+                      renderCommentBody(replyText || "(...)", replyImageUrl)
                     ) : (
-                      <span className="text-muted italic">Visual ko&apos;rinish...</span>
+                      <span className="text-muted italic">{b.previewTab}...</span>
                     )}
                   </div>
                 )}
@@ -838,7 +845,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                       onClick={() => setReplyImageUrl("")}
                       className="text-[10px] text-coral hover:underline"
                     >
-                      O&apos;chirish
+                      {b.removeImage}
                     </button>
                   </div>
                 )}
@@ -847,17 +854,17 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
-                      onClick={() => insertFormatting("**", "**", "matn", true)}
+                      onClick={() => insertFormatting("**", "**", "text", true)}
                       className="p-1 rounded hover:bg-yellow text-ink cursor-pointer"
-                      title="Qalin"
+                      title="Bold"
                     >
                       <Bold className="w-3 h-3" />
                     </button>
                     <button
                       type="button"
-                      onClick={() => insertFormatting("`", "`", "kod", true)}
+                      onClick={() => insertFormatting("`", "`", "code", true)}
                       className="p-1 rounded hover:bg-yellow text-ink cursor-pointer"
-                      title="Kod"
+                      title="Code"
                     >
                       <Code className="w-3 h-3" />
                     </button>
@@ -866,10 +873,10 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                       onClick={() => replyFileInputRef.current?.click()}
                       disabled={isUploadingReplyImage}
                       className="p-1 rounded hover:bg-yellow text-ink cursor-pointer flex items-center gap-1 text-[11px]"
-                      title="Rasm yuklash"
+                      title={b.attachImage}
                     >
                       <ImageIcon className="w-3 h-3" />
-                      <span>{isUploadingReplyImage ? "Yuklanmoqda..." : "Rasm"}</span>
+                      <span>{isUploadingReplyImage ? "..." : b.attachImage}</span>
                     </button>
                   </div>
 
@@ -879,7 +886,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                       onClick={() => setReplyingToId(null)}
                       className="px-2.5 py-1 text-xs font-mono text-muted hover:text-ink cursor-pointer"
                     >
-                      Bekor
+                      {b.cancelBtn}
                     </button>
                     <button
                       type="button"
@@ -887,7 +894,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                       disabled={isSubmittingReply || !replyText.trim()}
                       className="px-3.5 py-1 rounded-full bg-ink text-cream border border-ink text-xs font-mono font-bold hover:bg-yellow hover:text-ink transition-colors cursor-pointer disabled:opacity-50"
                     >
-                      {isSubmittingReply ? "Yuborilmoqda..." : "Javob berish"}
+                      {isSubmittingReply ? "..." : b.replyBtn}
                     </button>
                   </div>
                 </div>
@@ -932,7 +939,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                               setEditImageUrl(reply.imageUrl || "");
                             }}
                             className="p-1 rounded text-ink hover:bg-cream cursor-pointer"
-                            title="Tahrirlash"
+                            title={b.editBtn}
                           >
                             <Edit2 className="w-2.5 h-2.5" />
                           </button>
@@ -940,7 +947,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                             type="button"
                             onClick={() => handleDeleteComment(reply.id)}
                             className="p-1 rounded text-coral hover:bg-peach cursor-pointer"
-                            title="O'chirish"
+                            title={b.deleteBtn}
                           >
                             <Trash2 className="w-2.5 h-2.5" />
                           </button>
@@ -963,7 +970,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                             onClick={() => setEditingCommentId(null)}
                             className="px-2 py-0.5 text-xs font-mono text-muted"
                           >
-                            Bekor
+                            {b.cancelBtn}
                           </button>
                           <button
                             type="button"
@@ -971,7 +978,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                             disabled={isSubmittingEdit || !editText.trim()}
                             className="px-3 py-0.5 rounded-full bg-yellow border border-ink text-xs font-mono font-bold text-ink"
                           >
-                            Saqlash
+                            {b.saveBtn}
                           </button>
                         </div>
                       </div>
@@ -1000,7 +1007,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
             type="button"
             onClick={() => setFullscreenImage(null)}
             className="absolute top-5 right-5 p-3 rounded-full bg-white/20 text-cream hover:bg-white/40 transition-colors cursor-pointer"
-            title="Yopish"
+            title={language === "uz" ? "Yopish" : language === "ru" ? "Закрыть" : "Close"}
           >
             <X className="w-6 h-6" />
           </button>

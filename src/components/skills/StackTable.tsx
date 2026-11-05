@@ -4,8 +4,11 @@ import React, { useState } from "react";
 import { SKILL_GROUPS } from "@/data/skillsData";
 import { Search } from "lucide-react";
 import { getTechIcon } from "@/components/ui/icons/TechIcons";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function StackTable() {
+  const { dict } = useLanguage();
+  const s = dict.skillsPage;
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
@@ -52,7 +55,7 @@ export function StackTable() {
                   : "bg-white text-ink border-2 border-ink hover:bg-yellow/20"
               }`}
             >
-              All Stack ({SKILL_GROUPS.reduce((acc, g) => acc + g.rows.length, 0)})
+              {s.allStack} ({SKILL_GROUPS.reduce((acc, g) => acc + g.rows.length, 0)})
             </button>
             {SKILL_GROUPS.map((g) => (
               <button
@@ -80,7 +83,7 @@ export function StackTable() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search technologies..."
+              placeholder={s.searchPlaceholder}
               className="w-full pl-9 pr-3 py-1.5 rounded-full border-2 border-ink bg-white font-mono text-xs text-ink placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-yellow shadow-solid-sm"
             />
           </div>
@@ -88,16 +91,16 @@ export function StackTable() {
 
         {/* Table Head (Desktop) */}
         <div className="hidden lg:grid grid-cols-[330px_330px_1fr] gap-4 pb-2.5 border-b-2 border-ink font-mono text-[8.5px] uppercase tracking-[1.4px] text-muted font-semibold">
-          <div>TECHNOLOGY</div>
-          <div>CATEGORY</div>
-          <div>WHERE I&apos;VE USED IT</div>
+          <div>{s.colTech}</div>
+          <div>{s.colCategory}</div>
+          <div>{s.colUsed}</div>
         </div>
 
         {/* Table Body Groups */}
         <div className="flex flex-col gap-6">
           {filteredGroups.length === 0 ? (
             <div className="py-12 text-center font-mono text-sm text-muted">
-              No matching technologies found for &quot;{searchQuery}&quot;.
+              {s.noMatchingTech} &quot;{searchQuery}&quot;.
             </div>
           ) : (
             filteredGroups.map((group) => (

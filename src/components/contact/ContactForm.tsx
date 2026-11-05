@@ -1,17 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { CircleAlert, CircleCheck, Clock, MessageSquare, Send, ShieldCheck, Sparkles, UserCheck } from "lucide-react";
+import { CircleAlert, CircleCheck, Clock, Send, ShieldCheck, UserCheck } from "lucide-react";
 import { SOCIAL_LINKS } from "@/data/portfolioData";
-
-const SUGGESTED_TOPICS = [
-  "⚡ Backend & Architecture",
-  "🤖 AI & Speech Systems",
-  "🚀 Redis & Caching",
-  "💼 Job / Collaboration",
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export function ContactForm() {
+  const { dict } = useLanguage();
+  const c = dict.contactPage;
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -30,6 +27,13 @@ export function ContactForm() {
   const showNameError = touched.name && name.trim().length < 2;
   const showMessageError = touched.message && message.trim().length < 5;
 
+  const suggestedTopics = [
+    c.topics.backend,
+    c.topics.ai,
+    c.topics.redis,
+    c.topics.job,
+  ];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -39,15 +43,15 @@ export function ContactForm() {
 
     // Validate
     if (name.trim().length < 2) {
-      setErrorMessage("Iltimos, ismingizni kiriting (kamida 2 ta belgi).");
+      setErrorMessage(c.nameError);
       return;
     }
     if (!email.trim() || !emailRegex.test(email.trim())) {
-      setErrorMessage("Iltimos, to'g'ri email manzilini kiriting.");
+      setErrorMessage(c.emailError);
       return;
     }
     if (message.trim().length < 5) {
-      setErrorMessage("Iltimos, xabar matnini kiriting (kamida 5 ta belgi).");
+      setErrorMessage(c.messageError);
       return;
     }
 
@@ -75,10 +79,10 @@ export function ContactForm() {
         setMessage("");
         setTouched({});
       } else {
-        setErrorMessage(data.error || "Xabar yuborishda xatolik yuz berdi.");
+        setErrorMessage(data.error || c.errorMsg);
       }
     } catch {
-      setErrorMessage("Server bilan aloqa uzildi. Iltimos qaytadan urinib ko'ring.");
+      setErrorMessage(c.errorMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -101,17 +105,17 @@ export function ContactForm() {
         <div className="w-full flex items-center justify-between pb-2 border-b border-line/40">
           <div className="flex flex-col gap-[3px]">
             <h2 className="font-display text-[22px] font-bold tracking-[-0.6px] text-ink">
-              Send a message
+              {c.formHeadTitle}
             </h2>
             <span className="font-mono text-[9px] uppercase tracking-[0.4px] text-muted">
-              Direct inbox · All fields verified
+              {c.formHeadSubtitle}
             </span>
           </div>
 
           <div className="px-[10px] py-[4px] rounded-full bg-mint/25 border-[1.5px] border-ink flex items-center gap-1.5 shadow-solid-sm">
             <span className="w-2 h-2 rounded-full bg-mint animate-pulse" />
             <span className="font-mono text-[8.5px] uppercase tracking-[0.5px] text-ink font-bold">
-              ONLINE · DIRECT INBOX
+              {c.onlineBadge}
             </span>
           </div>
         </div>
@@ -125,10 +129,10 @@ export function ContactForm() {
 
             <div className="flex flex-col gap-1 max-w-[480px]">
               <h3 className="font-display text-[18px] font-bold text-ink">
-                Xabaringiz muvaffaqiyatli yuborildi!
+                {c.successTitle}
               </h3>
               <p className="font-sans text-[13px] leading-relaxed text-ink/80">
-                Rahmat! Xabaringiz qabul qilindi. Tez orada ko&apos;rsatilgan email manzilingiz orqali javob qaytaraman.
+                {c.successDesc}
               </p>
             </div>
 
@@ -138,7 +142,7 @@ export function ContactForm() {
                 onClick={handleReset}
                 className="px-4 py-2 rounded-xl bg-white hover:bg-cream border-2 border-ink font-mono text-xs font-bold text-ink shadow-solid-sm active:scale-95 transition-all cursor-pointer"
               >
-                Yana xabar yuborish
+                {c.sendAnotherBtn}
               </button>
 
               <a
@@ -147,7 +151,7 @@ export function ContactForm() {
                 rel="noopener noreferrer"
                 className="px-4 py-2 rounded-xl bg-yellow hover:bg-yellow-hover border-2 border-ink font-mono text-xs font-bold text-ink shadow-solid-sm active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
               >
-                <span>Telegram&apos;da yozish</span>
+                <span>{c.telegramBtn}</span>
                 <span className="font-sans">↗</span>
               </a>
             </div>
@@ -175,7 +179,7 @@ export function ContactForm() {
                       showNameError ? "text-coral font-bold" : "text-muted"
                     }`}
                   >
-                    NAME *
+                    {c.nameLabel}
                   </label>
                 </div>
                 <div className="relative w-full">
@@ -189,7 +193,7 @@ export function ContactForm() {
                       setName(e.target.value);
                       if (errorMessage) setErrorMessage(null);
                     }}
-                    placeholder="Ismingiz yoki kompaniya nomi"
+                    placeholder={c.namePlaceholder}
                     className={`w-full h-[44px] px-[13px] py-[11px] rounded-[10px] font-sans text-[12.5px] text-ink outline-none transition-colors placeholder:text-muted/60 ${
                       showNameError
                         ? "bg-[#FDF8F1] border-2 border-coral"
@@ -201,7 +205,7 @@ export function ContactForm() {
                   <div className="flex items-center gap-[6px] pt-0.5">
                     <CircleAlert className="w-[11px] h-[11px] text-coral shrink-0" />
                     <span className="font-sans text-[10.5px] text-coral font-medium">
-                      Ismingizni kiriting (kamida 2 ta harf).
+                      {c.nameError}
                     </span>
                   </div>
                 )}
@@ -216,7 +220,7 @@ export function ContactForm() {
                       showEmailError ? "text-coral font-bold" : "text-muted"
                     }`}
                   >
-                    EMAIL *
+                    {c.emailLabel}
                   </label>
                 </div>
                 <div className="w-full">
@@ -230,7 +234,7 @@ export function ContactForm() {
                       setEmail(e.target.value);
                       if (errorMessage) setErrorMessage(null);
                     }}
-                    placeholder="sizning.email@misol.uz"
+                    placeholder={c.emailPlaceholder}
                     className={`w-full h-[44px] px-[13px] py-[11px] rounded-[10px] font-sans text-[12.5px] outline-none transition-colors placeholder:text-muted/60 ${
                       showEmailError
                         ? "bg-[#FDF8F1] border-2 border-coral text-ink"
@@ -242,7 +246,7 @@ export function ContactForm() {
                   <div className="flex items-center gap-[6px] pt-0.5">
                     <CircleAlert className="w-[11px] h-[11px] text-coral shrink-0" />
                     <span className="font-sans text-[10.5px] text-coral font-medium">
-                      Haqiqiy email manzilini kiriting (masalan: siz@gmail.com).
+                      {c.emailError}
                     </span>
                   </div>
                 )}
@@ -256,10 +260,10 @@ export function ContactForm() {
                   htmlFor="subject"
                   className="font-mono text-[8.5px] uppercase tracking-[1.2px] text-muted font-medium"
                 >
-                  SUBJECT (MAVZU)
+                  {c.subjectLabel}
                 </label>
                 <span className="font-mono text-[8px] text-muted">
-                  Ixtiyoriy yoki tezkor tanlang
+                  {c.subjectHint}
                 </span>
               </div>
 
@@ -269,13 +273,13 @@ export function ContactForm() {
                 type="text"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                placeholder="Backend / AI / hamkorlik yoki maslahat"
+                placeholder={c.subjectPlaceholder}
                 className="w-full h-[44px] px-[13px] py-[11px] rounded-[10px] bg-[#FDF8F1] border-[1.5px] border-line focus:border-ink focus:bg-white font-sans text-[12.5px] text-ink outline-none transition-colors placeholder:text-muted/60"
               />
 
               {/* Quick Topic Chips */}
               <div className="flex flex-wrap gap-1.5 pt-1">
-                {SUGGESTED_TOPICS.map((topic) => (
+                {suggestedTopics.map((topic) => (
                   <button
                     key={topic}
                     type="button"
@@ -301,7 +305,7 @@ export function ContactForm() {
                     showMessageError ? "text-coral font-bold" : "text-muted"
                   }`}
                 >
-                  MESSAGE (XABAR MATNI) *
+                  {c.messageLabel}
                 </label>
                 <span className="font-mono text-[8.5px] text-muted">
                   {message.length} / 2500
@@ -318,7 +322,7 @@ export function ContactForm() {
                   setMessage(e.target.value);
                   if (errorMessage) setErrorMessage(null);
                 }}
-                placeholder="Qanday loyiha yoki masalani hal qilmoqchisiz? Barcha tafsilotlarni yozishingiz mumkin..."
+                placeholder={c.messagePlaceholder}
                 className={`w-full px-[13px] py-[11px] rounded-[10px] font-sans text-[12.5px] leading-[20px] text-ink outline-none transition-colors placeholder:text-muted/60 resize-none min-h-[120px] ${
                   showMessageError
                     ? "bg-[#FDF8F1] border-2 border-coral"
@@ -329,7 +333,7 @@ export function ContactForm() {
                 <div className="flex items-center gap-[6px] pt-0.5">
                   <CircleAlert className="w-[11px] h-[11px] text-coral shrink-0" />
                   <span className="font-sans text-[10.5px] text-coral font-medium">
-                    Xabar matnini kiriting (kamida 5 ta belgi).
+                    {c.messageError}
                   </span>
                 </div>
               )}
@@ -340,7 +344,7 @@ export function ContactForm() {
               <div className="flex items-center gap-[7px]">
                 <Clock className="w-[13px] h-[13px] text-muted shrink-0" />
                 <span className="font-mono text-[9px] text-muted">
-                  Xabaringiz Javohir Sadullayevning pochtasiga to&apos;g&apos;ridan-to&apos;g&apos;ri yetkaziladi.
+                  {c.directInboxNotice}
                 </span>
               </div>
 
@@ -349,7 +353,7 @@ export function ContactForm() {
                 disabled={isSubmitting}
                 className="px-6 py-3 rounded-full bg-yellow hover:bg-yellow-hover border-2 border-ink shadow-[3px_3px_0px_#14110F] font-sans text-[13.5px] font-semibold text-ink flex items-center gap-2 cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 active:shadow-none disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <span>{isSubmitting ? "Yuborilmoqda..." : "Send message"}</span>
+                <span>{isSubmitting ? c.sendingBtn : c.submitBtn}</span>
                 <Send className={`w-[15px] h-[15px] ${isSubmitting ? "animate-pulse" : ""}`} />
               </button>
             </div>
@@ -357,21 +361,21 @@ export function ContactForm() {
         )}
       </form>
 
-      {/* Trust & Guarantee Cards (Replacing old fake prototype preview) */}
+      {/* Trust & Guarantee Cards */}
       <div className="w-full flex flex-col sm:flex-row gap-[12px] pt-1">
         {/* 1. Fast Response */}
         <div className="flex-1 bg-white rounded-[16px] p-[14px_16px] flex flex-col gap-[6px] border-2 border-ink shadow-solid-sm">
           <div className="w-full flex justify-between items-center">
             <span className="font-mono text-[8px] uppercase tracking-[1.2px] text-muted font-bold">
-              RESPONSE TIME
+              {c.trustResponseLabel}
             </span>
             <Clock className="w-[14px] h-[14px] text-ink" />
           </div>
           <span className="font-display text-[14px] font-bold text-ink">
-            ~2–4 soat ichida
+            {c.trustResponseValue}
           </span>
           <span className="font-sans text-[11px] text-muted leading-tight">
-            Ish kunlarida tezkor tahlil va aniq texnik javob.
+            {c.trustResponseDesc}
           </span>
         </div>
 
@@ -379,15 +383,15 @@ export function ContactForm() {
         <div className="flex-1 bg-white rounded-[16px] p-[14px_16px] flex flex-col gap-[6px] border-2 border-ink shadow-solid-sm">
           <div className="w-full flex justify-between items-center">
             <span className="font-mono text-[8px] uppercase tracking-[1.2px] text-muted font-bold">
-              DIRECT REACH
+              {c.trustDirectLabel}
             </span>
             <UserCheck className="w-[14px] h-[14px] text-ink" />
           </div>
           <span className="font-display text-[14px] font-bold text-ink">
-            Dasturchining o&apos;zi
+            {c.trustDirectValue}
           </span>
           <span className="font-sans text-[11px] text-muted leading-tight">
-            O&apos;rtakashlarsiz to&apos;g&apos;ridan-to&apos;g&apos;ri texnik muhokama.
+            {c.trustDirectDesc}
           </span>
         </div>
 
@@ -395,15 +399,15 @@ export function ContactForm() {
         <div className="flex-1 bg-white rounded-[16px] p-[14px_16px] flex flex-col gap-[6px] border-2 border-ink shadow-solid-sm">
           <div className="w-full flex justify-between items-center">
             <span className="font-mono text-[8px] uppercase tracking-[1.2px] text-muted font-bold">
-              PRIVACY
+              {c.trustPrivacyLabel}
             </span>
             <ShieldCheck className="w-[14px] h-[14px] text-ink" />
           </div>
           <span className="font-display text-[14px] font-bold text-ink">
-            100% Maxfiy
+            {c.trustPrivacyValue}
           </span>
           <span className="font-sans text-[11px] text-muted leading-tight">
-            Loyiha g&apos;oyalari va arxitektura ma&apos;lumotlari sir saqlanadi.
+            {c.trustPrivacyDesc}
           </span>
         </div>
       </div>

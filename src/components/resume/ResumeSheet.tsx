@@ -92,7 +92,7 @@ export function ResumeSheet() {
                   {dict.resumePage.experienceLabel}
                 </h3>
                 <span className="font-mono text-[8px] font-normal tracking-[1px] text-muted uppercase">
-                  {roles.length.toString().padStart(2, "0")} ROLES
+                  {roles.length.toString().padStart(2, "0")} {dict.resumePage.rolesCount}
                 </span>
               </div>
 

@@ -1,17 +1,22 @@
+"use client";
+
 import React from "react";
 import { CERTIFICATIONS } from "@/data/skillsData";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function CertsStrip() {
+  const { dict } = useLanguage();
+
   return (
     <section className="w-full bg-white border-y-2 border-ink">
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 py-11 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 lg:gap-10">
         {/* Left Section */}
         <div className="w-full lg:w-[420px] shrink-0 flex flex-col gap-1.5">
           <span className="font-mono text-[10.5px] uppercase tracking-[1.6px] text-muted font-semibold">
-            VERIFIED
+            {dict.skillsPage.certsEyebrow}
           </span>
           <h3 className="font-display text-2xl font-semibold text-ink tracking-tight">
-            Certifications &amp; languages.
+            {dict.skillsPage.certsTitle}
           </h3>
         </div>
 

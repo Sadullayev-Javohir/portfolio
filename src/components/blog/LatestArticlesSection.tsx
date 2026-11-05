@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import { PUBLISHED_ARTICLES } from "@/data/blogData";
 import { CustomArticle } from "@/lib/dynamicContent";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface LatestArticlesSectionProps {
   customArticles?: CustomArticle[];
@@ -18,6 +19,7 @@ export function LatestArticlesSection({
   searchQuery = "",
   categoryFilter = "",
 }: LatestArticlesSectionProps) {
+  const { dict } = useLanguage();
   const allArticles = [
     ...customArticles.map((a) => ({
       id: a.id,
@@ -64,7 +66,7 @@ export function LatestArticlesSection({
           {/* Head */}
           <div className="flex items-center justify-between pb-1">
             <span className="font-mono text-[9px] uppercase tracking-wider text-muted font-medium">
-              BARCHA CHOP ETILGAN MAQOLALAR ({filteredArticles.length})
+              {dict.blogPage.allPublishedArticles} ({filteredArticles.length})
             </span>
             <span className="font-mono text-[9px] text-muted font-medium">
               {String(filteredArticles.length).padStart(2, "0")}
@@ -82,8 +84,8 @@ export function LatestArticlesSection({
                 </span>
                 <p className="font-sans text-[14px] text-muted">
                   {allArticles.length === 0
-                    ? "Hozircha chop etilgan maqolalar yo'q."
-                    : "Qidiruvga mos maqola topilmadi."}
+                    ? dict.blogPage.noArticlesYet
+                    : dict.blogPage.noMatchingArticles}
                 </p>
               </div>
               <span className="font-mono text-[8.5px] tracking-wider uppercase text-muted bg-white border border-ink/30 px-2.5 py-1 rounded shrink-0 font-medium">
@@ -134,7 +136,7 @@ export function LatestArticlesSection({
 
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                     <span className="px-3.5 py-1.5 rounded-full border border-ink bg-yellow font-mono text-xs font-bold text-ink shadow-solid-sm group-hover:shadow-solid group-hover:-translate-y-0.5 transition-all">
-                      O&apos;qish ↗
+                      {dict.blogPage.readArticleBtn}
                     </span>
                   </div>
                 </Link>
