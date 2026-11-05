@@ -10,6 +10,7 @@ export interface BlogComment {
   authorTokenHash: string;
   avatarBg?: string;
   body: string;
+  imageUrl?: string;
   createdAt: string;
   updatedAt?: string;
 }
@@ -22,6 +23,7 @@ export interface SanitizedBlogComment {
   avatarBg?: string;
   isOwner?: boolean;
   body: string;
+  imageUrl?: string;
   createdAt: string;
   updatedAt?: string;
   replies?: SanitizedBlogComment[];
@@ -87,6 +89,7 @@ export function getArticleComments(slug: string, clientToken?: string): Sanitize
     avatarBg: c.avatarBg || getAvatarColor(c.authorName),
     isOwner: Boolean(clientHash && c.authorTokenHash === clientHash),
     body: c.body,
+    imageUrl: c.imageUrl,
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
   }));
@@ -127,6 +130,7 @@ export function addComment(params: {
   authorName: string;
   authorToken: string;
   body: string;
+  imageUrl?: string;
   parentId?: string | null;
 }): SanitizedBlogComment {
   const all = getAllComments();
@@ -143,6 +147,7 @@ export function addComment(params: {
     authorTokenHash: tokenHash,
     avatarBg,
     body,
+    imageUrl: params.imageUrl?.trim() || undefined,
     createdAt: new Date().toISOString(),
   };
 
@@ -157,6 +162,7 @@ export function addComment(params: {
     avatarBg: newComment.avatarBg,
     isOwner: true,
     body: newComment.body,
+    imageUrl: newComment.imageUrl,
     createdAt: newComment.createdAt,
     replies: [],
   };
@@ -166,6 +172,7 @@ export function editComment(params: {
   commentId: string;
   authorToken: string;
   newBody: string;
+  newImageUrl?: string;
 }): { success: boolean; comment?: SanitizedBlogComment; error?: string } {
   const all = getAllComments();
   const index = all.findIndex((c) => c.id === params.commentId);
@@ -181,6 +188,9 @@ export function editComment(params: {
   }
 
   comment.body = params.newBody.trim();
+  if (params.newImageUrl !== undefined) {
+    comment.imageUrl = params.newImageUrl.trim() || undefined;
+  }
   comment.updatedAt = new Date().toISOString();
   saveAllComments(all);
 
@@ -194,6 +204,7 @@ export function editComment(params: {
       avatarBg: comment.avatarBg,
       isOwner: true,
       body: comment.body,
+      imageUrl: comment.imageUrl,
       createdAt: comment.createdAt,
       updatedAt: comment.updatedAt,
     },

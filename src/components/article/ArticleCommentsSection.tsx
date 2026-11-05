@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Image from "next/image";
 import {
   Code,
   Bold,
@@ -12,11 +11,13 @@ import {
   Edit2,
   Trash2,
   Reply,
-  Check,
   X,
   MessageSquare,
   Loader2,
-  Quote,
+  Image as ImageIcon,
+  Eye,
+  PenTool,
+  Maximize2,
 } from "lucide-react";
 import { SanitizedBlogComment } from "@/lib/blogComments";
 import {
@@ -37,23 +38,35 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [authorName, setAuthorName] = useState<string>("");
   const [newCommentText, setNewCommentText] = useState<string>("");
+  const [commentImageUrl, setCommentImageUrl] = useState<string>("");
+  const [isUploadingImage, setIsUploadingImage] = useState<boolean>(false);
+  const [formTab, setFormTab] = useState<"write" | "preview">("write");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // Active reply form parent ID
   const [replyingToId, setReplyingToId] = useState<string | null>(null);
   const [replyText, setReplyText] = useState<string>("");
+  const [replyImageUrl, setReplyImageUrl] = useState<string>("");
+  const [isUploadingReplyImage, setIsUploadingReplyImage] = useState<boolean>(false);
+  const [replyTab, setReplyTab] = useState<"write" | "preview">("write");
   const [isSubmittingReply, setIsSubmittingReply] = useState<boolean>(false);
 
   // Active edit comment ID
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editText, setEditText] = useState<string>("");
+  const [editImageUrl, setEditImageUrl] = useState<string>("");
   const [isSubmittingEdit, setIsSubmittingEdit] = useState<boolean>(false);
+
+  // Fullscreen image preview modal
+  const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
 
   // Sorting
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const replyTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const replyFileInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch comments from backend
   const loadComments = useCallback(async () => {
@@ -116,6 +129,34 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
     }, 0);
   };
 
+  // Upload image for comment
+  const handleImageUpload = async (file: File, isReply: boolean = false) => {
+    const setUploading = isReply ? setIsUploadingReplyImage : setIsUploadingImage;
+    const setUrl = isReply ? setReplyImageUrl : setCommentImageUrl;
+
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/blog/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setUrl(data.url);
+      } else {
+        alert(data.error || "Rasm yuklashda xatolik yuz berdi.");
+      }
+    } catch {
+      alert("Serverga ulanishda xatolik.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   // Post top-level comment
   const handlePostComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,12 +175,15 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
           authorName: finalName,
           authorToken: token,
           body: newCommentText.trim(),
+          imageUrl: commentImageUrl.trim() || undefined,
         }),
       });
 
       const data = await res.json();
       if (data.ok) {
         setNewCommentText("");
+        setCommentImageUrl("");
+        setFormTab("write");
         await loadComments();
       } else {
         alert(data.error || "Izoh yuborishda xatolik yuz berdi.");
@@ -168,6 +212,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
           authorName: finalName,
           authorToken: token,
           body: replyText.trim(),
+          imageUrl: replyImageUrl.trim() || undefined,
           parentId,
         }),
       });
@@ -175,6 +220,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
       const data = await res.json();
       if (data.ok) {
         setReplyText("");
+        setReplyImageUrl("");
         setReplyingToId(null);
         await loadComments();
       } else {
@@ -202,6 +248,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
           commentId,
           authorToken: token,
           body: editText.trim(),
+          imageUrl: editImageUrl,
         }),
       });
 
@@ -209,6 +256,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
       if (data.ok) {
         setEditingCommentId(null);
         setEditText("");
+        setEditImageUrl("");
         await loadComments();
       } else {
         alert(data.error || "Tahrirlashda xatolik.");
@@ -244,73 +292,96 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
     }
   };
 
-  // Format comment body text with simple markdown (bold, italic, code, link)
-  const renderCommentBody = (text: string) => {
+  // Format comment body text with markdown (bold, italic, code, link)
+  const renderCommentBody = (text: string, imageUrl?: string) => {
     const lines = text.split("\n");
-    return lines.map((line, lIdx) => {
-      // Basic inline formatting regexes
-      const parts: React.ReactNode[] = [];
-      let cursor = 0;
+    return (
+      <div className="flex flex-col gap-2">
+        {lines.map((line, lIdx) => {
+          const parts: React.ReactNode[] = [];
+          let cursor = 0;
 
-      // Match code, bold, italic, links
-      const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\)|@[a-zA-Z0-9_-]+)/g;
-      let match;
+          const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|\[[^\]]+\]\([^)]+\)|@[a-zA-Z0-9_-]+)/g;
+          let match;
 
-      while ((match = regex.exec(line)) !== null) {
-        if (match.index > cursor) {
-          parts.push(line.substring(cursor, match.index));
-        }
+          while ((match = regex.exec(line)) !== null) {
+            if (match.index > cursor) {
+              parts.push(line.substring(cursor, match.index));
+            }
 
-        const token = match[0];
-        if (token.startsWith("`") && token.endsWith("`")) {
-          parts.push(
-            <code
-              key={match.index}
-              className="px-1.5 py-0.5 rounded bg-cream border border-ink/20 font-mono text-[11px] text-ink font-semibold"
-            >
-              {token.slice(1, -1)}
-            </code>
-          );
-        } else if (token.startsWith("**") && token.endsWith("**")) {
-          parts.push(<strong key={match.index} className="font-bold text-ink">{token.slice(2, -2)}</strong>);
-        } else if (token.startsWith("*") && token.endsWith("*")) {
-          parts.push(<em key={match.index} className="italic text-ink">{token.slice(1, -1)}</em>);
-        } else if (token.startsWith("[") && token.includes("](") && token.endsWith(")")) {
-          const textMatch = token.match(/\[([^\]]+)\]\(([^)]+)\)/);
-          if (textMatch) {
-            parts.push(
-              <a
-                key={match.index}
-                href={textMatch[2]}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue font-semibold hover:underline"
-              >
-                {textMatch[1]}
-              </a>
-            );
+            const token = match[0];
+            if (token.startsWith("`") && token.endsWith("`")) {
+              parts.push(
+                <code
+                  key={match.index}
+                  className="px-1.5 py-0.5 rounded bg-cream border border-ink/20 font-mono text-[11px] text-ink font-semibold"
+                >
+                  {token.slice(1, -1)}
+                </code>
+              );
+            } else if (token.startsWith("**") && token.endsWith("**")) {
+              parts.push(<strong key={match.index} className="font-bold text-ink">{token.slice(2, -2)}</strong>);
+            } else if (token.startsWith("*") && token.endsWith("*")) {
+              parts.push(<em key={match.index} className="italic text-ink">{token.slice(1, -1)}</em>);
+            } else if (token.startsWith("[") && token.includes("](") && token.endsWith(")")) {
+              const textMatch = token.match(/\[([^\]]+)\]\(([^)]+)\)/);
+              if (textMatch) {
+                parts.push(
+                  <a
+                    key={match.index}
+                    href={textMatch[2]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue font-semibold hover:underline"
+                  >
+                    {textMatch[1]}
+                  </a>
+                );
+              }
+            } else if (token.startsWith("@")) {
+              parts.push(
+                <span key={match.index} className="font-semibold text-blue bg-blue/10 px-1 py-0.5 rounded">
+                  {token}
+                </span>
+              );
+            }
+
+            cursor = regex.lastIndex;
           }
-        } else if (token.startsWith("@")) {
-          parts.push(
-            <span key={match.index} className="font-semibold text-blue bg-blue/10 px-1 py-0.5 rounded">
-              {token}
-            </span>
+
+          if (cursor < line.length) {
+            parts.push(line.substring(cursor));
+          }
+
+          return (
+            <p key={lIdx} className="min-h-[1.2em]">
+              {parts.length > 0 ? parts : line}
+            </p>
           );
-        }
+        })}
 
-        cursor = regex.lastIndex;
-      }
-
-      if (cursor < line.length) {
-        parts.push(line.substring(cursor));
-      }
-
-      return (
-        <p key={lIdx} className="min-h-[1.2em]">
-          {parts.length > 0 ? parts : line}
-        </p>
-      );
-    });
+        {/* Attached image if present */}
+        {imageUrl && (
+          <div className="mt-2.5 max-w-md rounded-2xl border-2 border-ink overflow-hidden bg-white shadow-solid-sm group relative w-fit">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageUrl}
+              alt="Izohdagi rasm"
+              className="max-h-72 w-auto object-contain cursor-pointer hover:opacity-95 transition-opacity"
+              onClick={() => setFullscreenImage(imageUrl)}
+            />
+            <button
+              type="button"
+              onClick={() => setFullscreenImage(imageUrl)}
+              className="absolute top-2 right-2 p-1.5 rounded-lg bg-ink/70 hover:bg-yellow hover:text-ink text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+              title="Katta o'lchamda ko'rish"
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+      </div>
+    );
   };
 
   // Sort comments
@@ -322,6 +393,30 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
 
   return (
     <section className="w-full bg-cream border-2 border-ink rounded-[22px] p-6 sm:p-7 shadow-solid flex flex-col gap-6">
+      {/* Hidden file inputs for image upload */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) handleImageUpload(f, false);
+          if (fileInputRef.current) fileInputRef.current.value = "";
+        }}
+      />
+      <input
+        type="file"
+        ref={replyFileInputRef}
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) handleImageUpload(f, true);
+          if (replyFileInputRef.current) replyFileInputRef.current.value = "";
+        }}
+      />
+
       {/* Comments Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2.5">
@@ -367,8 +462,8 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
         onSubmit={handlePostComment}
         className="w-full bg-white border-2 border-ink rounded-[18px] p-4 sm:p-5 flex flex-col gap-3.5 shadow-solid-sm"
       >
-        {/* Name input */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        {/* Name input & Mode Toggle */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-ink/10">
           <div className="flex items-center gap-2.5 flex-1">
             <div
               className="w-8 h-8 rounded-full border border-ink flex items-center justify-center font-mono text-xs font-bold text-cream shrink-0 shadow-sm"
@@ -385,25 +480,86 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               required
             />
           </div>
-          <span className="text-[10px] font-mono text-muted">
-            O&apos;z izohlaringizni keyinchalik tahrirlashingiz yoki o&apos;chirishingiz mumkin
-          </span>
+
+          {/* Visual Editor Tabs (Yozish / Visual Ko'rinishi) */}
+          <div className="flex items-center gap-1 bg-cream/60 p-1 rounded-xl border border-ink/20 self-start sm:self-auto">
+            <button
+              type="button"
+              onClick={() => setFormTab("write")}
+              className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                formTab === "write"
+                  ? "bg-white text-ink border border-ink shadow-sm"
+                  : "text-muted hover:text-ink"
+              }`}
+            >
+              <PenTool className="w-3 h-3" />
+              <span>Yozish</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormTab("preview")}
+              className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                formTab === "preview"
+                  ? "bg-yellow text-ink border border-ink shadow-sm"
+                  : "text-muted hover:text-ink"
+              }`}
+            >
+              <Eye className="w-3 h-3" />
+              <span>Visual Ko&apos;rinishi</span>
+            </button>
+          </div>
         </div>
 
-        {/* Textarea */}
-        <textarea
-          ref={textareaRef}
-          rows={3}
-          value={newCommentText}
-          onChange={(e) => setNewCommentText(e.target.value)}
-          placeholder="Maqola bo'yicha savolingiz yoki fikringizni yozing..."
-          className="w-full bg-cream/40 border-[1.5px] border-ink/30 rounded-xl p-3 text-[13px] text-ink font-sans placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors resize-y min-h-[85px]"
-          required
-        />
+        {/* Textarea OR Visual Preview */}
+        {formTab === "write" ? (
+          <textarea
+            ref={textareaRef}
+            rows={3}
+            value={newCommentText}
+            onChange={(e) => setNewCommentText(e.target.value)}
+            placeholder="Maqola bo'yicha fikringizni yozing (matnni belgilab Bold, Italic yoki Rasm tugmasini bosing)..."
+            className="w-full bg-cream/40 border-[1.5px] border-ink/30 rounded-xl p-3 text-[13px] text-ink font-sans placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors resize-y min-h-[90px]"
+            required
+          />
+        ) : (
+          <div className="w-full bg-cream/30 border-[1.5px] border-ink/30 rounded-xl p-4 min-h-[90px] text-[13px] text-ink font-sans">
+            {newCommentText.trim() || commentImageUrl ? (
+              renderCommentBody(newCommentText || "(Matnsiz rasm)", commentImageUrl)
+            ) : (
+              <span className="text-muted italic">
+                Bu yerda formatlangan izohingiz qanday ko&apos;rinishi real vaqtda aks etadi.
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Attached image preview inside form */}
+        {commentImageUrl && (
+          <div className="flex items-center gap-3 p-2.5 bg-cream/60 rounded-xl border border-ink/30 w-fit">
+            <div className="relative w-14 h-14 rounded-lg border border-ink overflow-hidden bg-white shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={commentImageUrl} alt="preview" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="font-mono text-xs font-bold text-ink">Biriktirilgan rasm</span>
+              <span className="font-mono text-[10px] text-muted truncate max-w-[200px]">
+                {commentImageUrl}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setCommentImageUrl("")}
+              className="p-1 rounded-lg text-coral hover:bg-peach cursor-pointer ml-2"
+              title="Rasmni olib tashlash"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
         {/* Toolbar & Submit button */}
         <div className="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-ink/10">
-          <div className="flex items-center gap-1.5 text-ink">
+          <div className="flex items-center gap-1 text-ink flex-wrap">
             <button
               type="button"
               onClick={() => insertFormatting("**", "**", "qalin matn")}
@@ -432,7 +588,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               type="button"
               onClick={() => insertFormatting("[", "](https://havola.uz)", "havola matni")}
               className="p-1.5 rounded-lg hover:bg-yellow hover:text-ink transition-colors cursor-pointer"
-              title="Havola qo'shish [text](url)"
+              title="Havola [text](url)"
             >
               <LinkIcon className="w-3.5 h-3.5" />
             </button>
@@ -443,6 +599,19 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               title="Belgilash (@nom)"
             >
               <AtSign className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Image upload button */}
+            <div className="h-4 w-[1px] bg-ink/20 mx-1" />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploadingImage}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-ink/30 bg-cream/70 hover:bg-yellow text-xs font-mono font-bold text-ink transition-colors cursor-pointer disabled:opacity-50"
+              title="Rasm yuklash / biriktirish"
+            >
+              <ImageIcon className="w-3.5 h-3.5" />
+              <span>{isUploadingImage ? "Yuklanmoqda..." : "Rasm qo'shish"}</span>
             </button>
           </div>
 
@@ -528,6 +697,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                   onClick={() => {
                     setReplyingToId(replyingToId === comment.id ? null : comment.id);
                     setReplyText("");
+                    setReplyImageUrl("");
                   }}
                   className="p-1.5 rounded-lg border border-ink/20 hover:border-ink hover:bg-yellow text-ink transition-colors flex items-center gap-1 text-[11px] font-mono font-semibold cursor-pointer"
                   title="Javob berish"
@@ -543,6 +713,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                     onClick={() => {
                       setEditingCommentId(comment.id);
                       setEditText(comment.body);
+                      setEditImageUrl(comment.imageUrl || "");
                     }}
                     className="p-1.5 rounded-lg border border-ink/20 hover:border-ink hover:bg-cream text-ink transition-colors cursor-pointer"
                     title="Tahrirlash"
@@ -574,6 +745,21 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                   onChange={(e) => setEditText(e.target.value)}
                   className="w-full bg-cream border border-ink rounded-xl p-2.5 text-xs font-sans text-ink focus:outline-none"
                 />
+
+                {editImageUrl && (
+                  <div className="flex items-center gap-2 p-2 bg-cream/60 rounded-lg border border-ink/20 w-fit">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={editImageUrl} alt="edit preview" className="w-10 h-10 object-cover rounded" />
+                    <button
+                      type="button"
+                      onClick={() => setEditImageUrl("")}
+                      className="text-xs text-coral hover:underline"
+                    >
+                      Rasmni olib tashlash
+                    </button>
+                  </div>
+                )}
+
                 <div className="flex items-center justify-end gap-2">
                   <button
                     type="button"
@@ -594,35 +780,68 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
               </div>
             ) : (
               <div className="font-sans text-[13px] text-ink leading-relaxed break-words pl-0.5">
-                {renderCommentBody(comment.body)}
+                {renderCommentBody(comment.body, comment.imageUrl)}
               </div>
             )}
 
             {/* Inline Reply Form */}
             {replyingToId === comment.id && (
-              <div className="mt-2 pt-3 border-t border-ink/10 flex flex-col gap-2 bg-cream/30 p-3 rounded-xl border border-ink/20">
+              <div className="mt-2 pt-3 border-t border-ink/10 flex flex-col gap-2.5 bg-cream/30 p-3.5 rounded-xl border border-ink/20">
                 <div className="flex items-center justify-between text-xs font-mono">
                   <span className="font-bold text-ink flex items-center gap-1">
                     <CornerDownLeft className="w-3 h-3 text-muted" />
                     {comment.authorName}ga javob yozish:
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => setReplyingToId(null)}
-                    className="text-muted hover:text-ink"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setReplyTab(replyTab === "write" ? "preview" : "write")}
+                      className="text-[11px] font-mono text-ink underline"
+                    >
+                      {replyTab === "write" ? "Visual ko'rish" : "Yozish"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setReplyingToId(null)}
+                      className="text-muted hover:text-ink"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
-                <textarea
-                  ref={replyTextareaRef}
-                  rows={2}
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                  placeholder="Javobingizni yozing..."
-                  className="w-full bg-white border border-ink/30 rounded-lg p-2.5 text-xs font-sans text-ink focus:outline-none focus:border-ink"
-                />
+                {replyTab === "write" ? (
+                  <textarea
+                    ref={replyTextareaRef}
+                    rows={2}
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    placeholder="Javobingizni yozing..."
+                    className="w-full bg-white border border-ink/30 rounded-lg p-2.5 text-xs font-sans text-ink focus:outline-none focus:border-ink"
+                  />
+                ) : (
+                  <div className="w-full bg-white border border-ink/30 rounded-lg p-2.5 text-xs font-sans text-ink min-h-[60px]">
+                    {replyText.trim() || replyImageUrl ? (
+                      renderCommentBody(replyText || "(Matnsiz)", replyImageUrl)
+                    ) : (
+                      <span className="text-muted italic">Visual ko&apos;rinish...</span>
+                    )}
+                  </div>
+                )}
+
+                {replyImageUrl && (
+                  <div className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-ink/20 w-fit">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={replyImageUrl} alt="reply img" className="w-10 h-10 object-cover rounded" />
+                    <button
+                      type="button"
+                      onClick={() => setReplyImageUrl("")}
+                      className="text-[10px] text-coral hover:underline"
+                    >
+                      O&apos;chirish
+                    </button>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <div className="flex items-center gap-1">
@@ -642,13 +861,23 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                     >
                       <Code className="w-3 h-3" />
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => replyFileInputRef.current?.click()}
+                      disabled={isUploadingReplyImage}
+                      className="p-1 rounded hover:bg-yellow text-ink cursor-pointer flex items-center gap-1 text-[11px]"
+                      title="Rasm yuklash"
+                    >
+                      <ImageIcon className="w-3 h-3" />
+                      <span>{isUploadingReplyImage ? "Yuklanmoqda..." : "Rasm"}</span>
+                    </button>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => setReplyingToId(null)}
-                      className="px-2.5 py-1 text-xs font-mono text-muted hover:text-ink"
+                      className="px-2.5 py-1 text-xs font-mono text-muted hover:text-ink cursor-pointer"
                     >
                       Bekor
                     </button>
@@ -700,6 +929,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                             onClick={() => {
                               setEditingCommentId(reply.id);
                               setEditText(reply.body);
+                              setEditImageUrl(reply.imageUrl || "");
                             }}
                             className="p-1 rounded text-ink hover:bg-cream cursor-pointer"
                             title="Tahrirlash"
@@ -747,7 +977,7 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
                       </div>
                     ) : (
                       <div className="font-sans text-xs text-ink leading-relaxed break-words pl-0.5">
-                        {renderCommentBody(reply.body)}
+                        {renderCommentBody(reply.body, reply.imageUrl)}
                       </div>
                     )}
                   </div>
@@ -757,6 +987,32 @@ export function ArticleCommentsSection({ slug, onCountChange }: ArticleCommentsS
           </div>
         ))}
       </div>
+
+      {/* Fullscreen Image Preview Modal */}
+      {fullscreenImage && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-ink/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer"
+          onClick={() => setFullscreenImage(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setFullscreenImage(null)}
+            className="absolute top-5 right-5 p-3 rounded-full bg-white/20 text-cream hover:bg-white/40 transition-colors cursor-pointer"
+            title="Yopish"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={fullscreenImage}
+            alt="Full size comment image"
+            className="max-w-full max-h-[90vh] object-contain rounded-2xl border-2 border-white/20 shadow-2xl cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </section>
   );
 }

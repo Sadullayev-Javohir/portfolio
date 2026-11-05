@@ -370,11 +370,6 @@ function renderBlock(block: BlockType, key: number) {
               <ExternalLink className="w-4 h-4" />
             </a>
           </div>
-          {block.caption && (
-            <figcaption className="mt-2.5 text-xs font-mono text-muted text-center italic max-w-xl">
-              📸 {block.caption}
-            </figcaption>
-          )}
         </figure>
       );
 

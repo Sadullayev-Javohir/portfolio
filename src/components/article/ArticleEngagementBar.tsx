@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { Heart, Eye, Bookmark, Share2, Check } from "lucide-react";
+import { Heart, Eye, Share2, Check } from "lucide-react";
 import { ArticleData } from "@/data/articles";
 import { getOrCreateAuthorToken } from "@/lib/useClientIdentity";
 
@@ -15,12 +15,6 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
   const [likes, setLikes] = useState<number>(reactions?.likes || 0);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
   const [views, setViews] = useState<number>(0);
-
-  const [claps, setClaps] = useState<number>(reactions?.claps || 0);
-  const [fires, setFires] = useState<number>(reactions?.fires || 0);
-  const [bulbs, setBulbs] = useState<number>(reactions?.bulbs || 0);
-
-  const [bookmarked, setBookmarked] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
 
@@ -36,7 +30,7 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
 
     try {
       if (!alreadyViewed) {
-        // Record new view once
+        // Record new view once per device
         const res = await fetch(`/api/blog/${encodeURIComponent(slug)}/engagement`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -55,9 +49,6 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
         setViews(data.data.views || 0);
         setLikes(data.data.likes || 0);
         setHasLiked(Boolean(data.data.hasLiked));
-        setClaps(data.data.claps || 0);
-        setFires(data.data.fires || 0);
-        setBulbs(data.data.bulbs || 0);
         onStatsChange?.({ views: data.data.views || 0, likes: data.data.likes || 0 });
       }
     } catch (e) {
@@ -67,13 +58,9 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
 
   useEffect(() => {
     initEngagement();
+  }, [initEngagement]);
 
-    if (slug && typeof window !== "undefined") {
-      setBookmarked(localStorage.getItem(`bookmarked_${slug}`) === "true");
-    }
-  }, [slug, initEngagement]);
-
-  // Handle Like Toggle
+  // Handle Like Toggle: only 1 like per device, clicking toggles ON/OFF
   const handleLike = async () => {
     if (!slug || isLiking) return;
     const token = getOrCreateAuthorToken();
@@ -106,34 +93,6 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
     }
   };
 
-  const handleReaction = async (kind: "claps" | "fires" | "bulbs") => {
-    if (!slug) return;
-    const token = getOrCreateAuthorToken();
-
-    if (kind === "claps") setClaps((c) => c + 1);
-    if (kind === "fires") setFires((f) => f + 1);
-    if (kind === "bulbs") setBulbs((b) => b + 1);
-
-    try {
-      await fetch(`/api/blog/${encodeURIComponent(slug)}/engagement`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "reaction", token, reactionKind: kind }),
-      });
-    } catch (e) {
-      console.warn("Reaction error:", e);
-    }
-  };
-
-  const handleBookmark = () => {
-    if (!slug) return;
-    const nextState = !bookmarked;
-    setBookmarked(nextState);
-    if (typeof window !== "undefined") {
-      localStorage.setItem(`bookmarked_${slug}`, String(nextState));
-    }
-  };
-
   const handleShare = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
@@ -143,87 +102,67 @@ export function ArticleEngagementBar({ slug, reactions, onStatsChange }: Article
   };
 
   return (
-    <div className="w-full bg-white border-2 border-ink rounded-[18px] px-5 py-4 flex flex-wrap items-center justify-between gap-4 shadow-solid-sm">
-      {/* Reactions Left */}
-      <div className="flex items-center gap-2.5 flex-wrap">
-        <span className="font-mono text-[8px] text-muted tracking-wider uppercase font-semibold mr-1">
-          REACTIONS
-        </span>
-
-        {/* Like Button */}
+    <div className="w-full bg-white border-2 border-ink rounded-[20px] px-6 py-4 flex flex-wrap items-center justify-between gap-4 shadow-solid-sm">
+      {/* Like Button Left */}
+      <div className="flex items-center gap-3">
         <button
           onClick={handleLike}
           disabled={isLiking}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-all active:scale-95 cursor-pointer ${
+          className={`group flex items-center gap-2.5 px-5 py-2.5 rounded-full border-2 border-ink transition-all active:scale-95 cursor-pointer shadow-solid-sm hover:shadow-solid ${
             hasLiked
-              ? "bg-coral text-cream shadow-sm"
+              ? "bg-coral text-cream border-ink"
               : "bg-cream text-ink hover:bg-coral/20"
           }`}
-          title={hasLiked ? "Liked (Unlike qilish uchun bosing)" : "Like bosish"}
+          title={hasLiked ? "Sizga yoqdi (Qaytarib olish uchun bosing)" : "Maqolaga like bosish"}
         >
-          <Heart className={`w-3.5 h-3.5 ${hasLiked ? "fill-cream text-cream" : "text-ink"}`} />
-          <span className="font-mono text-[10px] font-bold">{likes}</span>
+          <Heart
+            className={`w-4 h-4 transition-transform group-hover:scale-110 ${
+              hasLiked ? "fill-cream text-cream" : "text-ink"
+            }`}
+          />
+          <span className="font-mono text-xs font-bold tracking-wide">
+            {hasLiked ? "Yoqdi" : "Like"}
+          </span>
+          <span
+            className={`px-2 py-0.5 rounded-full font-mono text-xs font-bold ${
+              hasLiked ? "bg-white/20 text-cream" : "bg-white text-ink border border-ink/30"
+            }`}
+          >
+            {likes}
+          </span>
         </button>
-
-        {/* Clap Button */}
-        <button
-          onClick={() => handleReaction("claps")}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 bg-cream text-ink hover:bg-yellow/30 cursor-pointer"
-          title="Qarsak chalish"
-        >
-          <span className="text-[11px] leading-none">👏</span>
-          <span className="font-mono text-[10px] font-semibold">{claps}</span>
-        </button>
-
-        {/* Fire Button */}
-        <button
-          onClick={() => handleReaction("fires")}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 bg-cream text-ink hover:bg-coral/20 cursor-pointer"
-          title="Olov"
-        >
-          <span className="text-[11px] leading-none">🔥</span>
-          <span className="font-mono text-[10px] font-semibold">{fires}</span>
-        </button>
-
-        {/* Bulb Button */}
-        <button
-          onClick={() => handleReaction("bulbs")}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 bg-cream text-ink hover:bg-yellow/30 cursor-pointer"
-          title="G'oya"
-        >
-          <span className="text-[11px] leading-none">💡</span>
-          <span className="font-mono text-[10px] font-semibold">{bulbs}</span>
-        </button>
+        <span className="text-xs font-mono text-muted hidden sm:inline">
+          {hasLiked ? "Fikringiz uchun rahmat!" : "Maqola ma'qul kelgan bo'lsa like bosing"}
+        </span>
       </div>
 
-      {/* Engagement Right (Views, Bookmark, Share) */}
+      {/* Engagement Right (Views, Share) */}
       <div className="flex items-center gap-3">
         {/* Read / Views Count */}
-        <div className="flex items-center gap-1.5 text-muted px-2 py-1 rounded-full bg-cream border border-ink/20">
-          <Eye className="w-3.5 h-3.5 text-ink" />
-          <span className="font-mono text-[9px] font-semibold text-ink uppercase tracking-wide">
+        <div className="flex items-center gap-2 text-ink px-3.5 py-2 rounded-full bg-cream border border-ink/30 shadow-sm">
+          <Eye className="w-4 h-4 text-ink" />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider">
             {views} {views === 1 ? "VIEW" : "VIEWS"}
           </span>
         </div>
 
-        {/* Bookmark Button */}
-        <button
-          onClick={handleBookmark}
-          className={`p-2 rounded-full border-[1.5px] border-ink transition-colors cursor-pointer ${
-            bookmarked ? "bg-yellow text-ink" : "bg-cream text-ink hover:bg-yellow/30"
-          }`}
-          title={bookmarked ? "Saqlangan (Bookmark)" : "Saqlash"}
-        >
-          <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? "fill-ink text-ink" : "text-ink"}`} />
-        </button>
-
         {/* Share Button */}
         <button
           onClick={handleShare}
-          className="p-2 rounded-full border-[1.5px] border-ink bg-cream text-ink hover:bg-yellow/30 transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-ink bg-cream text-ink hover:bg-yellow hover:shadow-solid-sm transition-all cursor-pointer font-mono text-xs font-bold"
           title="Havoladan nusxa olish"
         >
-          {copiedLink ? <Check className="w-3.5 h-3.5 text-mint" /> : <Share2 className="w-3.5 h-3.5" />}
+          {copiedLink ? (
+            <>
+              <Check className="w-3.5 h-3.5 text-mint stroke-[3]" />
+              <span className="text-ink">Nusxalandi!</span>
+            </>
+          ) : (
+            <>
+              <Share2 className="w-3.5 h-3.5 text-ink" />
+              <span>Ulashish</span>
+            </>
+          )}
         </button>
       </div>
     </div>

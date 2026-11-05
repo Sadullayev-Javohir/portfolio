@@ -46,9 +46,6 @@ function saveAllEngagement(data: Record<string, ArticleEngagement>) {
 export function getArticleEngagement(slug: string, token?: string): {
   views: number;
   likes: number;
-  claps: number;
-  fires: number;
-  bulbs: number;
   hasLiked: boolean;
 } {
   const all = getAllEngagement();
@@ -64,13 +61,12 @@ export function getArticleEngagement(slug: string, token?: string): {
   };
 
   const hasLiked = token ? !!entry.likedTokens?.[token] : false;
+  const likesCount = entry.likedTokens ? Object.keys(entry.likedTokens).length : (entry.likes || 0);
+  const viewsCount = entry.viewedTokens ? Object.keys(entry.viewedTokens).length : (entry.views || 0);
 
   return {
-    views: entry.views || 0,
-    likes: entry.likes || 0,
-    claps: entry.claps || 0,
-    fires: entry.fires || 0,
-    bulbs: entry.bulbs || 0,
+    views: viewsCount,
+    likes: likesCount,
     hasLiked,
   };
 }
@@ -94,13 +90,12 @@ export function recordArticleView(slug: string, token: string): number {
   const entry = all[slug];
   if (!entry.viewedTokens) entry.viewedTokens = {};
 
-  // Agar bu token/qurilma allaqachon ko'rgan bo'lsa, qayta oshirilmaydi
   if (!entry.viewedTokens[token]) {
     entry.viewedTokens[token] = Date.now();
-    entry.views = (entry.views || 0) + 1;
-    saveAllEngagement(all);
   }
 
+  entry.views = Object.keys(entry.viewedTokens).length;
+  saveAllEngagement(all);
   return entry.views;
 }
 
@@ -126,13 +121,13 @@ export function toggleArticleLike(slug: string, token: string): { likes: number;
   const currentlyLiked = !!entry.likedTokens[token];
   if (currentlyLiked) {
     delete entry.likedTokens[token];
-    entry.likes = Math.max(0, (entry.likes || 1) - 1);
   } else {
     entry.likedTokens[token] = true;
-    entry.likes = (entry.likes || 0) + 1;
   }
 
+  entry.likes = Object.keys(entry.likedTokens).length;
   saveAllEngagement(all);
+
   return {
     likes: entry.likes,
     hasLiked: !currentlyLiked,

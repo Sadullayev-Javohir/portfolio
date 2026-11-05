@@ -37,7 +37,7 @@ export async function POST(req: NextRequest, { params }: RouteProps) {
   try {
     const { slug } = await params;
     const body = await req.json();
-    const { authorName, authorToken, body: commentBody, parentId } = body;
+    const { authorName, authorToken, body: commentBody, imageUrl, parentId } = body;
 
     if (!commentBody || !commentBody.trim()) {
       return NextResponse.json(
@@ -58,6 +58,7 @@ export async function POST(req: NextRequest, { params }: RouteProps) {
       authorName: authorName || "Foydalanuvchi",
       authorToken,
       body: commentBody,
+      imageUrl,
       parentId: parentId || null,
     });
 
@@ -74,7 +75,7 @@ export async function POST(req: NextRequest, { params }: RouteProps) {
 export async function PUT(req: NextRequest, { params }: RouteProps) {
   try {
     const body = await req.json();
-    const { commentId, authorToken, body: newBody } = body;
+    const { commentId, authorToken, body: newBody, imageUrl: newImageUrl } = body;
 
     if (!commentId || !authorToken || !newBody?.trim()) {
       return NextResponse.json(
@@ -87,6 +88,7 @@ export async function PUT(req: NextRequest, { params }: RouteProps) {
       commentId,
       authorToken,
       newBody,
+      newImageUrl,
     });
 
     if (!result.success) {
