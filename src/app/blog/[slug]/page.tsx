@@ -9,6 +9,7 @@ import { ArticleTableOfContents } from "@/components/article/ArticleTableOfConte
 import { ArticleContent } from "@/components/article/ArticleContent";
 import { ArticleRelated } from "@/components/article/ArticleRelated";
 import { ArticlePrevNext } from "@/components/article/ArticlePrevNext";
+import { generateHeadingSlug } from "@/components/article/MarkdownRenderer";
 
 export const dynamic = "force-dynamic";
 
@@ -25,17 +26,11 @@ function extractTocFromMarkdown(content: string) {
     const trimmed = line.trim();
     if (trimmed.startsWith("## ") && !trimmed.startsWith("###")) {
       const heading = trimmed.replace(/^##\s+/, "");
-      // Clean leading numbering like "01. Title" if present
-      const cleanText = heading.replace(/^\d+[\.\)]\s*/, "");
-      const slugId =
-        "section-" +
-        cleanText
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)+/g, "");
+      const cleanText = heading.replace(/^\d+[\.\)]\s*/, "").trim();
+      const slugId = generateHeadingSlug(cleanText || heading, count);
 
       toc.push({
-        id: slugId || `section-${count}`,
+        id: slugId,
         num: String(count).padStart(2, "0"),
         text: cleanText || heading,
       });
@@ -43,11 +38,23 @@ function extractTocFromMarkdown(content: string) {
     }
   }
 
+  // If no ## headings found, fallback to ### headings
   if (toc.length === 0) {
-    toc.push(
-      { id: "section-01", num: "01", text: "Maqola Mazmuni" },
-      { id: "section-02", num: "02", text: "Xulosalar" }
-    );
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed.startsWith("### ")) {
+        const heading = trimmed.replace(/^###\s+/, "");
+        const cleanText = heading.replace(/^\d+[\.\)]\s*/, "").trim();
+        const slugId = generateHeadingSlug(cleanText || heading, count);
+
+        toc.push({
+          id: slugId,
+          num: String(count).padStart(2, "0"),
+          text: cleanText || heading,
+        });
+        count++;
+      }
+    }
   }
 
   return toc;
@@ -71,9 +78,9 @@ function customToArticleData(custom: CustomArticle): ArticleData {
     categories: [...categories, ...(custom.tags || [])],
     publishedDate: custom.publishedDate,
     readTime: custom.readTime,
-    views: "180+ VIEWS",
-    likesCount: 14,
-    commentsCount: 2,
+    views: "0 VIEWS",
+    likesCount: 0,
+    commentsCount: 0,
     author: {
       name: "Javohir Sadullayev",
       role: "Backend & Systems Engineer",
@@ -82,8 +89,9 @@ function customToArticleData(custom: CustomArticle): ArticleData {
     },
     cover: {
       label: custom.chip || custom.category.toUpperCase(),
-      code: "JOURNAL",
+      code: custom.category.toUpperCase() || "JOURNAL",
       caption: custom.subtitle || custom.title,
+      image: custom.coverImage || undefined,
       stats: [
         { value: custom.readTime, label: "READ TIME" },
         { value: custom.category, label: "CATEGORY" },
@@ -131,12 +139,12 @@ function customToArticleData(custom: CustomArticle): ArticleData {
     tags: custom.tags || [custom.category, ".NET", "Backend"],
     customMarkdown: custom.markdownContent,
     reactions: {
-      likes: 42,
-      claps: 58,
-      fires: 19,
-      bulbs: 23,
-      reads: "350+",
-      bookmarks: 14,
+      likes: 0,
+      claps: 0,
+      fires: 0,
+      bulbs: 0,
+      reads: "0",
+      bookmarks: 0,
     },
     comments: [],
   };

@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "id": "birinchi-blogim",
+    "slug": "birinchi-blogim",
+    "title": "Birinchi blogim",
+    "subtitle": "Portfolio haqida qisqacha ma'lumot",
+    "category": "Personal-project",
+    "categories": [
+      "Personal-project"
+    ],
+    "chip": "JOURNAL · ARTICLE",
+    "bulletColor": "bg-yellow",
+    "coverImage": "",
+    "publishedDate": "NOV 2026",
+    "readTime": "1 min read",
+    "tags": [
+      "dotnet",
+      "csharp",
+      "backend",
+      "pendev"
+    ],
+    "markdownContent": "Portfolio qurishdan maqsad o'zimni auditoriyaga tanishtirish va qiziqarli blog postlarni yozishdan iborat edi. Porftolioni qurish uchun 12 soat vaqt ketgan bo'lsa bu vaqt davomida domain sotib olish, loyihaning designini qilish, keyin ai bilan birgalikda designni web saytga ko'chirish, web saytdagi ma'lumotlarni to'g'ri to'ldirish, ai chatbot + RAG, SEO, robot.txt, llms.txt kabilar bilan ishladim. Qo'shimcha ravishda boshqa xizmatlar ham uzviy bog'landi va siz ko'rib turgan portfolio vujudga keldi. Bu mening birinchi blogim va hammasi endi boshlanadi 😉\n\n![Screenshot From 2026 11 04 19 37 02](/uploads/screenshot-from-2026-11-04-19-37-02-1793805044912.png)\n\n",
+    "createdAt": "2026-11-04T15:10:47.654Z"
+  }
+]

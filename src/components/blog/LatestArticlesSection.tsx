@@ -3,27 +3,59 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { PUBLISHED_ARTICLES, BLOG_STATS } from "@/data/blogData";
+import { PUBLISHED_ARTICLES } from "@/data/blogData";
 import { CustomArticle } from "@/lib/dynamicContent";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 interface LatestArticlesSectionProps {
   customArticles?: CustomArticle[];
+  searchQuery?: string;
+  categoryFilter?: string;
 }
 
-export function LatestArticlesSection({ customArticles = [] }: LatestArticlesSectionProps) {
+export function LatestArticlesSection({
+  customArticles = [],
+  searchQuery = "",
+  categoryFilter = "",
+}: LatestArticlesSectionProps) {
   const allArticles = [
     ...customArticles.map((a) => ({
       id: a.id,
       slug: a.slug,
       title: a.title,
       desc: a.subtitle,
-      category: a.category,
+      category: a.category || (a.categories && a.categories[0]) || ".NET",
+      categories: a.categories || [a.category || ".NET"],
+      coverImage: a.coverImage,
       date: a.publishedDate,
       readTime: a.readTime,
     })),
-    ...PUBLISHED_ARTICLES,
+    ...PUBLISHED_ARTICLES.map((p) => ({
+      ...p,
+      categories: [p.category],
+      coverImage: undefined as string | undefined,
+    })),
   ];
+
+  // Filtering by search and category
+  const filteredArticles = allArticles.filter((art) => {
+    const q = searchQuery.toLowerCase().trim();
+    const cat = categoryFilter.toLowerCase().trim();
+
+    const matchesSearch =
+      !q ||
+      art.title.toLowerCase().includes(q) ||
+      art.desc.toLowerCase().includes(q) ||
+      art.category.toLowerCase().includes(q);
+
+    const matchesCat =
+      !cat ||
+      cat === "all" ||
+      art.categories.some((c) => c.toLowerCase().includes(cat)) ||
+      art.category.toLowerCase().includes(cat);
+
+    return matchesSearch && matchesCat;
+  });
 
   return (
     <section className="w-full bg-cream pb-16 px-6 sm:px-10 lg:px-14">
@@ -32,16 +64,16 @@ export function LatestArticlesSection({ customArticles = [] }: LatestArticlesSec
           {/* Head */}
           <div className="flex items-center justify-between pb-1">
             <span className="font-mono text-[9px] uppercase tracking-wider text-muted font-medium">
-              LATEST ARTICLES
+              BARCHA CHOP ETILGAN MAQOLALAR ({filteredArticles.length})
             </span>
             <span className="font-mono text-[9px] text-muted font-medium">
-              {String(allArticles.length).padStart(2, "0")}
+              {String(filteredArticles.length).padStart(2, "0")}
             </span>
           </div>
         </ScrollReveal>
 
         {/* Empty Row / Published Articles List */}
-        {allArticles.length === 0 ? (
+        {filteredArticles.length === 0 ? (
           <ScrollReveal delayMs={100}>
             <div className="border-y-[1.5px] border-ink py-[22px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
@@ -49,42 +81,57 @@ export function LatestArticlesSection({ customArticles = [] }: LatestArticlesSec
                   —
                 </span>
                 <p className="font-sans text-[14px] text-muted">
-                  No published articles yet. The first one will appear here the day
-                  it&apos;s ready.
+                  {allArticles.length === 0
+                    ? "Hozircha chop etilgan maqolalar yo'q."
+                    : "Qidiruvga mos maqola topilmadi."}
                 </p>
               </div>
               <span className="font-mono text-[8.5px] tracking-wider uppercase text-muted bg-white border border-ink/30 px-2.5 py-1 rounded shrink-0 font-medium">
-                COME BACK SOON
+                BLOG JOURNAL
               </span>
             </div>
           </ScrollReveal>
         ) : (
           <div className="flex flex-col divide-y-[1.5px] divide-ink border-y-[1.5px] border-ink">
-            {allArticles.map((article, idx) => (
-              <ScrollReveal key={article.id} delayMs={idx * 60}>
+            {filteredArticles.map((article, idx) => (
+              <ScrollReveal key={article.id} delayMs={idx * 50}>
                 <Link
                   href={`/blog/${article.slug}`}
                   className="py-[22px] flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:bg-white hover:shadow-solid-sm hover:-translate-y-0.5 -mx-4 px-4 rounded-2xl transition-all cursor-pointer border border-transparent hover:border-ink"
                 >
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[9.5px] uppercase font-bold px-2 py-0.5 rounded-full border border-ink bg-white">
-                        {article.category}
-                      </span>
-                      <span className="font-mono text-[11px] text-muted">
-                        {article.date} · {article.readTime}
-                      </span>
-                    </div>
-                    <h3 className="font-display font-bold text-lg sm:text-xl text-ink group-hover:text-blue transition-colors flex items-center gap-1.5">
-                      <span>{article.title}</span>
-                      <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                    </h3>
-                    {article.desc && (
-                      <p className="font-sans text-sm text-muted line-clamp-2 max-w-3xl">
-                        {article.desc}
-                      </p>
+                  <div className="flex items-start sm:items-center gap-4 min-w-0">
+                    {article.coverImage && (
+                      <div className="relative w-20 h-16 sm:w-24 sm:h-20 rounded-xl border border-ink overflow-hidden bg-ink shrink-0">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={article.coverImage}
+                          alt={article.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
                     )}
+
+                    <div className="flex flex-col gap-1.5 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-mono text-[9.5px] uppercase font-bold px-2 py-0.5 rounded-full border border-ink bg-white">
+                          {article.category}
+                        </span>
+                        <span className="font-mono text-[11px] text-muted">
+                          {article.date} · {article.readTime}
+                        </span>
+                      </div>
+                      <h3 className="font-display font-bold text-lg sm:text-xl text-ink group-hover:text-blue transition-colors flex items-center gap-1.5">
+                        <span className="line-clamp-2">{article.title}</span>
+                        <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                      </h3>
+                      {article.desc && (
+                        <p className="font-sans text-sm text-muted line-clamp-2 max-w-3xl">
+                          {article.desc}
+                        </p>
+                      )}
+                    </div>
                   </div>
+
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                     <span className="px-3.5 py-1.5 rounded-full border border-ink bg-yellow font-mono text-xs font-bold text-ink shadow-solid-sm group-hover:shadow-solid group-hover:-translate-y-0.5 transition-all">
                       O&apos;qish ↗

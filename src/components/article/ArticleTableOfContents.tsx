@@ -8,9 +8,15 @@ interface ArticleTableOfContentsProps {
 }
 
 export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
-  const [activeId, setActiveId] = useState<string>("section-02");
+  const [activeId, setActiveId] = useState<string>(items[0]?.id || "");
 
   useEffect(() => {
+    if (!items || items.length === 0) return;
+
+    if (!activeId && items[0]) {
+      setActiveId(items[0].id);
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -20,7 +26,7 @@ export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
         });
       },
       {
-        rootMargin: "-20% 0px -60% 0px",
+        rootMargin: "-15% 0px -70% 0px",
         threshold: 0,
       }
     );
@@ -33,12 +39,14 @@ export function ArticleTableOfContents({ items }: ArticleTableOfContentsProps) {
     return () => observer.disconnect();
   }, [items]);
 
+  if (!items || items.length === 0) {
+    return null;
+  }
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      const yOffset = -90;
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
       setActiveId(id);
     }
   };

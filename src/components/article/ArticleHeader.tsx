@@ -12,6 +12,36 @@ interface ArticleHeaderProps {
 
 export function ArticleHeader({ article }: ArticleHeaderProps) {
   const [copied, setCopied] = useState(false);
+  const [stats, setStats] = useState<{ views: number; likes: number; comments: number } | null>(null);
+
+  React.useEffect(() => {
+    if (!article.slug) return;
+    fetch(`/api/blog/${encodeURIComponent(article.slug)}/engagement`)
+      .then((res) => res.json())
+      .then((d) => {
+        if (d.ok && d.data) {
+          setStats((prev) => ({
+            views: d.data.views ?? 0,
+            likes: d.data.likes ?? 0,
+            comments: prev?.comments ?? 0,
+          }));
+        }
+      })
+      .catch(() => {});
+
+    fetch(`/api/blog/${encodeURIComponent(article.slug)}/comments`)
+      .then((res) => res.json())
+      .then((d) => {
+        if (d.ok) {
+          setStats((prev) => ({
+            views: prev?.views ?? 0,
+            likes: prev?.likes ?? 0,
+            comments: d.totalCount ?? 0,
+          }));
+        }
+      })
+      .catch(() => {});
+  }, [article.slug]);
 
   const handleCopyLink = () => {
     if (typeof window !== "undefined") {
@@ -77,7 +107,7 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
                 {article.author.name}
               </span>
               <span className="font-mono text-[8px] sm:text-[8.5px] text-muted tracking-wider uppercase mt-0.5">
-                {article.publishedDate} · {article.readTime} · 👁 {article.views} · ♥ {article.likesCount} LIKES · 💬 {article.commentsCount} COMMENTS
+                {article.publishedDate} · {article.readTime} · 👁 {stats ? `${stats.views} VIEWS` : article.views} · ♥ {stats ? `${stats.likes} LIKES` : `${article.likesCount} LIKES`} · 💬 {stats ? `${stats.comments} COMMENTS` : `${article.commentsCount} COMMENTS`}
               </span>
             </div>
           </div>

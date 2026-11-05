@@ -4,8 +4,15 @@ import React from "react";
 import { BLOG_STATS } from "@/data/blogData";
 import { useLanguage } from "@/context/LanguageContext";
 
-export function BlogHeader() {
+interface BlogHeaderProps {
+  publishedCount?: number;
+}
+
+export function BlogHeader({ publishedCount }: BlogHeaderProps) {
   const { dict } = useLanguage();
+  const countStr = publishedCount !== undefined
+    ? String(publishedCount).padStart(2, "0")
+    : BLOG_STATS.publishedCount;
 
   return (
     <section className="w-full bg-cream pt-10 sm:pt-14 pb-8 sm:pb-10 px-6 sm:px-10 lg:px-14 border-b-2 border-ink">
@@ -28,7 +35,7 @@ export function BlogHeader() {
           {/* Stat 1 */}
           <div className="flex items-baseline justify-between py-1.5 border-b border-[#2A2622]">
             <span className="font-display text-[18px] font-bold text-cream">
-              {BLOG_STATS.publishedCount}
+              {countStr}
             </span>
             <span className="font-mono text-[7.5px] uppercase tracking-[0.5px] text-[#8F8678]">
               {dict.blogPage.latestTitle}

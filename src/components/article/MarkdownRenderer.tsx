@@ -25,10 +25,22 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
 }
 
 // ----------------- BLOCK PARSER -----------------
+export function generateHeadingSlug(text: string, count: number): string {
+  const clean = text
+    .replace(/^\d+[\.\)]\s*/, "") // remove leading "01. " or "1) "
+    .trim()
+    .toLowerCase()
+    .replace(/['"ʻʼ`]/g, "")
+    .replace(/[^a-z0-9\u0400-\u04FF]+/g, "-") // support latin and cyrillic
+    .replace(/(^-|-$)+/g, "");
+
+  return clean ? `section-${clean}` : `section-${count}`;
+}
+
 type BlockType =
-  | { type: "h1"; text: string }
-  | { type: "h2"; text: string }
-  | { type: "h3"; text: string }
+  | { type: "h1"; text: string; id?: string }
+  | { type: "h2"; text: string; id?: string }
+  | { type: "h3"; text: string; id?: string }
   | { type: "image"; alt: string; src: string; caption?: string }
   | { type: "code"; lang: string; code: string }
   | { type: "quote"; text: string }
@@ -42,6 +54,7 @@ type BlockType =
 function parseMarkdownBlocks(raw: string): BlockType[] {
   const lines = raw.split(/\r?\n/);
   const blocks: BlockType[] = [];
+  let headingCount = 0;
 
   let inCode = false;
   let codeLang = "";
@@ -191,7 +204,9 @@ function parseMarkdownBlocks(raw: string): BlockType[] {
       flushChecklist();
       flushQuote();
       flushTable();
-      blocks.push({ type: "h1", text: trimmed.replace(/^#\s+/, "") });
+      headingCount++;
+      const text = trimmed.replace(/^#\s+/, "");
+      blocks.push({ type: "h1", text, id: generateHeadingSlug(text, headingCount) });
       continue;
     }
     if (trimmed.startsWith("## ") && !trimmed.startsWith("###")) {
@@ -200,7 +215,9 @@ function parseMarkdownBlocks(raw: string): BlockType[] {
       flushChecklist();
       flushQuote();
       flushTable();
-      blocks.push({ type: "h2", text: trimmed.replace(/^##\s+/, "") });
+      headingCount++;
+      const text = trimmed.replace(/^##\s+/, "");
+      blocks.push({ type: "h2", text, id: generateHeadingSlug(text, headingCount) });
       continue;
     }
     if (trimmed.startsWith("### ")) {
@@ -209,7 +226,9 @@ function parseMarkdownBlocks(raw: string): BlockType[] {
       flushChecklist();
       flushQuote();
       flushTable();
-      blocks.push({ type: "h3", text: trimmed.replace(/^###\s+/, "") });
+      headingCount++;
+      const text = trimmed.replace(/^###\s+/, "");
+      blocks.push({ type: "h3", text, id: generateHeadingSlug(text, headingCount) });
       continue;
     }
 
@@ -300,7 +319,8 @@ function renderBlock(block: BlockType, key: number) {
       return (
         <h1
           key={key}
-          className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-ink tracking-tight pt-6 pb-2 border-b-2 border-ink/10"
+          id={block.id}
+          className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-ink tracking-tight pt-6 pb-2 border-b-2 border-ink/10 scroll-mt-28"
         >
           {renderInline(block.text)}
         </h1>
@@ -310,7 +330,8 @@ function renderBlock(block: BlockType, key: number) {
       return (
         <h2
           key={key}
-          className="font-display text-xl sm:text-2xl font-bold text-ink tracking-tight pt-5 pb-1 flex items-center gap-2.5"
+          id={block.id}
+          className="font-display text-xl sm:text-2xl font-bold text-ink tracking-tight pt-5 pb-1 flex items-center gap-2.5 scroll-mt-28"
         >
           <span className="w-2 h-5 rounded-full bg-yellow inline-block shrink-0" />
           <span>{renderInline(block.text)}</span>
@@ -321,7 +342,8 @@ function renderBlock(block: BlockType, key: number) {
       return (
         <h3
           key={key}
-          className="font-display text-lg sm:text-xl font-bold text-ink pt-3 text-ink"
+          id={block.id}
+          className="font-display text-lg sm:text-xl font-bold text-ink pt-3 text-ink scroll-mt-28"
         >
           {renderInline(block.text)}
         </h3>

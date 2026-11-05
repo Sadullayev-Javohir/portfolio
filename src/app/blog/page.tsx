@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { BlogView } from "@/components/blog/BlogView";
 import { getCustomArticles } from "@/lib/dynamicContent";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Engineering Journal & Blog · Javohir Sadullayev",
   description:

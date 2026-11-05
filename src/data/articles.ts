@@ -45,6 +45,7 @@ export interface ArticleData {
     label: string;
     code: string;
     caption: string;
+    image?: string;
     stats: { value: string; label: string }[];
   };
   toc: { id: string; num: string; text: string }[];

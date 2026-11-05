@@ -74,7 +74,7 @@ export function WriteBlogView() {
   };
 
   const handlePublish = () => {
-    showToast("🚀 Article configured! Ready to publish to javohir.engineer/blog");
+    window.location.href = "/admin";
   };
 
   const handleAddTag = (newTag: string) => {

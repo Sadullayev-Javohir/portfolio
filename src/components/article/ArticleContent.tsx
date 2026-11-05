@@ -89,10 +89,10 @@ export function ArticleContent({ article }: ArticleContentProps) {
         </div>
 
         {/* Engagement Bar */}
-        <ArticleEngagementBar reactions={article.reactions} />
+        <ArticleEngagementBar slug={article.slug} reactions={article.reactions} />
 
         {/* Comments Section */}
-        <ArticleCommentsSection initialComments={article.comments || []} />
+        <ArticleCommentsSection slug={article.slug} initialComments={article.comments || []} />
       </article>
     );
   }
@@ -317,10 +317,10 @@ export function ArticleContent({ article }: ArticleContentProps) {
       </div>
 
       {/* Engagement Bar */}
-      <ArticleEngagementBar reactions={article.reactions} />
+      <ArticleEngagementBar slug={article.slug} reactions={article.reactions} />
 
       {/* Comments Section */}
-      <ArticleCommentsSection initialComments={article.comments} />
+      <ArticleCommentsSection slug={article.slug} initialComments={article.comments} />
     </article>
   );
 }

@@ -141,6 +141,8 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [subtitle, setSubtitle] = useState("");
+  const [coverImage, setCoverImage] = useState("");
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [chip, setChip] = useState("JOURNAL · ARTICLE");
   const [bulletColor, setBulletColor] = useState("bg-yellow");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([".NET"]);
@@ -163,6 +165,7 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const coverFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     loadArticles();
@@ -201,6 +204,7 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
     setTitle("");
     setSlug("");
     setSubtitle("");
+    setCoverImage("");
     setChip("JOURNAL · ARTICLE");
     setBulletColor("bg-yellow");
     setSelectedCategories([".NET"]);
@@ -217,6 +221,7 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
     setTitle(art.title);
     setSlug(art.slug);
     setSubtitle(art.subtitle);
+    setCoverImage(art.coverImage || "");
     setChip(art.chip || "JOURNAL · ARTICLE");
     setBulletColor(art.bulletColor || "bg-yellow");
     const cats = art.categories && art.categories.length > 0 ? art.categories : [art.category || ".NET"];
@@ -437,6 +442,59 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
     }
   };
 
+  const uploadCoverFile = async (file: File) => {
+    setIsUploadingCover(true);
+    setStatusMessage({
+      type: "success",
+      text: `Muqova rasmi yuklanmoqda: ${file.name}...`,
+    });
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: {
+          "x-admin-pin": adminPin,
+        },
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setCoverImage(data.url);
+        setStatusMessage({
+          type: "success",
+          text: "✓ Maqola muqova rasmi yuklandi!",
+        });
+        setTimeout(() => setStatusMessage(null), 3000);
+      } else {
+        setStatusMessage({
+          type: "error",
+          text: data.error || "Muqova yuklashda xatolik yuz berdi.",
+        });
+      }
+    } catch {
+      setStatusMessage({
+        type: "error",
+        text: "Serverga ulanishda xatolik yuz berdi.",
+      });
+    } finally {
+      setIsUploadingCover(false);
+      if (coverFileInputRef.current) {
+        coverFileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleCoverInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      uploadCoverFile(file);
+    }
+  };
+
   // Paste image from clipboard (Ctrl + V)
   const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const items = e.clipboardData?.items;
@@ -499,6 +557,7 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
       title: title.trim(),
       slug: slug.trim() || title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
       subtitle: subtitle.trim(),
+      coverImage: coverImage.trim(),
       category: primaryCategory,
       categories: selectedCategories,
       chip: chip.trim() || "JOURNAL · ARTICLE",
@@ -552,6 +611,13 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
         type="file"
         ref={fileInputRef}
         onChange={handleFileInputChange}
+        accept="image/*"
+        className="hidden"
+      />
+      <input
+        type="file"
+        ref={coverFileInputRef}
+        onChange={handleCoverInputChange}
         accept="image/*"
         className="hidden"
       />
@@ -689,6 +755,68 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
               placeholder="Azure Speech sintez xarajatlarini 35% ga qisqartirish va kechikishni kamaytirish sirlari..."
               className="w-full px-4 py-2.5 rounded-xl border-2 border-ink bg-cream/30 text-sm font-sans focus:outline-none focus:bg-white"
             />
+          </div>
+
+          {/* Row 2.5: Cover Image Upload & Preview */}
+          <div className="p-4 sm:p-5 rounded-2xl border-2 border-ink/20 bg-cream/30 flex flex-col gap-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <label className="block text-xs font-mono font-bold text-ink uppercase tracking-wider">
+                  Asosiy Muqova Rasmi (Cover Image)
+                </label>
+                <p className="text-[11px] font-mono text-muted mt-0.5">
+                  Ushbu rasm maqola sahifasining yuqori qismida va /blog ro&apos;yxatida asosiy banner sifatida chiqadi.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => coverFileInputRef.current?.click()}
+                  disabled={isUploadingCover}
+                  className="px-3.5 py-1.5 rounded-xl border-2 border-ink bg-white hover:bg-yellow text-xs font-mono font-bold text-ink shadow-solid-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                >
+                  <UploadCloud className="w-3.5 h-3.5" />
+                  <span>{isUploadingCover ? "Yuklanmoqda..." : coverImage ? "Boshqa rasm yuklash" : "Muqova yuklash"}</span>
+                </button>
+                {coverImage && (
+                  <button
+                    type="button"
+                    onClick={() => setCoverImage("")}
+                    className="px-3 py-1.5 rounded-xl border-2 border-coral/40 hover:border-coral bg-peach/40 hover:bg-peach text-xs font-mono font-bold text-coral transition-colors cursor-pointer"
+                  >
+                    O&apos;chirish
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {coverImage ? (
+              <div className="relative w-full h-48 sm:h-64 rounded-xl border-2 border-ink overflow-hidden bg-ink shadow-solid-sm group">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={coverImage}
+                  alt="Maqola muqovasi"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded-lg bg-ink/80 text-white font-mono text-[10px] backdrop-blur-sm">
+                  Muqova manzili: {coverImage}
+                </div>
+              </div>
+            ) : (
+              <div
+                onClick={() => coverFileInputRef.current?.click()}
+                className="w-full h-32 rounded-xl border-2 border-dashed border-ink/30 hover:border-ink bg-white/60 hover:bg-white flex flex-col items-center justify-center gap-2 cursor-pointer transition-colors"
+              >
+                <ImageIcon className="w-6 h-6 text-muted" />
+                <span className="text-xs font-mono font-bold text-ink">
+                  Muqova rasmini yuklash uchun bosing (JPG, PNG, WebP)
+                </span>
+                <span className="text-[10px] font-mono text-muted">
+                  yoki rasm bo&apos;lmasa standart chiroyli fon ko&apos;rsatiladi
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Row 3: Chip & Bullet Color */}
@@ -1319,8 +1447,15 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
                 key={art.id}
                 className="p-5 sm:p-6 rounded-3xl bg-white border-2 border-ink shadow-solid flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group hover:shadow-solid-lg transition-all"
               >
-                <div className="flex flex-col gap-1.5 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-start gap-4 min-w-0 flex-1">
+                  {art.coverImage && (
+                    <div className="relative w-20 h-20 rounded-2xl border-2 border-ink overflow-hidden bg-ink shrink-0 hidden sm:block">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={art.coverImage} alt={art.title} className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-mono text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full border border-ink bg-yellow">
                       {art.chip || art.category}
                     </span>
@@ -1351,6 +1486,7 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
                     URL: <span className="text-ink font-semibold">/blog/{art.slug}</span>
                   </div>
                 </div>
+              </div>
 
                 <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
                   <Link

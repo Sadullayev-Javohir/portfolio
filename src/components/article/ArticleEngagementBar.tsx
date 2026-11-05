@@ -1,66 +1,149 @@
 "use client";
 
-import React, { useState } from "react";
-import { Heart, Eye, Bookmark } from "lucide-react";
+import React, { useState, useEffect, useCallback } from "react";
+import { Heart, Eye, Bookmark, Share2, Check } from "lucide-react";
 import { ArticleData } from "@/data/articles";
+import { getOrCreateAuthorToken } from "@/lib/useClientIdentity";
 
 interface ArticleEngagementBarProps {
-  reactions: ArticleData["reactions"];
+  slug?: string;
+  reactions?: ArticleData["reactions"];
+  onStatsChange?: (stats: { views: number; likes: number }) => void;
 }
 
-export function ArticleEngagementBar({ reactions }: ArticleEngagementBarProps) {
-  const [likes, setLikes] = useState(reactions.likes);
-  const [liked, setLiked] = useState(true);
+export function ArticleEngagementBar({ slug, reactions, onStatsChange }: ArticleEngagementBarProps) {
+  const [likes, setLikes] = useState<number>(reactions?.likes || 0);
+  const [hasLiked, setHasLiked] = useState<boolean>(false);
+  const [views, setViews] = useState<number>(0);
 
-  const [claps, setClaps] = useState(reactions.claps);
-  const [clapped, setClapped] = useState(false);
-
-  const [fires, setFires] = useState(reactions.fires);
-  const [fired, setFired] = useState(false);
-
-  const [bulbs, setBulbs] = useState(reactions.bulbs);
-  const [bulbed, setBulbed] = useState(false);
+  const [claps, setClaps] = useState<number>(reactions?.claps || 0);
+  const [fires, setFires] = useState<number>(reactions?.fires || 0);
+  const [bulbs, setBulbs] = useState<number>(reactions?.bulbs || 0);
 
   const [bookmarked, setBookmarked] = useState(false);
-  const [bookmarkCount, setBookmarkCount] = useState(reactions.bookmarks);
+  const [copiedLink, setCopiedLink] = useState(false);
+  const [isLiking, setIsLiking] = useState(false);
 
-  const handleLike = () => {
-    if (liked) {
-      setLikes(likes - 1);
-      setLiked(false);
-    } else {
-      setLikes(likes + 1);
-      setLiked(true);
+  // Initialize and record view
+  const initEngagement = useCallback(async () => {
+    if (!slug) return;
+    const token = getOrCreateAuthorToken();
+    if (!token) return;
+
+    // Check if device already viewed this article
+    const viewedKey = `viewed_article_${slug}`;
+    const alreadyViewed = typeof window !== "undefined" && !!localStorage.getItem(viewedKey);
+
+    try {
+      if (!alreadyViewed) {
+        // Record new view once
+        const res = await fetch(`/api/blog/${encodeURIComponent(slug)}/engagement`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "view", token }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          localStorage.setItem(viewedKey, `${Date.now()}`);
+        }
+      }
+
+      // Fetch current engagement stats & like status
+      const res = await fetch(`/api/blog/${encodeURIComponent(slug)}/engagement?token=${encodeURIComponent(token)}`);
+      const data = await res.json();
+      if (data.ok && data.data) {
+        setViews(data.data.views || 0);
+        setLikes(data.data.likes || 0);
+        setHasLiked(Boolean(data.data.hasLiked));
+        setClaps(data.data.claps || 0);
+        setFires(data.data.fires || 0);
+        setBulbs(data.data.bulbs || 0);
+        onStatsChange?.({ views: data.data.views || 0, likes: data.data.likes || 0 });
+      }
+    } catch (e) {
+      console.warn("Engagement init error:", e);
+    }
+  }, [slug, onStatsChange]);
+
+  useEffect(() => {
+    initEngagement();
+
+    if (slug && typeof window !== "undefined") {
+      setBookmarked(localStorage.getItem(`bookmarked_${slug}`) === "true");
+    }
+  }, [slug, initEngagement]);
+
+  // Handle Like Toggle
+  const handleLike = async () => {
+    if (!slug || isLiking) return;
+    const token = getOrCreateAuthorToken();
+    setIsLiking(true);
+
+    // Optimistic UI update
+    const nextHasLiked = !hasLiked;
+    const nextLikes = nextHasLiked ? likes + 1 : Math.max(0, likes - 1);
+    setHasLiked(nextHasLiked);
+    setLikes(nextLikes);
+
+    try {
+      const res = await fetch(`/api/blog/${encodeURIComponent(slug)}/engagement`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "like", token }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setLikes(data.likes);
+        setHasLiked(data.hasLiked);
+        onStatsChange?.({ views, likes: data.likes });
+      }
+    } catch {
+      // Revert on error
+      setHasLiked(!nextHasLiked);
+      setLikes(likes);
+    } finally {
+      setIsLiking(false);
     }
   };
 
-  const handleClap = () => {
-    setClaps(claps + 1);
-    setClapped(true);
-  };
+  const handleReaction = async (kind: "claps" | "fires" | "bulbs") => {
+    if (!slug) return;
+    const token = getOrCreateAuthorToken();
 
-  const handleFire = () => {
-    setFires(fires + 1);
-    setFired(true);
-  };
+    if (kind === "claps") setClaps((c) => c + 1);
+    if (kind === "fires") setFires((f) => f + 1);
+    if (kind === "bulbs") setBulbs((b) => b + 1);
 
-  const handleBulb = () => {
-    setBulbs(bulbs + 1);
-    setBulbed(true);
+    try {
+      await fetch(`/api/blog/${encodeURIComponent(slug)}/engagement`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "reaction", token, reactionKind: kind }),
+      });
+    } catch (e) {
+      console.warn("Reaction error:", e);
+    }
   };
 
   const handleBookmark = () => {
-    if (bookmarked) {
-      setBookmarkCount(bookmarkCount - 1);
-      setBookmarked(false);
-    } else {
-      setBookmarkCount(bookmarkCount + 1);
-      setBookmarked(true);
+    if (!slug) return;
+    const nextState = !bookmarked;
+    setBookmarked(nextState);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(`bookmarked_${slug}`, String(nextState));
+    }
+  };
+
+  const handleShare = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
     }
   };
 
   return (
-    <div className="w-full bg-white border-2 border-ink rounded-[18px] px-5 py-4 flex flex-wrap items-center justify-between gap-4">
+    <div className="w-full bg-white border-2 border-ink rounded-[18px] px-5 py-4 flex flex-wrap items-center justify-between gap-4 shadow-solid-sm">
       {/* Reactions Left */}
       <div className="flex items-center gap-2.5 flex-wrap">
         <span className="font-mono text-[8px] text-muted tracking-wider uppercase font-semibold mr-1">
@@ -70,22 +153,23 @@ export function ArticleEngagementBar({ reactions }: ArticleEngagementBarProps) {
         {/* Like Button */}
         <button
           onClick={handleLike}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 ${
-            liked ? "bg-coral text-cream" : "bg-cream text-ink hover:bg-coral/20"
+          disabled={isLiking}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-all active:scale-95 cursor-pointer ${
+            hasLiked
+              ? "bg-coral text-cream shadow-sm"
+              : "bg-cream text-ink hover:bg-coral/20"
           }`}
-          title="Like this article"
+          title={hasLiked ? "Liked (Unlike qilish uchun bosing)" : "Like bosish"}
         >
-          <Heart className={`w-3.5 h-3.5 ${liked ? "fill-cream text-cream" : "text-ink"}`} />
-          <span className="font-mono text-[10px] font-semibold">{likes}</span>
+          <Heart className={`w-3.5 h-3.5 ${hasLiked ? "fill-cream text-cream" : "text-ink"}`} />
+          <span className="font-mono text-[10px] font-bold">{likes}</span>
         </button>
 
         {/* Clap Button */}
         <button
-          onClick={handleClap}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 ${
-            clapped ? "bg-yellow text-ink" : "bg-cream text-ink hover:bg-yellow/30"
-          }`}
-          title="Clap"
+          onClick={() => handleReaction("claps")}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 bg-cream text-ink hover:bg-yellow/30 cursor-pointer"
+          title="Qarsak chalish"
         >
           <span className="text-[11px] leading-none">👏</span>
           <span className="font-mono text-[10px] font-semibold">{claps}</span>
@@ -93,11 +177,9 @@ export function ArticleEngagementBar({ reactions }: ArticleEngagementBarProps) {
 
         {/* Fire Button */}
         <button
-          onClick={handleFire}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 ${
-            fired ? "bg-coral/30 text-ink" : "bg-cream text-ink hover:bg-coral/20"
-          }`}
-          title="Fire"
+          onClick={() => handleReaction("fires")}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 bg-cream text-ink hover:bg-coral/20 cursor-pointer"
+          title="Olov"
         >
           <span className="text-[11px] leading-none">🔥</span>
           <span className="font-mono text-[10px] font-semibold">{fires}</span>
@@ -105,35 +187,43 @@ export function ArticleEngagementBar({ reactions }: ArticleEngagementBarProps) {
 
         {/* Bulb Button */}
         <button
-          onClick={handleBulb}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 ${
-            bulbed ? "bg-yellow/30 text-ink" : "bg-cream text-ink hover:bg-yellow/20"
-          }`}
-          title="Insightful"
+          onClick={() => handleReaction("bulbs")}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-transform active:scale-95 bg-cream text-ink hover:bg-yellow/30 cursor-pointer"
+          title="G'oya"
         >
           <span className="text-[11px] leading-none">💡</span>
           <span className="font-mono text-[10px] font-semibold">{bulbs}</span>
         </button>
       </div>
 
-      {/* Stats Right */}
-      <div className="flex items-center gap-3.5">
-        <div className="flex items-center gap-1.5 text-muted">
-          <Eye className="w-3.5 h-3.5" />
-          <span className="font-mono text-[9.5px] font-medium">{reactions.reads}</span>
+      {/* Engagement Right (Views, Bookmark, Share) */}
+      <div className="flex items-center gap-3">
+        {/* Read / Views Count */}
+        <div className="flex items-center gap-1.5 text-muted px-2 py-1 rounded-full bg-cream border border-ink/20">
+          <Eye className="w-3.5 h-3.5 text-ink" />
+          <span className="font-mono text-[9px] font-semibold text-ink uppercase tracking-wide">
+            {views} {views === 1 ? "VIEW" : "VIEWS"}
+          </span>
         </div>
 
+        {/* Bookmark Button */}
         <button
           onClick={handleBookmark}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border-[1.5px] border-ink transition-colors ${
-            bookmarked ? "bg-ink text-cream" : "bg-white text-ink hover:bg-cream"
+          className={`p-2 rounded-full border-[1.5px] border-ink transition-colors cursor-pointer ${
+            bookmarked ? "bg-yellow text-ink" : "bg-cream text-ink hover:bg-yellow/30"
           }`}
-          title="Save article"
+          title={bookmarked ? "Saqlangan (Bookmark)" : "Saqlash"}
         >
-          <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? "fill-cream text-cream" : "text-ink"}`} />
-          <span className="font-mono text-[9px] font-medium">
-            {bookmarked ? `Saved (${bookmarkCount})` : `Bookmark (${bookmarkCount})`}
-          </span>
+          <Bookmark className={`w-3.5 h-3.5 ${bookmarked ? "fill-ink text-ink" : "text-ink"}`} />
+        </button>
+
+        {/* Share Button */}
+        <button
+          onClick={handleShare}
+          className="p-2 rounded-full border-[1.5px] border-ink bg-cream text-ink hover:bg-yellow/30 transition-colors cursor-pointer"
+          title="Havoladan nusxa olish"
+        >
+          {copiedLink ? <Check className="w-3.5 h-3.5 text-mint" /> : <Share2 className="w-3.5 h-3.5" />}
         </button>
       </div>
     </div>
