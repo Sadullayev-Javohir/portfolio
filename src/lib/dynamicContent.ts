@@ -45,8 +45,19 @@ export interface CustomArticle {
   createdAt: string;
 }
 
+export interface CustomPlannedArticle {
+  id: string;
+  index: string;
+  title: string;
+  desc: string;
+  category: string;
+  chipColor: "coral" | "yellow" | "mint" | "lilac";
+  createdAt: string;
+}
+
 const PROJECTS_FILE = path.join(process.cwd(), "src/data/customProjects.json");
 const ARTICLES_FILE = path.join(process.cwd(), "src/data/customArticles.json");
+const PLANNED_ARTICLES_FILE = path.join(process.cwd(), "src/data/plannedArticles.json");
 
 function ensureFile(filePath: string, defaultData: string = "[]") {
   try {
@@ -201,3 +212,67 @@ export function deleteCustomArticle(id: string): boolean {
   }
   return false;
 }
+
+// ----------------- PLANNED ARTICLES -----------------
+export function getPlannedArticles(): CustomPlannedArticle[] {
+  ensureFile(PLANNED_ARTICLES_FILE);
+  try {
+    const raw = fs.readFileSync(PLANNED_ARTICLES_FILE, "utf-8");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    console.error("Error reading planned articles:", err);
+    return [];
+  }
+}
+
+export function savePlannedArticle(
+  item: Partial<CustomPlannedArticle> & { title: string; desc: string; category: string }
+): CustomPlannedArticle {
+  ensureFile(PLANNED_ARTICLES_FILE);
+  const items = getPlannedArticles();
+
+  const id = item.id || `planned-${Date.now()}`;
+  const chipColor = item.chipColor || "coral";
+
+  const updatedItem: CustomPlannedArticle = {
+    id,
+    index: item.index || "01",
+    title: item.title.trim(),
+    desc: item.desc.trim(),
+    category: item.category.trim(),
+    chipColor,
+    createdAt: item.createdAt || new Date().toISOString(),
+  };
+
+  const existingIndex = items.findIndex((p) => p.id === id);
+  if (existingIndex >= 0) {
+    items[existingIndex] = { ...items[existingIndex], ...updatedItem };
+  } else {
+    items.push(updatedItem);
+  }
+
+  // Normalize indices: 01, 02, 03...
+  items.forEach((p, idx) => {
+    p.index = String(idx + 1).padStart(2, "0");
+  });
+
+  fs.writeFileSync(PLANNED_ARTICLES_FILE, JSON.stringify(items, null, 2), "utf-8");
+  return items.find((p) => p.id === id) || updatedItem;
+}
+
+export function deletePlannedArticle(id: string): boolean {
+  ensureFile(PLANNED_ARTICLES_FILE);
+  const items = getPlannedArticles();
+  const filtered = items.filter((p) => p.id !== id);
+  if (filtered.length !== items.length) {
+    // Re-index remaining
+    filtered.forEach((p, idx) => {
+      p.index = String(idx + 1).padStart(2, "0");
+    });
+    fs.writeFileSync(PLANNED_ARTICLES_FILE, JSON.stringify(filtered, null, 2), "utf-8");
+    return true;
+  }
+  return false;
+}
+

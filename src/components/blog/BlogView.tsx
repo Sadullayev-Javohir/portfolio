@@ -6,13 +6,17 @@ import { BlogTools } from "./BlogTools";
 import { BlogFeaturedArticle } from "./BlogFeaturedArticle";
 import { PlannedArticlesSection } from "./PlannedArticlesSection";
 import { LatestArticlesSection } from "./LatestArticlesSection";
-import { CustomArticle } from "@/lib/dynamicContent";
+import { CustomArticle, CustomPlannedArticle } from "@/lib/dynamicContent";
 
 interface BlogViewProps {
   customArticles?: CustomArticle[];
+  plannedArticles?: CustomPlannedArticle[];
 }
 
-export function BlogView({ customArticles = [] }: BlogViewProps) {
+export function BlogView({
+  customArticles = [],
+  plannedArticles = [],
+}: BlogViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
 
@@ -20,7 +24,10 @@ export function BlogView({ customArticles = [] }: BlogViewProps) {
 
   return (
     <div className="flex flex-col w-full">
-      <BlogHeader publishedCount={customArticles.length} />
+      <BlogHeader
+        publishedCount={customArticles.length}
+        plannedCount={plannedArticles.length}
+      />
       <BlogTools
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -34,6 +41,7 @@ export function BlogView({ customArticles = [] }: BlogViewProps) {
         categoryFilter={selectedCategory}
       />
       <PlannedArticlesSection
+        articles={plannedArticles}
         filterText={searchQuery}
         categoryFilter={selectedCategory}
       />

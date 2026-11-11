@@ -1,15 +1,17 @@
 "use client";
 
 import React from "react";
-import { PLANNED_ARTICLES, PlannedArticle } from "@/data/blogData";
+import { PLANNED_ARTICLES } from "@/data/blogData";
+import { CustomPlannedArticle } from "@/lib/dynamicContent";
 import { useLanguage } from "@/context/LanguageContext";
 
 interface PlannedArticlesSectionProps {
+  articles?: CustomPlannedArticle[];
   filterText?: string;
   categoryFilter?: string;
 }
 
-const CHIP_BG_MAP: Record<PlannedArticle["chipColor"], string> = {
+const CHIP_BG_MAP: Record<string, string> = {
   coral: "bg-coral",
   yellow: "bg-yellow",
   mint: "bg-mint",
@@ -17,12 +19,22 @@ const CHIP_BG_MAP: Record<PlannedArticle["chipColor"], string> = {
 };
 
 export function PlannedArticlesSection({
+  articles,
   filterText = "",
   categoryFilter = "",
 }: PlannedArticlesSectionProps) {
   const { dict } = useLanguage();
-  // If search filter is active, filter articles; otherwise display all planned cards as in pen design
-  const filteredArticles = PLANNED_ARTICLES.filter((item) => {
+  const sourceArticles = articles && articles.length > 0 ? articles : PLANNED_ARTICLES;
+
+  // Filter articles by search query and category
+  const filteredArticles = sourceArticles.filter((item) => {
+    const matchesCategory =
+      !categoryFilter ||
+      categoryFilter.toLowerCase() === "all" ||
+      item.category.toLowerCase().includes(categoryFilter.toLowerCase());
+
+    if (!matchesCategory) return false;
+
     if (!filterText) return true;
     return (
       item.title.toLowerCase().includes(filterText.toLowerCase()) ||
@@ -56,7 +68,7 @@ export function PlannedArticlesSection({
               const chipBg = CHIP_BG_MAP[card.chipColor] || "bg-coral";
               return (
                 <div
-                  key={card.index}
+                  key={"id" in card && (card as any).id ? (card as any).id : card.index}
                   className="bg-white border-2 border-ink rounded-[18px] p-5 flex flex-col justify-between gap-3 shadow-none hover:-translate-y-1 hover:shadow-solid transition-all duration-200"
                 >
                   {/* Top Bar */}

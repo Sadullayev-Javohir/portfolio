@@ -39,8 +39,10 @@ import {
   Palette,
   Layers,
   Loader2,
+  CalendarClock,
 } from "lucide-react";
 import { MarkdownRenderer } from "@/components/article/MarkdownRenderer";
+import { AdminPlannedArticlesManager } from "@/components/admin/AdminPlannedArticlesManager";
 
 export interface CustomArticleData {
   id: string;
@@ -133,6 +135,7 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [subTab, setSubTab] = useState<"published" | "planned">("published");
 
   // View mode: split (side-by-side), editor (full edit), preview (full preview)
   const [viewMode, setViewMode] = useState<"split" | "editor" | "preview">("split");
@@ -606,21 +609,53 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Hidden File Input for Image Upload */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileInputChange}
-        accept="image/*"
-        className="hidden"
-      />
-      <input
-        type="file"
-        ref={coverFileInputRef}
-        onChange={handleCoverInputChange}
-        accept="image/*"
-        className="hidden"
-      />
+      {/* Sub-Tabs: Published vs Planned */}
+      <div className="flex flex-wrap items-center gap-3 p-1.5 bg-cream/70 rounded-2xl border-2 border-ink w-fit">
+        <button
+          type="button"
+          onClick={() => setSubTab("published")}
+          className={`px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-all cursor-pointer ${
+            subTab === "published"
+              ? "bg-ink text-white shadow-solid-sm"
+              : "text-muted hover:text-ink hover:bg-white/60"
+          }`}
+        >
+          <FileText className="w-3.5 h-3.5" />
+          <span>Chop etilgan maqolalar ({articles.length})</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setSubTab("planned")}
+          className={`px-4 py-2 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-all cursor-pointer ${
+            subTab === "planned"
+              ? "bg-yellow text-ink shadow-solid-sm"
+              : "text-muted hover:text-ink hover:bg-white/60"
+          }`}
+        >
+          <CalendarClock className="w-3.5 h-3.5" />
+          <span>Rejalashtirilgan mavzular (Upcoming Deep Dives)</span>
+        </button>
+      </div>
+
+      {subTab === "planned" ? (
+        <AdminPlannedArticlesManager adminPin={adminPin} />
+      ) : (
+        <>
+          {/* Hidden File Input for Image Upload */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileInputChange}
+            accept="image/*"
+            className="hidden"
+          />
+          <input
+            type="file"
+            ref={coverFileInputRef}
+            onChange={handleCoverInputChange}
+            accept="image/*"
+            className="hidden"
+          />
 
       {/* Header Bar */}
       <div className="p-6 rounded-3xl bg-white border-2 border-ink shadow-solid flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -1519,6 +1554,8 @@ export function AdminArticlesManager({ adminPin }: AdminArticlesManagerProps) {
           </div>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 }

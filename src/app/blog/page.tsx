@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { BlogView } from "@/components/blog/BlogView";
-import { getCustomArticles } from "@/lib/dynamicContent";
+import { getCustomArticles, getPlannedArticles } from "@/lib/dynamicContent";
 
 export const dynamic = "force-dynamic";
 
@@ -15,5 +15,6 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const customArticles = getCustomArticles();
-  return <BlogView customArticles={customArticles} />;
+  const plannedArticles = getPlannedArticles();
+  return <BlogView customArticles={customArticles} plannedArticles={plannedArticles} />;
 }

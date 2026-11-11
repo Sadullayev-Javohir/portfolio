@@ -1,0 +1,38 @@
+[
+  {
+    "id": "planned-01",
+    "index": "01",
+    "title": "The anti-cheat rule that locked students out",
+    "desc": "How telemetry turned a “motivation problem” into a fraud-logic bug — and what recovery looked like.",
+    "category": "BACKEND · .NET",
+    "chipColor": "coral",
+    "createdAt": "2026-11-11T05:00:00.000Z"
+  },
+  {
+    "id": "planned-02",
+    "index": "02",
+    "title": "A Redis cache key you won't regret",
+    "desc": "Hashing audio content instead of users, and the cost curve that follows.",
+    "category": "CACHING · REDIS",
+    "chipColor": "yellow",
+    "createdAt": "2026-11-11T05:01:00.000Z"
+  },
+  {
+    "id": "planned-03",
+    "index": "03",
+    "title": "Under 30 ms: real-time without lying",
+    "desc": "SignalR, Redis Pub/Sub and why the server should own the scoreboard.",
+    "category": "REAL-TIME",
+    "chipColor": "mint",
+    "createdAt": "2026-11-11T05:02:00.000Z"
+  },
+  {
+    "id": "planned-04",
+    "index": "04",
+    "title": "When the AI provider runs out of quota",
+    "desc": "Dual-key failover, tiered timeouts and deduplication in a Telegram bot.",
+    "category": "AI ENGINEERING",
+    "chipColor": "lilac",
+    "createdAt": "2026-11-11T05:03:00.000Z"
+  }
+]
