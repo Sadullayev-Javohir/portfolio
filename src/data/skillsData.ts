@@ -23,199 +23,219 @@ export interface CertificationItem {
 }
 
 export const PRIMARY_STACK: PrimarySkillItem[] = [
-  { name: "C# / .NET 8", where: "every product" },
-  { name: "ASP.NET Core", where: "EnglishAI API" },
-  { name: "PostgreSQL", where: "all five projects" },
-  { name: "Redis", where: "cache · pub/sub" },
-  { name: "Docker", where: "ZiyoAI deployment" },
+  { name: "C# / .NET (8/9)", where: "Core language & runtime" },
+  { name: "ASP.NET Core", where: "REST APIs & WebSockets" },
+  { name: "PostgreSQL", where: "Primary database" },
+  { name: "Redis", where: "Distributed cache & Pub/Sub" },
+  { name: "AI Automation & RAG", where: "LLMs & workflows" },
 ];
 
 export const SKILL_GROUPS: SkillCategoryGroup[] = [
   {
-    id: "languages-core",
-    name: "Languages & core",
-    count: "09",
+    id: "language-core",
+    name: "Language Core",
+    count: "04",
     color: "#4F7CFF", // blue
     rows: [
       {
         tech: "C#",
-        category: "Languages & core",
-        used: "All five projects",
+        category: "Language Core",
+        used: "Primary backend language (production)",
       },
       {
-        tech: ".NET 8",
-        category: "Languages & core",
-        used: "KitobdagiMen · ZiyoAI · TypingWar · MeningVaqtim",
+        tech: "Python",
+        category: "Language Core",
+        used: "Automation & data processing scripts",
+      },
+      {
+        tech: "C",
+        category: "Language Core",
+        used: "Low-level foundations & algorithms",
+      },
+      {
+        tech: "SQL (PostgreSQL, MS SQL, SQLite)",
+        category: "Language Core",
+        used: "Relational database queries & tuning",
+      },
+    ],
+  },
+  {
+    id: "frameworks-core-web",
+    name: "Frameworks & Core Web",
+    count: "08",
+    color: "#FF6B5A", // coral
+    rows: [
+      {
+        tech: ".NET (8/9)",
+        category: "Frameworks & Core Web",
+        used: "TypingWar · KitobdagiMen · MeningVaqtim · EnglishAI",
       },
       {
         tech: "ASP.NET Core",
-        category: "Languages & core",
-        used: "EnglishAI REST API",
+        category: "Frameworks & Core Web",
+        used: "REST APIs & backend microservices",
       },
       {
         tech: "REST APIs",
-        category: "Languages & core",
-        used: "EnglishAI · KitobdagiMen",
+        category: "Frameworks & Core Web",
+        used: "EnglishAI · KitobdagiMen · HackerRank certified",
       },
       {
         tech: "Entity Framework Core",
-        category: "Languages & core",
-        used: "ZiyoAI",
-      },
-      {
-        tech: "Dapper",
-        category: "Languages & core",
-        used: "Toolkit",
+        category: "Frameworks & Core Web",
+        used: "ORM & relational modeling",
       },
       {
         tech: "LINQ",
-        category: "Languages & core",
-        used: "Daily query work",
+        category: "Frameworks & Core Web",
+        used: "Data transformations & query pipelines",
+      },
+      {
+        tech: "SignalR",
+        category: "Frameworks & Core Web",
+        used: "Real-time duels & instant messaging",
+      },
+      {
+        tech: "Dapper",
+        category: "Frameworks & Core Web",
+        used: "High-performance data queries (<60ms)",
+      },
+      {
+        tech: "Hangfire",
+        category: "Frameworks & Core Web",
+        used: "Reliable background job orchestration",
+      },
+    ],
+  },
+  {
+    id: "architecture-dsa",
+    name: "Architecture & DSA",
+    count: "06",
+    color: "#7BE0AD", // mint
+    rows: [
+      {
+        tech: "Data Structures & Algorithms (DSA)",
+        category: "Architecture & DSA",
+        used: "Academic coursework (GPA 4.13) & HackerRank",
       },
       {
         tech: "OOP",
-        category: "Languages & core",
-        used: "Everywhere",
+        category: "Architecture & DSA",
+        used: "Clean object-oriented system modeling",
       },
       {
         tech: "Clean Architecture",
-        category: "Languages & core",
-        used: "API structure",
+        category: "Architecture & DSA",
+        used: "Domain isolation & decoupled service design",
+      },
+      {
+        tech: "SOLID Principles",
+        category: "Architecture & DSA",
+        used: "EPAM Systems training & production code",
+      },
+      {
+        tech: "Design Patterns",
+        category: "Architecture & DSA",
+        used: "Creational, structural, and behavioral patterns",
+      },
+      {
+        tech: "CQRS basics",
+        category: "Architecture & DSA",
+        used: "Command/query segregation in APIs",
       },
     ],
   },
   {
     id: "databases-caching",
-    name: "Databases & caching",
+    name: "Databases & Caching",
     count: "04",
     color: "#FFC940", // yellow
     rows: [
       {
         tech: "PostgreSQL",
-        category: "Databases & caching",
-        used: "EnglishAI · KitobdagiMen · ZiyoAI · TypingWar · MeningVaqtim",
+        category: "Databases & Caching",
+        used: "All backend services & indexing",
       },
       {
-        tech: "Microsoft SQL Server",
-        category: "Databases & caching",
-        used: "Toolkit",
+        tech: "Redis (Distributed Caching, Pub/Sub)",
+        category: "Databases & Caching",
+        used: "EnglishAI · TypingWar · KitobdagiMen",
       },
       {
-        tech: "Redis (Caching & Pub/Sub)",
-        category: "Databases & caching",
-        used: "EnglishAI · KitobdagiMen · TypingWar",
+        tech: "MS SQL Server",
+        category: "Databases & Caching",
+        used: "Enterprise relational schema management",
       },
       {
-        tech: "SQL Query Optimization",
-        category: "Databases & caching",
-        used: "Reporting & feeds",
+        tech: "Query Optimization",
+        category: "Databases & Caching",
+        used: "Execution plans, B-trees & composite indexes",
       },
     ],
   },
   {
-    id: "realtime-background",
-    name: "Real-time & background work",
-    count: "05",
-    color: "#FF6B5A", // coral
-    rows: [
-      {
-        tech: "SignalR Core",
-        category: "Real-time & background work",
-        used: "KitobdagiMen · TypingWar",
-      },
-      {
-        tech: "WebSockets",
-        category: "Real-time & background work",
-        used: "TypingWar",
-      },
-      {
-        tech: "Redis Pub/Sub",
-        category: "Real-time & background work",
-        used: "TypingWar",
-      },
-      {
-        tech: "Hangfire",
-        category: "Real-time & background work",
-        used: "MeningVaqtim",
-      },
-      {
-        tech: "BackgroundService",
-        category: "Real-time & background work",
-        used: "MeningVaqtim",
-      },
-    ],
-  },
-  {
-    id: "delivery-testing",
-    name: "Delivery & testing",
-    count: "04",
-    color: "#7BE0AD", // mint
-    rows: [
-      {
-        tech: "Docker",
-        category: "Delivery & testing",
-        used: "ZiyoAI",
-      },
-      {
-        tech: "Git",
-        category: "Delivery & testing",
-        used: "All projects",
-      },
-      {
-        tech: "CI/CD (GitHub Actions)",
-        category: "Delivery & testing",
-        used: "Build pipeline",
-      },
-      {
-        tech: "xUnit",
-        category: "Delivery & testing",
-        used: "TypingWar · 105+ tests",
-      },
-    ],
-  },
-  {
-    id: "ai-speech",
-    name: "AI & speech",
-    count: "02",
+    id: "ai-automation",
+    name: "AI & Automation",
+    count: "03",
     color: "#C9BDF5", // lilac
     rows: [
       {
-        tech: "Azure Speech (STT / TTS)",
-        category: "AI & speech",
-        used: "EnglishAI · ZiyoAI",
+        tech: "AI Automation",
+        category: "AI & Automation",
+        used: "Automated pipelines & intelligent bots",
       },
       {
-        tech: "OCR / visual comprehension",
-        category: "AI & speech",
-        used: "ZiyoAI",
+        tech: "RAG Workflows",
+        category: "AI & Automation",
+        used: "Portfolio AI assistant & context retrieval",
+      },
+      {
+        tech: "LLM Tooling & APIs (ChatGPT, Claude, Gemini)",
+        category: "AI & Automation",
+        used: "Prompt engineering, function calling & APIs",
       },
     ],
   },
   {
-    id: "auth-integrations",
-    name: "Auth & integrations",
-    count: "04",
+    id: "tools-devops",
+    name: "Tools & DevOps",
+    count: "07",
     color: "#A8D8FF", // sky
     rows: [
       {
-        tech: "Google OAuth",
-        category: "Auth & integrations",
-        used: "KitobdagiMen",
+        tech: "Git & GitHub",
+        category: "Tools & DevOps",
+        used: "Version control, branching & code review",
       },
       {
-        tech: "Telegram Bot API",
-        category: "Auth & integrations",
-        used: "KitobdagiMen · ZiyoAI",
+        tech: "Docker",
+        category: "Tools & DevOps",
+        used: "Containerization & compose environments",
       },
       {
-        tech: "Telegram Mini App (HMAC-SHA256)",
-        category: "Auth & integrations",
-        used: "KitobdagiMen",
+        tech: "Postman",
+        category: "Tools & DevOps",
+        used: "API testing, mocks & documentation",
       },
       {
-        tech: "OTP authentication",
-        category: "Auth & integrations",
-        used: "KitobdagiMen · 2-min OTP",
+        tech: "xUnit",
+        category: "Tools & DevOps",
+        used: "105+ unit & integration tests (TypingWar)",
+      },
+      {
+        tech: "GitHub Actions (CI/CD)",
+        category: "Tools & DevOps",
+        used: "Automated build & test pipelines",
+      },
+      {
+        tech: "Linux (Bash)",
+        category: "Tools & DevOps",
+        used: "Server management, scripts & hosting",
+      },
+      {
+        tech: "Azure Speech",
+        category: "Tools & DevOps",
+        used: "Speech-to-text & pronunciation evaluation",
       },
     ],
   },
@@ -223,19 +243,19 @@ export const SKILL_GROUPS: SkillCategoryGroup[] = [
 
 export const CERTIFICATIONS: CertificationItem[] = [
   {
-    title: "HackerRank",
-    sub: "REST API (Intermediate)",
+    title: "HackerRank REST API",
+    sub: "RESTful architecture & API standards",
   },
   {
-    title: "HackerRank",
-    sub: "Software Engineer",
+    title: "HackerRank Software Engineer",
+    sub: "Problem solving, DSA & engineering",
   },
   {
-    title: "Microsoft / freeCodeCamp",
-    sub: "Foundational C#",
+    title: "Microsoft Foundational C#",
+    sub: "C# language & .NET ecosystem certification",
   },
   {
     title: "Languages",
-    sub: "Uzbek (native) · English (B1)",
+    sub: "English (B1 - Technical / Working) · Uzbek (Native)",
   },
 ];

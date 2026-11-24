@@ -109,8 +109,8 @@ export const uz: TranslationDictionary = {
     bio: {
       eyebrow: "TARJIMAI HOL",
       title: "Mening yo'lim va falsafam",
-      p1: "Men katta yuklamali backend arxitekturasi va AI integratsiyasiga ixtisoslashgan dasturiy ta'minot muhandisiman. Murakkab biznes qoidalarini masshtablanuvchi, toza va mustahkam C# xizmatlariga aylantirishni yoqtiraman.",
-      p2: "So'nggi yillarda EnglishAI (700+ o'rganuvchiga xizmat qiluvchi nutq tahlili tizimi), KitobdagiMen (Telegram integratsiyali kitobxonlar tarmog'i) va TypingWar (50ms dan kam kechikishli multiplayer duel o'yini) kabi yirik tizimlarni ishlab chiqdim.",
+      p1: "C#, .NET 8, ASP.NET Core va PostgreSQL asosida kengayuvchan REST API hamda real vaqt tizimlarini yaratish bo‘yicha amaliy tajribaga ega .NET Backend dasturchi. Ma’lumotlar tuzilmalari va algoritmlar (DSA), Clean Architecture hamda OOP bo‘yicha mustahkam bilimga ega. Ishonchli backend tizimlarini qurishda AI avtomatlashtirish, RAG va zamonaviy LLM’lardan (ChatGPT, Gemini, Claude) samarali foydalanadi.",
+      p2: "EnglishAI (700+ faol foydalanuvchiga ega ta'lim platformasi), KitobdagiMen (ijtimoiy kitobxonlik tarmog'i), TypingWar (real vaqt 1v1 duellar platformasi) kabi loyihalarni yaratganman hamda EPAM Systems'da C# / .NET bo'yicha intensiv tajriba oshirganman.",
       quote: "Ishonchli kod yozish — ortiqcha narsalarning barchasini olib tashlash san'atidir.",
       stats: {
         speed: "<120ms",
@@ -475,14 +475,25 @@ export const uz: TranslationDictionary = {
   roles: {
     englishai: {
       id: "englishai",
-      role: "Backend dasturchi",
-      place: "Toshkent, O'zbekiston · To'liq stavka",
+      role: "Backend dasturchi (C# / .NET)",
+      place: "Toshkent, O'zbekiston",
       summary:
-        "700+ faol o'rganuvchiga xizmat ko'rsatuvchi, avtomatlashtirilgan test va nutq tahliliga ega platforma.",
+        "700+ faol foydalanuvchiga ega ta’lim platformasi uchun ASP.NET Core, PostgreSQL va Redis asosida REST API yaratdim.",
       bullets: [
-        "700+ faol foydalanuvchi uchun PostgreSQL va Redis keshlash bilan ASP.NET Core REST API larini ishlab chiqdim.",
-        "Soxta anticheat blokirovkalarini to'g'irlash va seansni qayta tiklash orqali onboarding yakunlanishini 78% ga oshirdim.",
-        "Azure Speech uchun MD5-heshlangan Redis audio keshini joriy qildim, sintez xarajatlarini 35% ga, kechikishni <120ms ga tushirdim.",
+        "700+ faol foydalanuvchiga ega ta’lim platformasi uchun ASP.NET Core, PostgreSQL va Redis asosida REST API yaratdim.",
+        "Mobil anti-cheat xatosini bartaraf etib va sessiyani tiklashni joriy qilib, onboarding yakunlanishini 78% ga oshirdim.",
+        "Azure Speech va Redis kesh qatlamini integratsiya qilib, audio so‘rovlar kechikishini 45% ga qisqartirdim.",
+      ],
+    },
+    epam: {
+      id: "epam",
+      role: "C# / .NET Trainee",
+      place: "Toshkent, O'zbekiston",
+      summary:
+        "C#, OOP, ASP.NET Core bo‘yicha chuqur bilim olib, SOLID va Clean Code amaliyotlarini real vazifalarda qo‘lladim.",
+      bullets: [
+        "C#, OOP, ASP.NET Core bo‘yicha chuqur bilim olib, SOLID va Clean Code amaliyotlarini real vazifalarda qo‘lladim.",
+        "Agile sprint jamoasida Git orqali kod tekshiruvi (code review) va testlash jarayonlarida faol ishladim.",
       ],
     },
     kitobdagimen: {

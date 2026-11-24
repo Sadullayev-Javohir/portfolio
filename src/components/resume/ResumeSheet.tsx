@@ -1,17 +1,18 @@
 "use client";
 
 import React from "react";
-import { Mail, Phone, Linkedin, Github } from "lucide-react";
+import { Mail, Phone, Globe, Linkedin, Github, ExternalLink } from "lucide-react";
 import { RESUME_DATA } from "@/data/resumeData";
 import { useLanguage } from "@/context/LanguageContext";
 
 export function ResumeSheet() {
-  const { dict, roles } = useLanguage();
+  const { dict, roles, language } = useLanguage();
   const {
     name,
-    location,
     initials,
     contacts,
+    projects,
+    education,
     skills,
     certifications,
     languages,
@@ -23,6 +24,8 @@ export function ResumeSheet() {
         return <Mail className="w-3 h-3 text-muted shrink-0" />;
       case "phone":
         return <Phone className="w-3 h-3 text-muted shrink-0" />;
+      case "website":
+        return <Globe className="w-3 h-3 text-muted shrink-0" />;
       case "linkedin":
         return <Linkedin className="w-3 h-3 text-muted shrink-0" />;
       case "github":
@@ -30,6 +33,12 @@ export function ResumeSheet() {
       default:
         return null;
     }
+  };
+
+  const getSectionTitle = (enTitle: string, uzTitle: string, ruTitle: string) => {
+    if (language === "uz") return uzTitle;
+    if (language === "ru") return ruTitle;
+    return enTitle;
   };
 
   return (
@@ -46,7 +55,7 @@ export function ResumeSheet() {
               {name}
             </h2>
             <p className="font-sans text-[14px] sm:text-[15px] font-medium text-ink-soft">
-              {dict.nav.roleTag}
+              Software Engineer | .NET Backend Developer
             </p>
             <span className="font-mono text-[9.5px] text-muted tracking-[0.4px]">
               {dict.contactPage.locationValue}
@@ -81,15 +90,20 @@ export function ResumeSheet() {
           {/* Main Column */}
           <div className="flex-1 min-w-0 flex flex-col gap-[22px]">
             {/* Summary */}
-            <p className="font-sans text-[11.5px] sm:text-[12px] text-ink-soft leading-[1.65]">
-              {dict.about.bio.p1}
-            </p>
+            <section className="flex flex-col gap-1.5">
+              <h3 className="font-mono text-[9px] font-normal tracking-[1.5px] text-ink uppercase border-b-[1.5px] border-ink pb-1">
+                {getSectionTitle("SUMMARY", "QISQACHA MA'LUMOT", "О СЕБЕ")}
+              </h3>
+              <p className="font-sans text-[11.5px] sm:text-[12px] text-ink-soft leading-[1.65]">
+                {dict.about.bio.p1}
+              </p>
+            </section>
 
             {/* Experience Section */}
             <section className="flex flex-col gap-3">
               <div className="border-b-[1.5px] border-ink pb-1 flex items-center justify-between">
                 <h3 className="font-mono text-[9px] font-normal tracking-[1.5px] text-ink uppercase">
-                  {dict.resumePage.experienceLabel}
+                  {getSectionTitle("EXPERIENCE", "ISH TAJRIBASI", "ОПЫТ РАБОТЫ")}
                 </h3>
                 <span className="font-mono text-[8px] font-normal tracking-[1px] text-muted uppercase">
                   {roles.length.toString().padStart(2, "0")} {dict.resumePage.rolesCount}
@@ -130,11 +144,49 @@ export function ResumeSheet() {
               </div>
             </section>
 
+            {/* Featured Projects Section */}
+            <section className="flex flex-col gap-3">
+              <div className="border-b-[1.5px] border-ink pb-1 flex items-center justify-between">
+                <h3 className="font-mono text-[9px] font-normal tracking-[1.5px] text-ink uppercase">
+                  {getSectionTitle("FEATURED PROJECTS", "ASOSIY LOYIHALAR", "ПРОЕКТЫ")}
+                </h3>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {projects.map((proj, pIdx) => (
+                  <div key={pIdx} className="flex flex-col gap-0.5">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-display text-[12.5px] sm:text-[13px] font-semibold text-ink">
+                          {proj.name}
+                        </span>
+                        <span className="font-mono text-[8px] text-muted">
+                          ({proj.tech})
+                        </span>
+                      </div>
+                      <a
+                        href={`https://${proj.domain}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono text-[8px] text-blue hover:underline flex items-center gap-0.5 shrink-0"
+                      >
+                        <span>{proj.domain}</span>
+                        <ExternalLink className="w-2.5 h-2.5" />
+                      </a>
+                    </div>
+                    <p className="font-sans text-[9px] sm:text-[9.5px] text-ink-soft leading-[1.55]">
+                      {proj.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
             {/* Education Section */}
             <section className="flex flex-col gap-2 mt-1">
               <div className="border-b-[1.5px] border-ink pb-1 flex items-center justify-between">
                 <h3 className="font-mono text-[9px] font-normal tracking-[1.5px] text-ink uppercase">
-                  {dict.resumePage.educationLabel}
+                  {getSectionTitle("EDUCATION", "TA'LIM", "ОБРАЗОВАНИЕ")}
                 </h3>
               </div>
 
@@ -142,26 +194,29 @@ export function ResumeSheet() {
                 <div className="flex items-baseline justify-between gap-3">
                   <div className="flex flex-col gap-0.5">
                     <span className="font-display text-[13px] sm:text-[13.5px] font-semibold text-ink">
-                      {dict.educationSection.degree}
+                      {education.degree}
                     </span>
                     <span className="font-sans text-[10px] sm:text-[10.5px] text-muted">
-                      {dict.educationSection.uni}
+                      {education.uni} · {education.gpa}
                     </span>
                   </div>
                   <span className="font-mono text-[8px] text-muted shrink-0 text-right">
-                    {dict.educationSection.years}
+                    {education.period}
                   </span>
                 </div>
+                <p className="font-sans text-[8.5px] sm:text-[9px] text-ink-soft italic">
+                  {education.focus}
+                </p>
               </div>
             </section>
           </div>
 
           {/* Sidebar */}
           <aside className="w-full lg:w-[280px] shrink-0 flex flex-col gap-[18px]">
-            {/* Block 1: LANGUAGES & CORE */}
+            {/* Block 1: LANGUAGE CORE */}
             <div className="flex flex-col gap-1.5">
               <span className="font-mono text-[8px] text-muted tracking-[1.2px] uppercase">
-                {dict.skillsPage.filterBackend}
+                {getSectionTitle("Language Core", "Dasturlash tillari", "Языки")}
               </span>
               <div className="flex flex-col">
                 {skills.languagesAndCore.map((skill, sIdx) => (
@@ -175,10 +230,44 @@ export function ResumeSheet() {
               </div>
             </div>
 
-            {/* Block 2: DATABASES & CACHING */}
+            {/* Block 2: FRAMEWORKS & CORE WEB */}
             <div className="flex flex-col gap-1.5">
               <span className="font-mono text-[8px] text-muted tracking-[1.2px] uppercase">
-                {dict.skillsPage.filterData}
+                {getSectionTitle("Frameworks & Core Web", "Freymvorklar & Veb", "Фреймворки & Web")}
+              </span>
+              <div className="flex flex-col">
+                {skills.frameworksAndWeb.map((skill, sIdx) => (
+                  <span
+                    key={sIdx}
+                    className="font-sans text-[10px] sm:text-[10.5px] text-ink-soft leading-[1.5]"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Block 3: ARCHITECTURE & DSA */}
+            <div className="flex flex-col gap-1.5">
+              <span className="font-mono text-[8px] text-muted tracking-[1.2px] uppercase">
+                {getSectionTitle("Architecture & DSA", "Arxitektura & DSA", "Архитектура & DSA")}
+              </span>
+              <div className="flex flex-col">
+                {skills.architectureAndDSA.map((skill, sIdx) => (
+                  <span
+                    key={sIdx}
+                    className="font-sans text-[10px] sm:text-[10.5px] text-ink-soft leading-[1.5]"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Block 4: DATABASES & CACHING */}
+            <div className="flex flex-col gap-1.5">
+              <span className="font-mono text-[8px] text-muted tracking-[1.2px] uppercase">
+                {getSectionTitle("Databases & Caching", "MB & Keshlash", "Базы данных & Кэш")}
               </span>
               <div className="flex flex-col">
                 {skills.databasesAndCaching.map((skill, sIdx) => (
@@ -192,13 +281,13 @@ export function ResumeSheet() {
               </div>
             </div>
 
-            {/* Block 3: REAL-TIME & DEVOPS */}
+            {/* Block 5: AI & AUTOMATION */}
             <div className="flex flex-col gap-1.5">
               <span className="font-mono text-[8px] text-muted tracking-[1.2px] uppercase">
-                {dict.skillsPage.filterArch}
+                {getSectionTitle("AI & Automation", "AI & Avtomatlashtirish", "AI & Автоматизация")}
               </span>
               <div className="flex flex-col">
-                {skills.realTimeAndDevops.map((skill, sIdx) => (
+                {skills.aiAndAutomation.map((skill, sIdx) => (
                   <span
                     key={sIdx}
                     className="font-sans text-[10px] sm:text-[10.5px] text-ink-soft leading-[1.5]"
@@ -209,7 +298,24 @@ export function ResumeSheet() {
               </div>
             </div>
 
-            {/* Block 4: CERTIFICATIONS */}
+            {/* Block 6: TOOLS & DEVOPS */}
+            <div className="flex flex-col gap-1.5">
+              <span className="font-mono text-[8px] text-muted tracking-[1.2px] uppercase">
+                {getSectionTitle("Tools & DevOps", "Vositalar & DevOps", "Инструменты & DevOps")}
+              </span>
+              <div className="flex flex-col">
+                {skills.toolsAndDevops.map((skill, sIdx) => (
+                  <span
+                    key={sIdx}
+                    className="font-sans text-[10px] sm:text-[10.5px] text-ink-soft leading-[1.5]"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Block 7: CERTIFICATIONS */}
             <div className="flex flex-col gap-1.5">
               <span className="font-mono text-[8px] text-muted tracking-[1.2px] uppercase">
                 {dict.experiencePage.certificationsLabel}
@@ -226,7 +332,7 @@ export function ResumeSheet() {
               </div>
             </div>
 
-            {/* Block 5: LANGUAGES */}
+            {/* Block 8: LANGUAGES */}
             <div className="flex flex-col gap-1.5">
               <span className="font-mono text-[8px] text-muted tracking-[1.2px] uppercase">
                 {dict.experiencePage.languagesLabel}

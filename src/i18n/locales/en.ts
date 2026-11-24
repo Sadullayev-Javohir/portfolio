@@ -109,8 +109,8 @@ export const en: TranslationDictionary = {
     bio: {
       eyebrow: "BIOGRAPHY",
       title: "My Background & Philosophy",
-      p1: "I am a software engineer focused on high-throughput backend architecture and AI integrations. I enjoy dissecting complex business rules and translating them into robust, clean C# services that scale effortlessly.",
-      p2: "Over the past years, I've designed and delivered systems like EnglishAI (serving 700+ learners with speech scoring), KitobdagiMen (a social reading platform with Telegram auth), and TypingWar (sub-50ms multiplayer duel engine).",
+      p1: "Motivated .NET Backend Developer with hands-on experience building scalable REST APIs and real-time systems using C#, .NET 8, ASP.NET Core, and PostgreSQL. Solid background in Data Structures & Algorithms (DSA), OOP, and Clean Architecture. Experienced with AI automation, RAG workflows, and modern LLMs (ChatGPT, Gemini, Claude) to build robust, modern products.",
+      p2: "Over the past years, I've designed and delivered systems like EnglishAI (serving 700+ learners with speech scoring), KitobdagiMen (a social reading platform with Telegram auth), TypingWar (sub-50ms multiplayer duel engine), and completed intensive C# / .NET training at EPAM Systems.",
       quote: "Writing predictable code is an art of removing everything unnecessary.",
       stats: {
         speed: "<120ms",
@@ -475,14 +475,25 @@ export const en: TranslationDictionary = {
   roles: {
     englishai: {
       id: "englishai",
-      role: "Backend Developer",
-      place: "Tashkent, Uzbekistan · Full-time",
+      role: "Backend Developer (C# / .NET)",
+      place: "Tashkent, Uzbekistan",
       summary:
-        "Adaptive English platform serving 700+ active learners with automated testing and speech scoring.",
+        "Built high-performance ASP.NET Core REST APIs with PostgreSQL and Redis, supporting 700+ active users.",
       bullets: [
-        "Architected ASP.NET Core REST APIs with PostgreSQL and Redis caching for 700+ active users.",
-        "Eliminated placement-test dropouts by correcting false anti-cheat triggers and enabling session recovery (+78% onboarding).",
-        "Engineered MD5-hashed Redis audio caching for Azure Speech, reducing synthesis costs by 35% and latency to <120ms.",
+        "Built high-performance ASP.NET Core REST APIs with PostgreSQL and Redis, supporting 700+ active users.",
+        "Resolved mobile anti-cheat desync with session recovery, boosting onboarding completion by 78%.",
+        "Integrated Azure Speech and Redis caching, slashing median audio evaluation latency by 45%.",
+      ],
+    },
+    epam: {
+      id: "epam",
+      role: "C# / .NET Trainee",
+      place: "Tashkent, Uzbekistan",
+      summary:
+        "Mastered C#, OOP, ASP.NET Core, and applied SOLID and Clean Code principles in production tasks.",
+      bullets: [
+        "Mastered C#, OOP, ASP.NET Core, and applied SOLID and Clean Code principles in production tasks.",
+        "Collaborated in Agile sprint teams using Git for version control, code reviews, and test-driven workflows.",
       ],
     },
     kitobdagimen: {

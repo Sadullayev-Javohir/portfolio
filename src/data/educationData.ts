@@ -22,7 +22,7 @@ export interface CredentialBadge {
 export const EDUCATION_HEADER_DATA = {
   eyebrow: "EDUCATION — PDP UNIVERSITY",
   headline: "Fundamentals first.",
-  sub: "B.Sc. in Computer Science at PDP University (2024 — 2028), studied alongside full-time backend engineering.",
+  sub: "Bachelor of Computer Science at PDP University (Oct 2024 — Jun 2028), balancing rigorous academic coursework with hands-on software engineering.",
   gpa: {
     label: "OVERALL GPA",
     value: "4.13",
@@ -32,103 +32,97 @@ export const EDUCATION_HEADER_DATA = {
 
 export const UNIVERSITY_CARD_DATA = {
   label: "PDP UNIVERSITY · TASHKENT, UZBEKISTAN",
-  title: "B.Sc. Computer Science",
-  period: "OCT 2024 — JUN 2028 · EXPECTED",
+  title: "Bachelor of Computer Science",
+  period: "OCT 2024 — JUN 2028 · IN PROGRESS",
   description:
-    "Foundational computer science principles: algorithm complexity, relational storage, and socket-level network architecture.",
-  focusLabel: "FOCUS AREAS",
+    "Core computer science curriculum emphasizing algorithmic complexity, relational databases, network programming, and operating systems.",
+  focusLabel: "RELEVANT COURSES",
   focusChips: [
-    "Algorithms & Data Structures",
+    "Data Structures & Algorithms (DSA)",
     "Relational Databases",
     "Network Programming",
+    "Operating Systems",
+    "OOP",
   ],
 };
 
 export const COURSEWORK_PILLARS: CourseworkPillar[] = [
   {
     num: "01",
-    title: "Algorithms & Data Structures",
+    title: "Data Structures & Algorithms (DSA)",
     description:
-      "Time and space complexity analysis, optimal collection selection, and algorithmic efficiency.",
-    tags: "Complexity · structures · recursion",
+      "Time and space complexity analysis, tree and graph algorithms, recursion, and collection optimization.",
+    tags: "Complexity · B-trees · Sorting · Graphs",
     color: "#4F7CFF", // blue
   },
   {
     num: "02",
     title: "Relational Databases",
     description:
-      "Schema normalization, B-tree indexing strategies, transaction isolation, and EXPLAIN query plan optimization.",
-    tags: "Schema · indexes · queries",
+      "Schema normalization, indexing strategies, transaction isolation levels, ACID, and query optimization.",
+    tags: "PostgreSQL · MS SQL · Indexing · Transactions",
     color: "#FF6B5A", // coral
   },
   {
     num: "03",
-    title: "Network Programming",
+    title: "Network Programming & Operating Systems",
     description:
-      "TCP/UDP socket communication, HTTP/WebSocket protocols, connection pooling, and resilient retry policies.",
-    tags: "Protocols · sockets · services",
+      "TCP/UDP socket communication, HTTP/WebSocket protocols, process concurrency, threads, and memory management.",
+    tags: "Sockets · WebSockets · Linux · Concurrency",
     color: "#7BE0AD", // mint
   },
 ];
 
 export const PARALLEL_PROJECTS: ParallelProjectItem[] = [
   {
-    year: "2026",
-    title: "EnglishAI",
+    year: "2025",
+    title: "TypingWar",
     description:
-      "Backend Developer — adaptive English platform with speech assessment.",
-    tag: "BACKEND · AI",
-    href: "/projects/englishai",
+      "Real-time competitive typing platform with 1v1 duels, automated tournaments, cadence verification, and 105+ xUnit tests.",
+    tag: "REAL-TIME · .NET 8",
+    href: "/projects/typingwar",
   },
   {
     year: "2026",
     title: "KitobdagiMen",
     description:
-      "Full-Stack Developer — social reading platform and Telegram Mini App.",
-    tag: "FULL-STACK",
+      "Social reading platform with reviews, reading goals, Telegram Mini App integration, HMAC-SHA256 auth, and Redis caching.",
+    tag: "FULL-STACK · SOCIAL",
     href: "/projects/kitobdagimen",
   },
   {
-    year: "2026",
-    title: "ZiyoAI",
-    description:
-      "Backend & AI Engineer — multimodal Telegram assistant with OCR and voice.",
-    tag: "AI ENGINEERING",
-    href: "/projects/ziyoai",
-  },
-  {
-    year: "2026",
-    title: "TypingWar",
-    description:
-      "Full-Stack Developer — real-time typing duels, 105+ unit tests.",
-    tag: "REAL-TIME",
-    href: "/projects/typingwar",
-  },
-  {
-    year: "ACTIVE",
+    year: "2025",
     title: "MeningVaqtim",
     description:
-      "Backend Developer — timezone-aware productivity analytics.",
-    tag: "PRODUCTIVITY",
+      "Productivity tracker for 200+ users with Hangfire background jobs and Dapper aggregate analytics with <60ms load times.",
+    tag: "PRODUCTIVITY · BACKEND",
     href: "/projects/meningvaqtim",
+  },
+  {
+    year: "2026",
+    title: "EnglishAI",
+    description:
+      "Backend Developer (C# / .NET) — high-performance REST APIs with PostgreSQL and Redis, supporting 700+ active users.",
+    tag: "BACKEND · AI",
+    href: "/projects/englishai",
   },
 ];
 
 export const CREDENTIALS_DATA: CredentialBadge[] = [
   {
-    title: "HackerRank",
-    subtitle: "REST API (Intermediate)",
+    title: "HackerRank REST API",
+    subtitle: "Intermediate certification",
   },
   {
-    title: "HackerRank",
-    subtitle: "Software Engineer",
+    title: "HackerRank Software Engineer",
+    subtitle: "Problem solving & software engineering",
   },
   {
-    title: "Microsoft / freeCodeCamp",
-    subtitle: "Foundational C#",
+    title: "Microsoft Foundational C#",
+    subtitle: "Microsoft / freeCodeCamp",
   },
   {
     title: "Languages",
-    subtitle: "Uzbek native · English B1",
+    subtitle: "English (B1 - Technical / Working) · Uzbek (Native)",
   },
 ];

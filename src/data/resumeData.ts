@@ -5,6 +5,13 @@ export interface ResumeJob {
   bullets: string[];
 }
 
+export interface ResumeProject {
+  name: string;
+  domain: string;
+  tech: string;
+  desc: string;
+}
+
 export interface ResumeData {
   name: string;
   role: string;
@@ -12,21 +19,27 @@ export interface ResumeData {
   initials: string;
   summary: string;
   contacts: {
-    type: "email" | "phone" | "linkedin" | "github";
+    type: "email" | "phone" | "website" | "linkedin" | "github";
     text: string;
     href: string;
   }[];
   experience: ResumeJob[];
+  projects: ResumeProject[];
   education: {
     degree: string;
     uni: string;
     period: string;
+    gpa: string;
     focus: string;
   };
   skills: {
     languagesAndCore: string[];
+    frameworksAndWeb: string[];
+    architectureAndDSA: string[];
     databasesAndCaching: string[];
-    realTimeAndDevops: string[];
+    aiAndAutomation: string[];
+    toolsAndDevops: string[];
+    realTimeAndDevops: string[]; // For backwards compatibility
   };
   certifications: string[];
   languages: {
@@ -44,11 +57,11 @@ export interface ResumeData {
 
 export const RESUME_DATA: ResumeData = {
   name: "Javohir Sadullayev",
-  role: ".NET Backend Developer",
+  role: "Software Engineer | .NET Backend Developer",
   location: "Tashkent, Uzbekistan",
   initials: "JS",
   summary:
-    "Backend developer specialising in C#, .NET 8 and ASP.NET Core, with production experience across PostgreSQL, Redis and real-time systems. Currently building adaptive English learning at EnglishAI while completing a B.Sc. in Computer Science at PDP University.",
+    "Motivated .NET Backend Developer with hands-on experience building scalable REST APIs and real-time systems using C#, .NET 8, ASP.NET Core, and PostgreSQL. Solid background in Data Structures & Algorithms (DSA), OOP, and Clean Architecture. Experienced with AI automation, RAG workflows, and modern LLMs (ChatGPT, Gemini, Claude) to build robust, modern products.",
   contacts: [
     {
       type: "email",
@@ -59,6 +72,11 @@ export const RESUME_DATA: ResumeData = {
       type: "phone",
       text: "+998 88 603 66 44",
       href: "tel:+998886036644",
+    },
+    {
+      type: "website",
+      text: "javohir.engineer",
+      href: "https://javohir.engineer",
     },
     {
       type: "linkedin",
@@ -73,79 +91,103 @@ export const RESUME_DATA: ResumeData = {
   ],
   experience: [
     {
-      role: "Backend Developer",
-      company: "EnglishAI, Tashkent",
-      period: "Jul 2026 — Present",
+      role: "Backend Developer (C# / .NET)",
+      company: "EnglishAI",
+      period: "Jun 2026 – Present",
       bullets: [
-        "Architected ASP.NET Core REST APIs with PostgreSQL and Redis caching for 700+ active users.",
-        "Eliminated placement-test dropouts by correcting false anti-cheat triggers and enabling session recovery (+78% onboarding).",
-        "Engineered MD5-hashed Redis audio caching for Azure Speech, reducing synthesis costs by 35% and latency to <120ms.",
+        "Built high-performance ASP.NET Core REST APIs with PostgreSQL and Redis, supporting 700+ active users.",
+        "Resolved mobile anti-cheat desync with session recovery, boosting onboarding completion by 78%.",
+        "Integrated Azure Speech and Redis caching, slashing median audio evaluation latency by 45%.",
       ],
     },
     {
-      role: "Full-Stack Developer",
-      company: "KitobdagiMen — kitobdagimen.uz",
-      period: "Jun 2026 — Jul 2026",
+      role: "C# / .NET Trainee",
+      company: "EPAM Systems",
+      period: "Sep 2025 – Jan 2026",
       bullets: [
-        "Built full-stack platform (.NET 8, PostgreSQL) with reviews, goals, quotes, and real-time SignalR chat.",
-        "Integrated Telegram Mini App with automated quote broadcasts, HMAC-SHA256 validation, and 2-minute OTP auth.",
-        "Engineered 60/40 discovery feed with cursor pagination and a 4-route fallback proxy (99.8% availability).",
-      ],
-    },
-    {
-      role: "Backend & AI Engineer",
-      company: "ZiyoAI — @ZiyoAIBot",
-      period: "Aug 2026 — Sep 2026",
-      bullets: [
-        "Developed multimodal Telegram bot (.NET 8, EF Core, Docker) with Whisper STT, TTS, and OCR document processing.",
-        "Engineered autonomous channel enrichment for generating discussion starters, summaries, and educational quizzes.",
-        "Built dual-key failover gateway with tiered timeouts (30s/65s) and deduplication, maintaining 99.9% uptime.",
-      ],
-    },
-    {
-      role: "Full-Stack Developer",
-      company: "TypingWar — open source",
-      period: "Jun 2026 — Jul 2026",
-      bullets: [
-        "Built multiplayer typing platform (.NET 8, Redis) with 1v1 live duels, rooms, and AI sparring bots.",
-        "Synchronized keystrokes, WPM, and live progress with <30ms latency via SignalR Core and Redis Pub/Sub.",
-        "Implemented server-side keystroke cadence verification to prevent cheating, covered by 105+ xUnit tests.",
-      ],
-    },
-    {
-      role: "Backend Developer",
-      company: "MeningVaqtim — meningvaqtim.uz",
-      period: "Active project",
-      bullets: [
-        "Built productivity backend (.NET 8, PostgreSQL) delivering timezone-aware analytics for 200+ users.",
-        "Automated timer completion and distraction logging with Hangfire background jobs (100% data integrity).",
+        "Mastered C#, OOP, ASP.NET Core, and applied SOLID and Clean Code principles in production tasks.",
+        "Collaborated in Agile sprint teams using Git for version control, code reviews, and test-driven workflows.",
       ],
     },
   ],
+  projects: [
+    {
+      name: "TypingWar",
+      domain: "typingwar.uz",
+      tech: ".NET 8, SignalR, Redis, PostgreSQL, xUnit",
+      desc: "Real-time competitive typing platform with 1v1 duels, automated tournaments, cadence verification, and 105+ xUnit tests.",
+    },
+    {
+      name: "KitobdagiMen",
+      domain: "kitobdagimen.uz",
+      tech: ".NET 8, Telegram Mini App, PostgreSQL, Redis",
+      desc: "Social reading platform with reviews, reading goals, Telegram Mini App integration, HMAC-SHA256 auth, and Redis caching.",
+    },
+    {
+      name: "MeningVaqtim",
+      domain: "meningvaqtim.uz",
+      tech: ".NET 8, Hangfire, Dapper, PostgreSQL",
+      desc: "Productivity tracker for 200+ users with Hangfire background jobs and Dapper aggregate analytics with <60ms load times.",
+    },
+    {
+      name: "Portfolio & AI Assistant",
+      domain: "javohir.engineer",
+      tech: "Next.js, AI Chatbot, RAG, LLM Integration",
+      desc: "Interactive personal engineering platform featuring an AI chatbot providing instant answers about my experience and skills.",
+    },
+  ],
   education: {
-    degree: "B.Sc. Computer Science",
-    uni: "PDP University, Tashkent",
-    period: "Oct 2024 — Jun 2028",
+    degree: "Bachelor of Computer Science",
+    uni: "PDP University",
+    period: "Oct 2024 – Jun 2028",
+    gpa: "GPA: 4.13 / 4.5",
     focus:
-      "Focus: Algorithms & Data Structures · Relational Databases · Network Programming · GPA 4.13 / 4.5",
+      "Relevant Courses: Data Structures & Algorithms (DSA), Relational Databases, Network Programming, Operating Systems, OOP",
   },
   skills: {
     languagesAndCore: [
       "C#",
-      ".NET 8",
+      "Python",
+      "C",
+      "SQL (PostgreSQL, MS SQL Server, SQLite)",
+    ],
+    frameworksAndWeb: [
+      ".NET (8/9)",
       "ASP.NET Core",
       "REST APIs",
-      "Entity Framework Core",
-      "Dapper",
+      "EF Core",
       "LINQ",
+      "SignalR",
+      "Dapper",
+      "Hangfire",
+    ],
+    architectureAndDSA: [
+      "Data Structures & Algorithms (DSA)",
       "OOP",
       "Clean Architecture",
+      "SOLID",
+      "Design Patterns",
+      "CQRS basics",
     ],
     databasesAndCaching: [
       "PostgreSQL",
-      "Microsoft SQL Server",
-      "Redis (Caching & Pub/Sub)",
-      "SQL Query Optimization",
+      "Redis (Distributed Caching, Pub/Sub)",
+      "MS SQL Server",
+      "Query Optimization",
+    ],
+    aiAndAutomation: [
+      "AI Automation",
+      "RAG",
+      "LLM Tooling & APIs (ChatGPT, Claude, Gemini)",
+    ],
+    toolsAndDevops: [
+      "Git",
+      "GitHub",
+      "Docker",
+      "Postman",
+      "xUnit",
+      "GitHub Actions (CI/CD)",
+      "Linux (Bash)",
     ],
     realTimeAndDevops: [
       "SignalR Core",
@@ -154,18 +196,18 @@ export const RESUME_DATA: ResumeData = {
       "Git",
       "CI/CD (GitHub Actions)",
       "Hangfire",
-      "Azure Speech (STT/TTS)",
+      "Azure Speech",
       "xUnit",
     ],
   },
   certifications: [
-    "HackerRank REST API — Intermediate",
+    "HackerRank REST API",
     "HackerRank Software Engineer",
-    "Microsoft / freeCodeCamp — Foundational C#",
+    "Microsoft Foundational C#",
   ],
   languages: [
-    { name: "Uzbek", level: "native" },
-    { name: "English", level: "B1" },
+    { name: "English", level: "B1 - Technical / Working" },
+    { name: "Uzbek", level: "Native" },
   ],
   downloads: [
     {

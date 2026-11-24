@@ -1,6 +1,6 @@
 export const JAVOHIR_KNOWLEDGE = {
   name: "Javohir Sadullayev",
-  title: ".NET Backend Developer & Computer Science Student",
+  title: "Software Engineer | .NET Backend Developer",
   location: "Toshkent, O'zbekiston (Tashkent, Uzbekistan)",
   email: "javohirsadullayev836@gmail.com",
   phone: "+998 88 603 66 44",
@@ -10,62 +10,152 @@ export const JAVOHIR_KNOWLEDGE = {
   github: "https://github.com/Sadullayev-Javohir",
   portfolio: "https://javohir.engineer",
 
+  summary:
+    "C#, .NET 8, ASP.NET Core va PostgreSQL asosida kengayuvchan REST API hamda real vaqt tizimlarini yaratish bo'yicha amaliy tajribaga ega .NET Backend dasturchi. Ma'lumotlar tuzilmalari va algoritmlar (DSA), Clean Architecture hamda OOP bo'yicha mustahkam bilimga ega. Ishonchli backend tizimlarini qurishda AI avtomatlashtirish, RAG va zamonaviy LLM'lardan (ChatGPT, Gemini, Claude) samarali foydalanadi.",
+
   education: {
     university: "PDP University",
-    degree: "B.Sc. in Computer Science (Kompyuter fanlari bakalavriati)",
-    period: "Oktabr 2024 — Iyun 2028 (Hozirda 3-kurs talabasi)",
+    degree: "Bachelor of Computer Science (Kompyuter fanlari bakalavriati)",
+    period: "Oktabr 2024 — Iyun 2028 (Oct 2024 – Jun 2028)",
     gpa: "4.13 / 4.5",
-    focus: [
-      "Algoritmlar va ma'lumotlar tuzilmalari (Algorithms & Data Structures)",
-      "Relyatsion ma'lumotlar bazalari (Relational Databases, PostgreSQL, SQL Optimization)",
-      "Tarmoq dasturlash va protokollar (Network Programming, WebSockets, HTTP/2)",
-      "Tizimlar arxitekturasi va taqsimlangan tizimlar (Distributed Systems, Clean Architecture)",
+    courses: [
+      "Data Structures & Algorithms (DSA)",
+      "Relational Databases",
+      "Network Programming",
+      "Operating Systems",
+      "OOP",
     ],
   },
 
+  experience: [
+    {
+      company: "EnglishAI",
+      period: "Iyun 2026 – hozirgacha (Jun 2026 – Present)",
+      role: "Backend Developer (C# / .NET)",
+      bullets: [
+        "700+ faol foydalanuvchiga ega ta'lim platformasi uchun ASP.NET Core, PostgreSQL va Redis asosida yuqori unumdorlikdagi REST API ishlab chiqildi.",
+        "Mobil anti-cheat desinxronizatsiyasi xatosini bartaraf etib va sessiyani tiklashni joriy qilib, onboarding yakunlanishini 78% ga oshirildi.",
+        "Azure Speech va Redis kesh qatlamini integratsiya qilib, audio so'rovlar kechikishini 45% ga qisqartirildi.",
+      ],
+    },
+    {
+      company: "EPAM Systems",
+      period: "Sentabr 2025 – Yanvar 2026 (Sep 2025 – Jan 2026)",
+      role: "C# / .NET Trainee",
+      bullets: [
+        "C#, OOP, ASP.NET Core bo'yicha chuqur bilim olib, SOLID va Clean Code amaliyotlarini real ishlab chiqarish vazifalarida qo'llandi.",
+        "Agile sprint jamoasida Git orqali kod tekshiruvi (code review) va test-driven ish jarayonlarida faol ishtirok etildi.",
+      ],
+    },
+  ],
+
+  projects: [
+    {
+      id: "typingwar",
+      title: "TypingWar",
+      domain: "typingwar.uz",
+      tech: ".NET 8, SignalR, Redis, PostgreSQL, xUnit",
+      summary: "1v1 duellar, turnirlar, ritm tekshiruvi va 105+ xUnit testlariga ega real vaqt tez yozish musobaqasi platformasi.",
+      details: [
+        "SignalR Core va Redis Pub/Sub yordamida past kechikishli (<30ms) WebSocket tizimi ishlab chiqilgan.",
+        "Server-side Cadence Anti-Cheat: insoniy bo'lmagan klaviatura tezligi va interval tahlili orqali makroslar va firibgarliklar to'xtatilgan.",
+        "105 dan ortiq xUnit avtomatlashtirilgan testlari bilan qamrab olingan.",
+      ],
+    },
+    {
+      id: "kitobdagimen",
+      title: "KitobdagiMen",
+      domain: "kitobdagimen.uz",
+      tech: ".NET 8, Telegram Mini App, PostgreSQL, Redis",
+      summary: "Taqrizlar, o'qish maqsadlari, Telegram Mini App integratsiyasi, HMAC-SHA256 avtorizatsiyasi va Redis keshiga ega ijtimoiy kitobxonlik tarmog'i.",
+      details: [
+        "ASP.NET Core 8 va PostgreSQL Clean Architecture asosida kitobxonlik platformasi.",
+        "Telegram Mini App integratsiyasi: HMAC-SHA256 tekshiruvi va 2 daqiqalik bir martalik OTP autentifikatsiyasi.",
+        "60/40 nisbatli kashfiyot lentasi va 4 bosqichli fallback proxy.",
+      ],
+    },
+    {
+      id: "meningvaqtim",
+      title: "MeningVaqtim",
+      domain: "meningvaqtim.uz",
+      tech: ".NET 8, Hangfire, Dapper, PostgreSQL",
+      summary: "200+ foydalanuvchi uchun Hangfire fon vazifalari va <60ms tezlikdagi Dapper tahliliy so'rovlari bilan ishlovchi unumdorlik trekeri.",
+      details: [
+        "Vaqt mintaqalarini inobatga oluvchi chuqur ishlash analitikasi.",
+        "Hangfire fon vazifalari orqali 90 daqiqadan oshgan ochiq sessiyalarni avtomatik to'xtatish (100% ma'lumot yaxlitligi).",
+        "Dapper aggregate analytics bilan <60ms yuklanish tezligi.",
+      ],
+    },
+    {
+      id: "portfolio",
+      title: "Portfolio & AI Assistant",
+      domain: "javohir.engineer",
+      tech: "Next.js, AI Chatbot, RAG, LLM Integratsiyasi",
+      summary: "Tajriba, loyihalar va ko'nikmalar bo'yicha darhol javob beruvchi shaxsiy AI chatbotli muhandislik platformasi.",
+      details: [
+        "Next.js App Router, Tailwind CSS va Neo-Brutalism uslubi.",
+        "RAG kontekst qidiruvi va Nous Research / OpenAI LLM integratsiyasi.",
+      ],
+    },
+  ],
+
   skills: {
-    languages: ["C# (C# 12)", ".NET 8 / .NET Core", "SQL", "TypeScript / JavaScript"],
-    backend: [
-      "ASP.NET Core Web API",
-      "Entity Framework Core",
+    languageCore: [
+      "C#",
+      "Python",
+      "C",
+      "SQL (PostgreSQL, MS SQL Server, SQLite)",
+    ],
+    frameworksAndWeb: [
+      ".NET (8/9)",
+      "ASP.NET Core",
+      "REST APIs",
+      "EF Core",
+      "LINQ",
+      "SignalR",
       "Dapper",
+      "Hangfire",
+    ],
+    architectureAndDSA: [
+      "Data Structures & Algorithms (DSA)",
+      "OOP",
       "Clean Architecture",
-      "CQRS & MediatR",
-      "RESTful API Design",
-      "Background Jobs (Hangfire, IHostedService, BackgroundService)",
+      "SOLID",
+      "Design Patterns",
+      "CQRS basics",
     ],
-    databasesAndCache: [
-      "PostgreSQL (Indexing, Query Optimization, Cursor Pagination)",
-      "Microsoft SQL Server",
-      "Redis (In-memory Caching, Distributed Locks, Pub/Sub)",
+    databasesAndCaching: [
+      "PostgreSQL",
+      "Redis (Distributed Caching, Pub/Sub)",
+      "MS SQL Server",
+      "Query Optimization",
     ],
-    realtimeAndAI: [
-      "SignalR Core",
-      "WebSockets (<30ms low-latency streaming)",
-      "Azure Cognitive Services (Speech-to-Text, Text-to-Speech)",
-      "OpenAI / Nous Research LLM Integrations",
-      "OCR Visual Comprehension",
+    aiAndAutomation: [
+      "AI Automation",
+      "RAG Workflows",
+      "LLM Tooling & APIs (ChatGPT, Claude, Gemini)",
     ],
-    devopsAndTools: [
-      "Docker & Docker Compose",
-      "Git & GitHub Actions (CI/CD)",
-      "Linux / Bash",
+    toolsAndDevOps: [
+      "Git",
+      "GitHub",
+      "Docker",
       "Postman",
-      "Serilog & Observability",
-      "xUnit (Unit & Integration Testing)",
+      "xUnit",
+      "GitHub Actions (CI/CD)",
+      "Linux (Bash)",
+      "Azure Speech",
     ],
     humanLanguages: [
-      "O'zbek tili (Native / Ona tili)",
-      "Ingliz tili (English - B1, texnik hujjatlar va kasbiy muloqot)",
-      "Rus tili (Russian - professional darajada muloqot)",
+      "English (B1 - Technical / Working)",
+      "Uzbek (Native)",
     ],
   },
 
   certifications: [
     {
-      title: "HackerRank REST API (Intermediate)",
+      title: "HackerRank REST API",
       issuer: "HackerRank",
-      description: "RESTful API arxitekturasi va ilg'or HTTP amaliyotlari bo'yicha sertifikat.",
+      description: "RESTful API arxitekturasi va standartlari bo'yicha sertifikat.",
     },
     {
       title: "HackerRank Software Engineer",
@@ -73,106 +163,9 @@ export const JAVOHIR_KNOWLEDGE = {
       description: "Dasturiy muhandislik masalalari va algoritmlar bo'yicha rol sertifikati.",
     },
     {
-      title: "Foundational C#",
+      title: "Microsoft Foundational C#",
       issuer: "Microsoft / freeCodeCamp",
-      description: "C# tili va .NET ekotizimi asoslari bo'yicha xalqaro sertifikat.",
-    },
-  ],
-
-  projects: [
-    {
-      id: "englishai",
-      title: "EnglishAI",
-      category: "Backend & AI",
-      period: "Iyul 2026 — Hozir",
-      role: "Backend Developer",
-      metrics: "700+ faol o'rganuvchilar · <120ms kechikish · +78% onboarding completion",
-      summary: "Nutqni baholash, darajani aniqlash testi va real vaqt talaffuz balliga ega moslashuvchan ingliz tili ta'lim platformasi.",
-      details: [
-        "700+ faol foydalanuvchiga ega ta'lim platformasi uchun ASP.NET Core, PostgreSQL va Redis asosida barqaror REST API ishlab chiqilgan.",
-        "Placement-test loglari tahlil qilingan: 27 foydalanuvchidan 21 nafari mobil qurilmalarda noto'g'ri ishlagan anti-cheat mexanizmi tufayli testni tashlab ketgani aniqlangan. Shubhali mantiq qayta yozilib, sessiyani tiklash qo'shilgan, bu esa onboardingni 78% ga oshirgan.",
-        "Azure Speech (STT va talaffuzni baholash) integratsiya qilingan. Takroriy so'rovlar uchun MD5-heshlangan Redis audio kesh tizimi yaratilib, sun'iy sintez xarajatlari 35% ga, audio kechikishi esa <120ms ga qisqartirilgan.",
-      ],
-      stack: ["ASP.NET Core", ".NET 8", "PostgreSQL", "Redis", "Azure Speech", "Docker"],
-    },
-    {
-      id: "kitobdagimen",
-      title: "KitobdagiMen (kitobdagimen.uz)",
-      category: "Full-Stack · Social & Telegram Mini App",
-      period: "Iyun 2026 — Iyul 2026",
-      role: "Full-Stack Developer",
-      metrics: "99.8% Uptime · 60/40 Lenta · 2 daqiqalik xavfsiz OTP",
-      summary: "Kitobxonlar uchun ijtimoiy platforma, sharhlar, iqtiboslar, o'qish maqsadlari va Telegram Mini App bilan integratsiya.",
-      details: [
-        "ASP.NET Core 8 va PostgreSQL Clean Architecture asosida kitoblar, taqrizlar, o'qish maqsadlari, iqtiboslar va SignalR asosidagi real vaqt chati qurilgan.",
-        "Telegram Bot va Mini App integratsiyasi: sharh va iqtiboslarni xabar ID sinxronizatsiyasi bilan avtomatlashtirilgan kanallarga uzatish, Telegram Mini App HMAC-SHA256 tekshiruvi va 2 daqiqalik bir martalik OTP autentifikatsiyasi yaratilgan.",
-        "60/40 nisbatli kuzatilayotgan va kashf etilayotgan mualliflar algoritmi (keyset cursor-based pagination) bilan ta'minlangan. Katalog cheklovlariga qarshi 4 bosqichli fallback proxy va 24 soatlik Redis kesh qurilib, 99.8% barqarorlik ta'minlangan.",
-      ],
-      stack: [".NET 8", "PostgreSQL", "SignalR", "Telegram Mini App", "Redis", "HMAC-SHA256"],
-    },
-    {
-      id: "typingwar",
-      title: "TypingWar (typingwar.uz)",
-      category: "Game & Real-Time Engine",
-      period: "Iyun 2026 — Iyul 2026",
-      role: "Full-Stack Developer",
-      metrics: "<30ms kechikish · Server-side Cadence Anti-Cheat · 105+ xUnit tests",
-      summary: "Real vaqt rejimida tez yozish bo'yicha 1v1 duellar, ko'p o'yinchili xonalar va sun'iy intellekt spar-botlari.",
-      details: [
-        "SignalR Core va Redis Pub/Sub yordamida past kechikishli (<30ms) WebSocket tizimi ishlab chiqilgan: har bir klaviatura bosilishi, WPM tezligi va xatolar real vaqtda poygasiz holatda sinxronlashadi.",
-        "Server tomonida tugmalar oralig'i (cadence) tahlili kiritilgan: insoniy bo'lmagan tezlik (masalan, <18ms interval va o'rtacha kvadratik chetlanish stdDev < 11.5) orqali klaviatura makroslari, botlar va nusxalash firibgarliklari to'xtatilgan.",
-        "O'yin mexanikasi 105 dan ortiq xUnit avtomatlashtirilgan testlari bilan qamrab olingan.",
-      ],
-      stack: [".NET 8", "SignalR Core", "Redis Pub/Sub", "PostgreSQL", "WebSockets", "xUnit"],
-    },
-    {
-      id: "meningvaqtim",
-      title: "MeningVaqtim (meningvaqtim.uz)",
-      category: "Productivity & Backend",
-      period: "Faol Loyiha (Active)",
-      role: "Backend Developer",
-      metrics: "200+ foydalanuvchilar · 100% ma'lumot yaxlitligi · Timezone-aware",
-      summary: "Rejalashtirilgan vazifalar va diqqatli ish (deep work) sessiyalarini taqqoslovchi shaxsiy vaqt boshqaruvi platformasi.",
-      details: [
-        "200+ foydalanuvchiga xizmat ko'rsatuvchi, vaqt mintaqalarini inobatga oladigan chuqur ishlash analitikasi ishlab chiqilgan.",
-        "Ochiq qolib ketgan taymerlar tufayli haftalik statistika buzilishining oldini olish uchun Hangfire va BackgroundService fon vazifalari joriy qilingan: 90 daqiqadan oshgan sessiyalar chalg'ishlar bilan avtomatik yopiladi (100% ma'lumot yaxlitligi).",
-        "PostgreSQL'da murakkab vaqt agregatsiyalari va filtrlari uchun maxsus kompozit B-tree indekslari yaratilib, so'rov tezligi optimallashtirilgan.",
-      ],
-      stack: [".NET 8", "PostgreSQL", "Hangfire", "Docker", "Clean Architecture"],
-    },
-    {
-      id: "ziyoai",
-      title: "ZiyoAI (@ZiyoAIBot)",
-      category: "AI & Education",
-      period: "Avgust 2026 — Sentabr 2026",
-      role: "Backend & AI Engineer",
-      metrics: "99.9% Uptime · Dual-Key Failover Gateway · Multimodal (Audio/OCR)",
-      summary: "Guruhlar va kanallar uchun avtonom multimodal Telegram AI yordamchisi (ovozli muloqot, OCR va avtomatik post boyitish).",
-      details: [
-        ".NET 8, EF Core, PostgreSQL va Docker mikroservislari asosida ovozli kiritish/chiqarish (STT/TTS) va tasvirlarni ko'rish (OCR) qobiliyatiga ega bot yaratilgan.",
-        "Kanal postlarini avtonom tahlil qilish moduli: ulangan kanallarga tushgan yangi maqolalarni o'rganib, guruhlar uchun munozara savollari, xulosalar va viktorina (quiz) tuzadi.",
-        "Tashqi AI API'larining kvota va taymout cheklovlariga qarshi ikki kalitli (dual-key) kaskadli failover shlyuzi ishlab chiqilgan (30 soniya birlamchi, 65 soniya jami taymout) va so'rovlar deduplikatsiyasi bilan 99.9% uptime ta'minlangan.",
-      ],
-      stack: [".NET 8", "Azure Cognitive Services", "PostgreSQL", "Docker", "Redis", "OpenAI / Nous"],
-    },
-  ],
-
-  engineeringPrinciples: [
-    {
-      title: "1. Serverga ishon (Never trust the client)",
-      desc: "Mijoz yuborgan har bir so'rov, vaqt oraliqlari va qiymatlar serverda qat'iy tekshiriladi va hisoblanadi (masalan, TypingWar'dagi cadence anti-cheat).",
-    },
-    {
-      title: "2. Keshlash — bu arxitektura (Caching is an architecture)",
-      desc: "Keshlash faqat ma'lumotni saqlash emas; aniq TTL, xesh kalitlari (MD5) va invalidatsiya siyosati bo'lmasa, kesh yangi xatolar manbaiga aylanadi.",
-    },
-    {
-      title: "3. Toza kod va modullilik (Clean Architecture & CQRS)",
-      desc: "Biznes mantig'ini (Domain) tashqi freymvorklar va kutubxonalardan mustaqil saqlash xUnit orqali oson va ishonchli testlash imkonini beradi.",
-    },
-    {
-      title: "4. Ma'lumot yaxlitligi (Data integrity above all)",
-      desc: "Tranzaksiyalar, fon ishchilari (Hangfire) va kaskadli zaxira shlyuzlari har bir jarayon oxirigacha xatosiz yetib borishini ta'minlaydi.",
+      description: "C# tili va .NET ekotizimi asoslari bo'yicha sertifikat.",
     },
   ],
 };
@@ -182,10 +175,11 @@ export function buildSystemPrompt(): string {
 
 SIZ HAQINGIZDA (Javohir Sadullayev haqida to'liq ma'lumot):
 - Ism: Javohir Sadullayev
-- Kasbi: .NET Backend Dasturchi, tizimlar arxitekturasi va real-time infratuzilma muhandisi.
-- Ta'lim: PDP University, Computer Science (B.Sc.) 3-kurs talabasi (2024-2028), GPA 4.13 / 4.5.
-- Asosiy texnologik stek: C# (C# 12), .NET 8, ASP.NET Core Web API, PostgreSQL, Redis, SignalR Core, Docker, Hangfire, Azure Cognitive Services (Speech), xUnit, Clean Architecture, CQRS, Dapper.
-- Manzil: Toshkent, O'zbekiston.
+- Kasbi: Software Engineer | .NET Backend Developer
+- Ta'lim: PDP University, Bachelor of Computer Science (Oct 2024 – Jun 2028), GPA 4.13 / 4.5.
+  Asosiy fanlar: Data Structures & Algorithms (DSA), Relational Databases, Network Programming, Operating Systems, OOP.
+- Manzil: Toshkent, O'zbekiston (Tashkent, Uzbekistan).
+- Portfolio: https://javohir.engineer
 - Bog'lanish:
   * Telegram: @dotnetda (havola: https://t.me/dotnetda)
   * Email: javohirsadullayev836@gmail.com
@@ -193,45 +187,52 @@ SIZ HAQINGIZDA (Javohir Sadullayev haqida to'liq ma'lumot):
   * LinkedIn: https://www.linkedin.com/in/javohir-sadullayev-b8737725a/
   * GitHub: https://github.com/Sadullayev-Javohir
 
-LOYIHALAR TAFSILOTLARI:
-1. EnglishAI:
-   - 700+ faol foydalanuvchiga ega moslashuvchan ingliz tili platformasi.
-   - Muammo va yechim: Placement testda 27 foydalanuvchidan 21 nafari noto'g'ri mobil anti-cheat tufayli chiqib ketgan. Javohir anti-cheat logikasini to'g'rilab, sessiya tiklashni joriy qildi (+78% onboarding completion).
-   - Azure Speech STT/TTS va MD5-keshlangan Redis audio tizimi orqali API xarajatlarini 35% ga tejab, kechikishni <120ms ga tushirdi.
+ISH TAJRIBASI (EXPERIENCE):
+1. EnglishAI (Iyun 2026 – hozirgacha / Jun 2026 – Present)
+   Lavozim: Backend Developer (C# / .NET)
+   - 700+ faol foydalanuvchiga ega platforma uchun ASP.NET Core, PostgreSQL va Redis asosida yuqori unumdor REST API yaratilgan.
+   - Mobil anti-cheat desinxronizatsiyasini hal qilib va sessiyani tiklashni joriy etib, onboarding yakunlanishini 78% ga oshirgan.
+   - Azure Speech va Redis kesh qatlamini integratsiya qilib, audio kechikishini 45% ga qisqartirgan.
 
-2. KitobdagiMen (kitobdagimen.uz):
-   - Kitobxonlar ijtimoiy tarmog'i va Telegram Mini App.
-   - Telegram bot va Mini App uchun HMAC-SHA256 validatsiya va 2 daqiqalik xavfsiz OTP autentifikatsiyasi.
-   - Algoritmik 60/40 lenta (kuzatilayotgan vs yangi mualliflar balansi) keyset cursor-based pagination bilan qurilgan.
-   - 4-yo'nalishli fallback proxy va 24 soatlik Redis kesh bilan 99.8% uptime.
+2. EPAM Systems (Sentabr 2025 – Yanvar 2026 / Sep 2025 – Jan 2026)
+   Lavozim: C# / .NET Trainee
+   - C#, OOP, ASP.NET Core bo'yicha chuqur bilim olib, SOLID va Clean Code amaliyotlarini ishlab chiqarish vazifalarida qo'llagan.
+   - Agile sprint jamoalarida Git orqali kod tekshiruvi (code review) va test-driven ish jarayonlarida faol ishlagan.
 
-3. TypingWar (typingwar.uz):
-   - Real-time tez yozish 1v1 duellari va xonalari.
-   - SignalR Core va Redis Pub/Sub orqali tugmalar bosilishi va WPM tezligini <30ms kechikishda sinxronlash.
-   - Server-side Cadence Anti-Cheat: insoniy bo'lmagan tezlikni (interval <18ms yoki o'rtacha kvadratik og'ish stdDev < 11.5) hisoblab botlar va makroslarni bartaraf etgan.
-   - 105+ xUnit testlari bilan himoyalangan.
+ASOSIY LOYIHALAR (FEATURED PROJECTS):
+1. TypingWar (typingwar.uz)
+   - .NET 8, SignalR, Redis, PostgreSQL, xUnit
+   - 1v1 duellar, turnirlar, kadens (ritm) tekshiruvi va 105+ xUnit testlariga ega real vaqt tez yozish platformasi.
+   - Low-latency (<30ms) WebSocket sinxronizatsiyasi.
 
-4. MeningVaqtim (meningvaqtim.uz):
-   - 200+ foydalanuvchiga ega chuqur ishlash (deep work) va Pomodoro tahlil platformasi.
-   - Foydalanuvchilar sessiyani ochiq qoldirib ketganda analitika buzilmasligi uchun Hangfire/BackgroundService fon vazifalari 90 daqiqadan oshgan sessiyalarni chalg'ishlar bilan avtomatik yopadi (100% data integrity).
-   - PostgreSQL kompozit B-tree indekslari bilan tezkor vaqt agregatsiyalari.
+2. KitobdagiMen (kitobdagimen.uz)
+   - .NET 8, Telegram Mini App, PostgreSQL, Redis
+   - Taqrizlar, o'qish maqsadlari, Telegram Mini App integratsiyasi, HMAC-SHA256 avtorizatsiyasi va Redis keshiga ega ijtimoiy kitobxonlik tarmog'i.
 
-5. ZiyoAI (@ZiyoAIBot):
-   - Avtonom multimodal Telegram AI yordamchi boti (Ovoz STT/TTS, OCR, Docker).
-   - Kanallarni avtomatik boyitish: ulangan kanallardagi yangi postlarni avtonom tahlil qilib, munozara savollari va quizlar tuzadi.
-   - Ikki kalitli (dual-key) kaskadli failover gateway (30s/65s) orqali AI API uzilishlarini yengib, 99.9% uptime ta'minlagan.
+3. MeningVaqtim (meningvaqtim.uz)
+   - .NET 8, Hangfire, Dapper, PostgreSQL
+   - 200+ foydalanuvchi uchun Hangfire fon vazifalari va <60ms yuklanish tezligidagi Dapper tahliliy so'rovlari bilan ishlovchi unumdorlik trekeri.
 
-MUHANDISLIK TAMOYILLARI:
-- Serverga ishon (Never trust client input)
-- Keshlash — bu shunchaki RAM emas, aniq TTL va invalidatsiyaga ega puxta arxitektura
-- Clean Architecture va CQRS: biznes mantiq freymvorkdan mustaqil bo'lishi kerak
-- Ma'lumotlar yaxlitligi: tranzaksiyalar va Hangfire fon vazifalari
+4. Portfolio & AI Assistant (javohir.engineer)
+   - Next.js, AI Chatbot, RAG, LLM Integration
+   - Shaxsiy tajriba, ko'nikmalar va loyihalar bo'yicha savollarga darhol javob beruvchi interaktiv platforma.
+
+TEXNIK KO'NIKMALAR (SKILLS):
+- Language Core: C#, Python, C, SQL (PostgreSQL, MS SQL Server, SQLite)
+- Frameworks & Core Web: .NET (8/9), ASP.NET Core, REST APIs, EF Core, LINQ, SignalR, Dapper, Hangfire
+- Architecture & DSA: Data Structures & Algorithms (DSA), OOP, Clean Architecture, SOLID, Design Patterns, CQRS basics
+- Databases & Caching: PostgreSQL, Redis (Distributed Caching, Pub/Sub), MS SQL Server, Query Optimization
+- AI & Automation: AI Automation, RAG, LLM Tooling & APIs (ChatGPT, Claude, Gemini)
+- Tools & DevOps: Git, GitHub, Docker, Postman, xUnit, GitHub Actions (CI/CD), Linux (Bash)
+
+TILLAR VA SERTIFIKATLAR:
+- Tillar: Ingliz tili (B1 - Technical / Working), O'zbek tili (Native)
+- Sertifikatlar: HackerRank REST API, HackerRank Software Engineer, Microsoft Foundational C#
 
 JAVOB BERISH QOIDALARI:
-- Har doim samimiy, mutaxassis darajasida va aniq metrikalar bilan gapiring.
+- Har doim samimiy, mutaxassis darajasida va aniq faktlar/metrikalar bilan gapiring.
 - Foydalanuvchi qaysi tilda yozsa (O'zbekcha, Inglizcha, Ruscha), o'sha tilda javob bering.
 - Javohir nomidan birinchi shaxsda ("Men...", "Mening loyiham...") gapirishingiz mumkin.
-- Javoblarni juda cho'zib yubormang, aniq, lo'nda va chiroyli formatlangan (markdown ro'yxatlar, toza xatboshilar bilan) holda bering.
-- Matnda ortiqcha, bo'sh yoki noto'g'ri yulduzchalarni ishlatmang (masalan: bo'sh yulduzchalar yoki bo'sh qavslar qo'ymang). Matn o'qishga qulay va ravon bo'lsin.
-- Agar loyiha taklifi yoki hamkorlik haqida so'rashsa, Telegram (@dotnetda), telefon yoki email orqali bog'lanishni taklif qiling.`;
+- Javoblarni aniq, lo'nda va chiroyli formatlangan (markdown ro'yxatlar, toza xatboshilar) holda bering.
+- Agar hamkorlik yoki loyiha taklifi bo'lsa, Telegram (@dotnetda), telefon (+998 88 603 66 44) yoki email (javohirsadullayev836@gmail.com) orqali bog'lanishni taklif qiling.`;
 }
